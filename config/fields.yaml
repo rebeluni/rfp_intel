@@ -1,0 +1,223 @@
+# Generic Field Definitions for RFP Intelligence Platform
+# Note: Zero bid-specific examples, vendor names, or hard-coded solicitation numbers are permitted here.
+
+fields:
+  Bid Number:
+    specialist: "commercial_legal"
+    description: "Official solicitation, RFP, IFB, or PORFP identifier assigned by the issuing authority."
+    format: "string"
+    query_expansion_hints:
+      - "solicitation number"
+      - "RFP number"
+      - "bid number"
+      - "solicitation identifier"
+      - "reference number"
+      - "project number"
+
+  Title:
+    specialist: "product_specs"
+    description: "Full official title of the bid solicitation or RFP package."
+    format: "string"
+    query_expansion_hints:
+      - "solicitation title"
+      - "project title"
+      - "bid name"
+      - "request for proposal title"
+
+  Due Date:
+    specialist: "dates_logistics"
+    description: "Final deadline for proposal or bid submission including time and timezone, reflecting any addendum modifications."
+    format: "YYYY-MM-DD HH:MM TZ"
+    query_expansion_hints:
+      - "proposal due date"
+      - "submission deadline"
+      - "closing date"
+      - "bid opening date"
+      - "new due date"
+      - "extended deadline"
+
+  Bid Submission Type:
+    specialist: "dates_logistics"
+    description: "Method required for submitting the bid (e.g., electronic procurement portal, sealed physical delivery, email)."
+    format: "string"
+    query_expansion_hints:
+      - "submission method"
+      - "submission instructions"
+      - "electronic submission"
+      - "sealed bid delivery"
+      - "how to submit"
+
+  Term of Bid:
+    specialist: "dates_logistics"
+    description: "Initial contract term/duration and any renewal or extension options."
+    format: "string"
+    query_expansion_hints:
+      - "contract term"
+      - "contract duration"
+      - "period of performance"
+      - "renewal options"
+      - "contract length"
+
+  Pre Bid Meeting:
+    specialist: "dates_logistics"
+    description: "Date, time, location and whether attendance is mandatory, optional, or 'None'."
+    format: "string"
+    query_expansion_hints:
+      - "pre-bid conference"
+      - "pre-proposal meeting"
+      - "mandatory pre-bid"
+      - "vendor conference"
+      - "site visit"
+
+  Installation:
+    specialist: "dates_logistics"
+    description: "Whether installation, configuration, staging, deployment, or imaging services are required."
+    format: "string"
+    query_expansion_hints:
+      - "installation required"
+      - "deployment services"
+      - "imaging services"
+      - "white glove delivery"
+      - "inside delivery"
+
+  Bid Bond Requirement:
+    specialist: "commercial_legal"
+    description: "Required bid bond, surety, letter of credit, dollar amount, percentage, or 'Not required'."
+    format: "string"
+    query_expansion_hints:
+      - "bid bond"
+      - "bid security"
+      - "surety requirement"
+      - "proposal guarantee"
+      - "performance bond"
+
+  Delivery Date:
+    specialist: "dates_logistics"
+    description: "Required delivery date, delivery window, or turnaround days after receipt of order / contract award."
+    format: "string"
+    query_expansion_hints:
+      - "delivery deadline"
+      - "delivery schedule"
+      - "days after receipt of order"
+      - "lead time"
+      - "delivery timeline"
+
+  Payment Terms:
+    specialist: "commercial_legal"
+    description: "Payment terms, invoicing schedule, or discount periods (e.g., Net 30, prompt pay discount)."
+    format: "string"
+    query_expansion_hints:
+      - "payment terms"
+      - "invoicing terms"
+      - "net 30"
+      - "billing instructions"
+      - "prompt payment"
+
+  Any Additional Documentation Required:
+    specialist: "commercial_legal"
+    description: "Required affidavits, compliance forms, certifications, insurance certificates, or tax documents."
+    format: "string"
+    query_expansion_hints:
+      - "required affidavits"
+      - "mandatory forms"
+      - "certification of non-collusion"
+      - "certificate of insurance"
+      - "conflict of interest"
+      - "compliance documentation"
+
+  MFG for Registration:
+    specialist: "commercial_legal"
+    description: "Manufacturer(s) or OEM brand name with which the bidder must be a certified or authorized partner/reseller."
+    format: "string"
+    query_expansion_hints:
+      - "manufacturer authorization"
+      - "partner certification"
+      - "authorized reseller"
+      - "OEM authorization"
+      - "deal registration"
+
+  Contract or Cooperative to use:
+    specialist: "commercial_legal"
+    description: "Referenced purchasing cooperative, state master contract, or GSA schedule vehicle, if applicable."
+    format: "string"
+    query_expansion_hints:
+      - "master contract"
+      - "cooperative purchasing"
+      - "piggyback contract"
+      - "purchasing vehicle"
+      - "state contract"
+
+  Model_no:
+    specialist: "product_specs"
+    description: "Model number(s), product family identifiers, or hardware chassis codes of the requested items."
+    format: "string"
+    query_expansion_hints:
+      - "model number"
+      - "equipment model"
+      - "hardware model"
+      - "product series"
+
+  Part_no:
+    specialist: "product_specs"
+    description: "Part number(s), SKU numbers, or manufacturer part codes of the requested products."
+    format: "string"
+    query_expansion_hints:
+      - "part number"
+      - "SKU"
+      - "manufacturer part number"
+      - "item number"
+      - "ordering code"
+
+  Product:
+    specialist: "product_specs"
+    description: "Name, category, and quantity of requested equipment, software, or items."
+    format: "string"
+    query_expansion_hints:
+      - "product name"
+      - "quantity required"
+      - "item description"
+      - "equipment requested"
+      - "bill of materials"
+
+  contact_info:
+    specialist: "commercial_legal"
+    description: "Designated procurement officer or buyer contact details: name, email address, and telephone number."
+    format: "string"
+    query_expansion_hints:
+      - "procurement officer"
+      - "contact person"
+      - "buyer email"
+      - "contract administrator"
+      - "questions contact"
+
+  company_name:
+    specialist: "commercial_legal"
+    description: "Name of the issuing public agency, school district, municipality, or buying organization."
+    format: "string"
+    query_expansion_hints:
+      - "issuing agency"
+      - "procuring entity"
+      - "school district"
+      - "organization name"
+      - "department name"
+
+  Bid Summary:
+    specialist: "product_specs"
+    description: "A concise 3 to 6 sentence summary outlining the procurement scope, objectives, requirements, and deliverables."
+    format: "string"
+    query_expansion_hints:
+      - "scope of work"
+      - "executive summary"
+      - "project background"
+      - "purpose of solicitation"
+
+  Product Specification:
+    specialist: "product_specs"
+    description: "Key technical hardware and software requirements (e.g., processor/CPU, memory/RAM, storage/SSD, display, ports, operating system, warranty)."
+    format: "string"
+    query_expansion_hints:
+      - "technical specifications"
+      - "hardware specifications"
+      - "minimum requirements"
+      - "processor ram storage"
+      - "display warranty requirements"
