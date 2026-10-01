@@ -1,0 +1,199 @@
+{
+  "phase": "Phase 1 - Document Ingestion & Parsing",
+  "test_results": {
+    "test_suite": "tests/test_ingestion.py",
+    "passed": 9,
+    "failed": 0,
+    "status": "PASSED (100%)",
+    "tests_run": [
+      "test_normalize_whitespace",
+      "test_fix_hyphenation",
+      "test_strip_running_headers_footers",
+      "test_classify_addendum_with_number",
+      "test_classify_affidavit",
+      "test_classify_specs",
+      "test_classify_bid_page",
+      "test_table_and_kv_parsing",
+      "test_table_preservation_in_chunk"
+    ]
+  },
+  "bids": {
+    "Bid1": {
+      "total_files": 4,
+      "total_chunks": 189,
+      "files": [
+        {
+          "file_name": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+          "doc_type": "bid_page",
+          "confidence": 0.98,
+          "addendum_number": null,
+          "document_date": "05/29/2024",
+          "total_pages": 1,
+          "chunks_count": 4
+        },
+        {
+          "file_name": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "doc_type": "addendum",
+          "confidence": 0.95,
+          "addendum_number": 1,
+          "document_date": null,
+          "total_pages": 5,
+          "chunks_count": 7
+        },
+        {
+          "file_name": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "doc_type": "addendum",
+          "confidence": 1.0,
+          "addendum_number": 2,
+          "document_date": null,
+          "total_pages": 1,
+          "chunks_count": 1
+        },
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "doc_type": "rfp",
+          "confidence": 0.65,
+          "addendum_number": null,
+          "document_date": null,
+          "total_pages": 62,
+          "chunks_count": 177
+        }
+      ],
+      "sample_chunks": [
+        {
+          "chunk_id": "Bid1_Student_and_Staff_Comput_p1_p0",
+          "file_name": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "### Bid Portal Metadata & Information\n- **Reference Number**: 00004079100\n- **Issuing Organization**: Dallas Independent School District\n- **Solicitation Type**: RFP - Request for Proposal (Informal)\n- **Solicitation Number**: JA-207652\n- **Title**: Student and Staff Computing Devices **SOURCING #168884**\n- **Source ID**: SCRIBE\n- **Location**: Texas\n- **Purchase Type**: Not Stated\n- **Piggyback C"
+        },
+        {
+          "chunk_id": "Bid1_Student_and_Staff_Comput_p1_p1",
+          "file_name": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "e\n- **Event Type**: Prebid Conference\n- **Attendance**: N/A\n- **Event date**: 06/10/2024 03:00 PM EDT\n- **Event Type**: Questions Due By\n- **Attendance**: N/A\n- **Event date**: 06/11/2024 05:00 PM EDT\n\nStudent and Staff Computing Devices **SOURCING #168884** - Bid Information - {3} | BidNet Direct\n\nLoading...\n\nOk\n\nSkip to main content\n\nGo to homepage\n\nMy Profile\n\nMy Organization\n\nContacts\n\nPurchas"
+        },
+        {
+          "chunk_id": "Bid1_Student_and_Staff_Comput_p1_p2",
+          "file_name": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "te\n\n07/09/2024 03:00 PM EDT\n\nPrebid Conference\n\n06/10/2024 03:00 PM EDT\n\nQuestions Due By\n\n06/11/2024 05:00 PM EDT\n\nContact Information\n\nProcurement Services\n\n972-925-3700\n\nProcurementCS@dallasisd.org\n\nDescription\n\nSpecifications include, but are not limited to: This Request for Proposal (RFP) will be for student and staff computing devices, including laptops, desktops, tablet devices, and display"
+        },
+        {
+          "chunk_id": "Bid1_Student_and_Staff_Comput_p1_p3",
+          "file_name": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": ", mice, keyboards, and cables that may not necessarily come with the devices. Each submission must include a d\n\nSee more\n\nFor more information on this solicitation, please click on the following link:\n\nhttps://www.dallasisd.org/site/default.aspx?PageType=3&DomainID=143&ModuleInstanceID=110052&ViewID=6446EE88-D30C-497E-9316-3F88...\n(opens in a new window)\n\nPre-Bidding Events\n\nEvent Type\n\nPrebid Con"
+        },
+        {
+          "chunk_id": "Bid1_Addendum_1_RFP_JA-207652_p1_p0",
+          "file_name": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "page_number": 1,
+          "doc_type": "addendum",
+          "is_table": false,
+          "text_preview": "The Purpose of this Addendum is to provide responses to the vendors\u2019 questions related to this RFP."
+        }
+      ]
+    },
+    "Bid2": {
+      "total_files": 5,
+      "total_chunks": 26,
+      "files": [
+        {
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "doc_type": "bid_page",
+          "confidence": 0.98,
+          "addendum_number": null,
+          "document_date": "05/28/2024",
+          "total_pages": 1,
+          "chunks_count": 3
+        },
+        {
+          "file_name": "Contract_Affidavit.pdf",
+          "doc_type": "affidavit",
+          "confidence": 1.0,
+          "addendum_number": null,
+          "document_date": null,
+          "total_pages": 3,
+          "chunks_count": 6
+        },
+        {
+          "file_name": "Dell_Laptop_Specs.pdf",
+          "doc_type": "specs",
+          "confidence": 0.67,
+          "addendum_number": null,
+          "document_date": null,
+          "total_pages": 3,
+          "chunks_count": 3
+        },
+        {
+          "file_name": "Mercury_Affidavit.pdf",
+          "doc_type": "affidavit",
+          "confidence": 1.0,
+          "addendum_number": null,
+          "document_date": null,
+          "total_pages": 1,
+          "chunks_count": 1
+        },
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "doc_type": "rfp",
+          "confidence": 1.0,
+          "addendum_number": null,
+          "document_date": "05/24/2024",
+          "total_pages": 4,
+          "chunks_count": 13
+        }
+      ],
+      "sample_chunks": [
+        {
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_p1_p0",
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "### Bid Portal Metadata & Information\n- **Reference Number**: 00004079359\n- **Issuing Organization**: State of Maryland Treasurer's Office\n- **Solicitation Type**: RFP - Request for Proposal (Informal)\n- **Solicitation Number**: BPM044557\n- **Title**: Dell Laptops w/Extended Warranty\n- **Source ID**: SCRIBE\n- **Location**: Anne Arundel County\n- **Purchase Type**: Not Stated\n- **Piggyback Contract*"
+        },
+        {
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_p1_p1",
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "Notes\n\nAre you sure you want to delete this note?\n\nCancel\n\nDelete\n\nThis solicitation is CLOSED\n\nNotice\n\nCategories\n\nAddendums\n\nDocuments\n\nNotice\n\nCategories\n\nAddendums\n\nDocuments\n\nFollow\n\nPrint\n\nShare\n\nMail\nEmail\n\nFacebook\n\nLinkedIn\n\nTwitter\n\nBasic Information\n\nReference Number\n\n00004079359\n\nIssuing Organization\n\nState of Maryland Treasurer's Office\n\nSolicitation Type\n\nRFP - Request for Proposal ("
+        },
+        {
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_p1_p2",
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "doc_type": "bid_page",
+          "is_table": false,
+          "text_preview": "d by our research team. Any bid responses, questions to the buyer or further information is conducted independent of BidNet Direct.\n\nPrint Options\n\nAll\n\nNotice\n\nAddendums\n\nCategories\n\nDocuments\n\nPrint\n\nWe use cookies and other similar technology to deliver our online services. Essential cookies are used to enable you to access and navigate our site. These are necessary and are always on. We also u"
+        },
+        {
+          "chunk_id": "Bid2_Contract_Affidavit_pdf_p1_tbl_0",
+          "file_name": "Contract_Affidavit.pdf",
+          "page_number": 1,
+          "doc_type": "affidavit",
+          "is_table": true,
+          "text_preview": "| I hereby affirm that I, | Col_2 | Col_3 |\n| --- | --- | --- |\n|  |  | (title) and duly aut (name of business |"
+        },
+        {
+          "chunk_id": "Bid2_Contract_Affidavit_pdf_p1_p0",
+          "file_name": "Contract_Affidavit.pdf",
+          "page_number": 1,
+          "doc_type": "affidavit",
+          "is_table": false,
+          "text_preview": "A.\nAUTHORITY\nI hereby affirm that I,\n\n(name of affiant) am the\n(title) and duly authorized representative of\n(name of business entity) and that I possess the legal\nauthority to make this affidavit on behalf of the business for which I am acting.\nB.\nCERTIFICATION OF REGISTRATION OR QUALIFICATION WITH THE STATE\nDEPARTMENT OF ASSESSMENTS AND TAXATION\nI FURTHER AFFIRM THAT:\nThe business named above is"
+        }
+      ]
+    }
+  }
+}
