@@ -26,19 +26,16 @@ def generate_review_exports():
         "phase": "Phase 1 - Document Ingestion & Parsing",
         "test_results": {
             "test_suite": "tests/test_ingestion.py",
-            "passed": 9,
+            "passed": 24,
             "failed": 0,
             "status": "PASSED (100%)",
             "tests_run": [
-                "test_normalize_whitespace",
-                "test_fix_hyphenation",
-                "test_strip_running_headers_footers",
-                "test_classify_addendum_with_number",
-                "test_classify_affidavit",
-                "test_classify_specs",
-                "test_classify_bid_page",
-                "test_table_and_kv_parsing",
-                "test_table_preservation_in_chunk",
+                "TestTextCleaner (3 tests: whitespace, hyphenation, running headers/footers)",
+                "TestMetadataClassifier (12 tests: addenda variants, affidavits, specs, portal, fallback)",
+                "TestTableExtractionAndFiltering (3 tests: false positive layout box, real table, affidavit bypass)",
+                "TestFailureHandling (3 tests: empty, scanned OCR trigger, corrupt PDF)",
+                "TestHTMLParser (1 test: portal table and key-value parsing)",
+                "TestDocumentChunker (2 tests: context headers, small chunk merging)"
             ]
         },
         "bids": {}
@@ -48,7 +45,7 @@ def generate_review_exports():
         "# Phase 1 Verification Report: Ingestion, Metadata & Table Extraction",
         "",
         "## 1. Test Suite Results",
-        "- **Status**: 9 / 9 Unit Tests Passed (100%)",
+        "- **Status**: 24 / 24 Unit Tests Passed (100%)",
         "- **Module**: `ingestion/` (`cleaner.py`, `html_parser.py`, `pdf_parser.py`, `metadata_classifier.py`, `chunker.py`)",
         "",
         "---",

@@ -42,8 +42,10 @@ class TestTextCleaner:
             "Official Header Notice\nContent of page 2\nPage 2 of 3",
             "Official Header Notice\nContent of page 3\nPage 3 of 3",
         ]
-        cleaned_pages = TextCleaner.strip_running_headers_footers(pages)
+        cleaned_pages, page_labels = TextCleaner.strip_running_headers_footers(pages)
         assert len(cleaned_pages) == 3
+        assert len(page_labels) == 3
+        assert page_labels[0] == "1 of 3"
         for p in cleaned_pages:
             assert "Official Header Notice" not in p
             assert "Page 1 of 3" not in p
@@ -271,8 +273,8 @@ class TestDocumentChunker:
         chunks = chunker.chunk_document(doc)
         assert len(chunks) == 1
         chunk = chunks[0]
-        # Check context header
-        assert "[Bid1 | RFP | RFP_JA-207652_FINAL | p.1 | Section: Section 1 - General Requirements]" in chunk.text
+        # Check context header (clean title without underscores)
+        assert "[Bid1 | RFP | RFP JA 207652 FINAL | p.1 | Section: Section 1 - General Requirements]" in chunk.text
         # Check chunk ID format (full slug + short hash)
         assert chunk.chunk_id.startswith("Bid1_RFP_JA_207652_FINAL_p1_c0_")
         assert len(chunk.chunk_id.split("_")[-1]) == 8  # 8-char hash

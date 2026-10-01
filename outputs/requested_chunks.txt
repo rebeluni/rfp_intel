@@ -1,0 +1,1079 @@
+================================================================================
+1. ADDENDUM 1 FULL CHUNKS (7 chunks)
+================================================================================
+
+--- [Addendum 1 | Chunk 1 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_a7799afa | Page 1] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: General]
+The Purpose of this Addendum is to provide responses to the vendors’ questions related to this RFP.
+
+--- [Addendum 1 | Chunk 2 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c1_f807f060 | Page 1] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: General]
+1. The Display monitor – non-Touch you are asking for 3.1 USB port. Are you ok with 3.0 or do you
+need 3.1?
+USB 3.1 is a minimum requirement.
+2. Are you ok with 3.2 USB port on the display?
+A higher specification is permissible.
+3. When are you going to award this?
+This RFP is anticipated to be awarded at the August board meeting.
+4. When do you need these delivered by?
+Dallas ISD is anticipating requesting quotes for different projects from awarded
+vendors starting in September of 2024.
+5. What types of funds are you going to use?
+Dallas ISD will primarily be using bond-funded money to purchase devices.
+6. Reference Page 3/40: All deliveries and deployments must incorporate white glove services,
+which include asset decaling, asset reporting, etching, and delivery to varied locations.
+Does Dallas ISD require a laser etch on the stand-alone monitors or AIO computers? If yes, what
+is the location and size of the etch?
+No, Dallas ISD will only require etching on Laptops.
+7. Reference Page 34/40 bullet point 11: Additional Warranty- not included in the initial purchase
+of a device. Our company can list the cost of several options for each device. However, this box
+is asking for one cost. Each option will be different and could be close to thirty options. Example,
+for just the Chrome requirement where Dallas is asking for the standard one-year warranty. We
+could expand these options for this product alone to: Two year onsite, Two-year ADP (accidental
+damage protection), Two year onsite and ADP then three-year, four year and five years.
+How would Dallas like us to explain this point? Can Dallas put more boxes in Oracle so we can
+have costs per option?
+As a minimum requirement, Dallas ISD is asking for a one-year warranty for
+student Chromebooks and three years for student and staff Windows laptops. The
+system will only take one input, additional warranty information and pricing can be
+submitted as an attachment.
+8. Does Dallas prefer for the warranties to be underwritten by insurance? Example: If you pay for
+an additional warranty and that company goes under, if your warranty was not underwritten
+you would lose your investment. If it were underwritten the warranty would continue as
+purchased.
+Dallas ISD will ask all warranties to be made by OEM.
+9. The base request for Chrome from Dallas is without Accidental Damage Protection. When DISD
+does have this type of damage, does Dallas choose to replace those units with new orders, new
+purchase order?
+Dallas ISD will not ask for Accidental Damage Protection for purchased devices.
+10. Reference Page 36: The column says response value here. As pricing is noted above, clearing up
+that the DISD requirement for “value” DISD would like displayed here, is just the spec’s of the
+device in question.
+Yes, the specs, more specifically the proposed make and model of the device
+being proposed, should be included in this field.
+11. Will DISD consider extending the submission deadline out a few more weeks to allow sufficient
+time for vendors to complete a compliant response after the addendum(s) has been posted?
+Dallas ISD does not anticipate extending the submission deadline.
+
+--- [Addendum 1 | Chunk 3 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c0_b99268b0 | Page 2] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.2 | Section: General]
+12. References are particularly important to our company as well as DISD. Can you please share the
+timeline DISD purchasing/M/WBE team will be reaching out to our references so we can remind
+them to be on the lookout during that timeline, reinforcing the urgency to respond to DISD
+request?
+References will be contacted within the week following the solicitation due
+date.
+13. During the desktop setup, is it necessary to secure the desktop under or on a surface? I.e. a
+lockbox or similar structure on the desks/tables.
+No, we are not securing desktops.
+14. What are the district's expectations for coverage under the warranties listed for each device
+category?
+Dallas ISD will ask all warranties to be made by OEM.
+15. Per the RFP, Dallas ISD mentions the awarded vendor must have the ability to stock devices as
+needed. Historically, how many devices need to be stocked for device management?
+Dallas ISD is not requiring vendors to keep inventory in stock. The District asks
+that the awarded vendor meet the deadline for the agreed delivery.
+16. On page 7, question #4 of the RFP, the document asks for the awarded vendor to include the
+address of their local location. Is a local location a requirement?
+No, a local location is not required.
+17. During the pre-bid call, a Dallas ISD representative mentioned OEM warranty only. Can vendors
+add additional non-warranty options as a value add?
+Yes, these can be submitted as an attachment.
+18. On page 9, question #11 of the RFP, the document asks about hot swap stock. Is this stock solely
+for in-warranty OEM repairs or will the awarded vendor be responsible for out-of-warranty
+repairs with supported hot swaps?
+No, hot swap is only for when warranty work will be longer than 5 business
+days.
+19. On page 7, question #5 of the RFP, the document asks about staffing for onsite deployments.
+Will an Onsite project manager be required?
+Any awarded vendor will need to coordinate a schedule of deliveries with the
+Dallas ISDED TECH department.
+20. On page 12, of the RFP, it asks for references within the Dallas/Ft Worth Area. What
+proximity/mileage range should be considered?
+References do not solely need to come from districts/companies within the
+Dallas/Fort Worth Area; there is no proximity/mileage that needs to be considered.
+21. Are stated quantities one-time buys or spread over the first 3 years of the contract?
+The quantities will be spread over life of the contract.
+22. Does DISD havea Volume License Agreement with Microsoft?
+Yes.
+23. Do the AIO Desktops require a webcam?
+Yes.
+24. In RFP Section 2.1 Line Information (pricing table), will you please clarify what information is
+being requested in the last column, “Bid Minimum Release Amount”?
+The “Bid Minimum Release Amount” is a system default field, this can be
+disregarded.
+
+--- [Addendum 1 | Chunk 4 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c0_5dd040fe | Page 3] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: General]
+25. In RFP Section 2.1 Line Information (pricing table) #11, will you please clarify if you would like us
+to include a minimum price for one of the optional warranty line items in the “quoted price”
+field then include the various additional warranty options (tier based) in an attachment. Also,
+can you clarify what should be included in the “quote value” field of the Oracle RFP input tool.
+Would this be the same price as the above highlighted field?
+
+--- [Addendum 1 | Chunk 5 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c1_1fac2c01 | Page 3] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: General]
+tions (tier based) in an attachment. Also,
+can you clarify what should be included in the “quote value” field of the Oracle RFP input tool.
+Would this be the same price as the above highlighted field?
+
+Please submit a minimum price on this line and attach additional pricing if this
+differs between tiers or devices. The “quote value” field is where the details for the
+warranty offered would be included..
+26. In RFP Section 2.1 Line Information (pricing table) #12, will you please clarify if you would like us
+to include a minimum price for one of the deployment services line items in the “quoted price”
+field then include the various additional deployment service options (tier based) in an
+attachment?
+Please submit a minimum price on this line and attach additional pricing if this
+differs between tiers or devices.
+27. In RFP Section 2.1 Line Information (pricing table) #14, would the District consider moving this to
+a distinct/separate column so you areable to evaluate the discount percentage of list per tier of
+device? If preferred, can we either attach a table to 2.2.14 Line 14 Discount percentage off
+catalog/list price or put a discount percentage in the “note to buyer” field.
+The pricing table is generated from the electronic system and cannot be
+manipulated. Line 14 can include the minimum discount percentage offered, and an
+attachment can be included with your submission to address different tiers.
+28. In the RFP “Scope and Specifications of the Proposal” section, can you please verify that all
+warranty options need to be official manufacturer warranties?
+Yes.
+29. Under the Scope and Specifications section relating to warranty, does Dallas ISD want to see
+additional break-fix repair programs available to the district? These programs could include the
+vendor going onsite to a central or regional DISD facility to pick up devices needing service,
+repairing them and returning on a defined schedule.
+As a minimum requirement, Dallas ISD is asking for a one-year warranty for
+student Chromebooks and three years for student and staff Windows laptops.
+Additional programs can be included as additional pricing in the attachments section.
+30. SCOPE: Does Dallas ISD need to etch and asset tag each device or is it one or the other?
+Both are required.
+
+--- [Addendum 1 | Chunk 6 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c0_81a21b95 | Page 4] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.4 | Section: General]
+31. FORM 1295 - CERTIFICATE OF INTERESTED PARTIES: The RFP states that "This form must then be
+signed and attached to the Response Attachments, prior to any business transaction." Referring
+to "Response Attachments," does Form 1295 have to be submitted with the RFP response or
+after award, "prior to any business transaction"?
+The Form 1295 should be submitted with the RFP response.
+32. INSTRUCTIONS AND REQUIREMENTS FOR OFFER SUBMITTAL: The RFP states that "the requested
+information must be provided using the PDF version of the solicitation." Some of the attributes,
+however, require a response that exceeds the space available in the PDF version of the
+solicitation. For example, in the SCOPE AND SPECIFICATIONS OF THE PROPOSAL section,
+attribute 1 asks the vendor to "provide examples of previously awarded contracts that
+demonstrate your company's ability," attribute 2 asks the vendor to "describe your company's
+ability to perform each of the deployment services," etc. How should vendors comply with the
+requirement to use the PDF version of the solicitation and yet respond to such attributes in the
+very limited space provided under the instruction to "Provide our answer below"?
+If responding electronically, a pdf version is not required. Manual responses
+should have direct edits on the PDF, supporting documentation can be included as part
+of the submission for those areas that are not sufficient in space.
+33. Pricing: Do you require any Imaging on your devices? Every DT, Laptop, and tablet device has an
+OS installed. What additional software do you require for the software installation requirement?
+For Windows devices, autopilot is required. For Chromebooks, enrollment in
+Google Management is required.
+34. Deployment: Does Dallas ISD have a deployment schedule? Number of devices to each address,
+which devices to each address. How many deployments per week, month and when?
+Any awarded vendor will need to coordinate a schedule of deliveries with the
+Dallas ISDED TECH department.
+35. Anticipated Equipment Quantities: Can they provide monthly QTY’s per category?
+Quantities will fluctuate, a monthly estimate cannot be provided.
+36. Laptop Battery Life: How are they measuring battery life?
+This will be based on the manufacturer's specifications.
+37. Evaluation Units: laptops, tablets, monitors, etc. Are samples needed? If so, when?
+Samples will only be required from awarded vendors when ready to purchase
+large quantities.
+38. Laptop Chargers: Why 65w chargers being requested for the Chrome?
+This is a minimum requirement for these devices.
+39. Terms and Conditions (Legal): Will DISD Negotiate the legal terms and conditions after the
+award of this bid has been made?
+If deviations/exceptions to the terms and conditions are submitted, the District
+will respectfully request the removal of said deviations/exceptions. Submissions may be
+deemed nonresponsive otherwise and could be removed from consideration.
+
+--- [Addendum 1 | Chunk 7 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p5_c0_8b635461 | Page 5] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.5 | Section: End Of Addendum]
+The information in this Addendum is hereby incorporated and made part of any contract awarded
+pursuant to this solicitation.
+
+Please sign this addendum and submit along with your copies of the proposal. ALL OTHER
+PROVISIONS, AND OTHER TERMS AND CONDITIONS REMA IN UNCHANGED. BIDDERS ARE REQUIRED TO ACKNOWLEDGE AND RETURN/SUBMIT A COPY OF THIS ADDENDUM WITH THEIR PROPOSAL.
+
+Company Name:
+
+Submitter’s Name/Title:
+
+Address:
+
+City, State and Zip Code:
+
+Email Address:
+
+Submitter’s Signature:
+
+Telephone No.
+
+Fax No.
+
+800 # (if available)
+
+Date:
+
+END OF ADDENDUM
+
+================================================================================
+2. ADDENDUM 2 FULL CHUNKS (1 chunks)
+================================================================================
+
+--- [Addendum 2 | Chunk 1 | ID: Bid1_Addendum_2_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_43abb869 | Page 1] ---
+[Bid1 | Addendum 2 | Addendum 2 RFP JA 207652 Student and | p.1 | Section: End Of Addendum]
+ADDENDUM No. 2
+RFPJA-207652 Student and Staff Computing Devices
+
+The Purpose of this Addendum is to extend the due date of this RFP.
+
+The new due date for this RFP will be July 9, 2024 at 2:00 PM CST.
+
+The information in this Addendum is hereby incorporated and made part of any contract awarded
+pursuant to this solicitation.
+
+Please sign this addendum and submit along with your copies of the proposal. ALL OTHER PROVISIONS
+AND OTHER TERMS AND CONDITIONS REMA IN UNCHANGED. BIDDERS ARE REQUIRED TO
+ACKNOWLEDGE AND RETURN/SUBMIT A COPY OF THIS ADDENDUM WITH THEIR PROPOSAL.
+
+Company Name:
+
+Submitter’s Name/Title:
+
+Address:
+
+City, State and Zip Code:
+
+Email Address:
+
+Submitter’s Signature:
+
+Telephone No.
+
+Fax No.
+
+800 # (if available)
+
+Date:
+
+END OF ADDENDUM
+
+================================================================================
+3. PORFP_-_Dell_Laptop_Final.pdf FULL CHUNKS (14 chunks)
+================================================================================
+
+--- [PORFP | Chunk 1 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f | Page 1 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Section 1 –General Information]
+Section 1 –General Information
+
+PORFP Number:: #E20P4600040 eMMA Project Number: BPM044557
+
+PORFP Type:: Fixed Price
+
+Functional Area/s (FA) for this PORFP: - Functional Area/s (FA) - FA I (Printers and Associated Peripherals) FA V (Manufacturer’s Extended Warranty)
+
+for this PORFP:
+
+Manufacturer Name: Dell
+
+Designated Small: Yes
+
+Business Reserve?(SBR):
+
+Minority Business Enterprise (MBE) Goal for FA IV Below: 0 %
+
+(See “Hardware Master Contract MBE Participation Worksheet”):
+
+PORFP Issue Date: - 05/24/2024 - PROPOSAL DUE - 06/10/2024
+
+mm/dd/yyyy: DATE and TIME:
+
+Place of Performance: - Place of Performance: - MD State Treasurer's Office 80 Clavert Street Annapolis MD 21401
+
+--- [PORFP | Chunk 2 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c1_4065d77c | Page 1 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Section 1 –General Information]
+PORFP Issue Date: - 05/24/2024 - PROPOSAL DUE - 06/10/2024
+
+mm/dd/yyyy: DATE and TIME:
+
+Place of Performance: - Place of Performance: - MD State Treasurer's Office 80 Clavert Street Annapolis MD 21401
+
+Special Instructions:: LIMITED TO MASTER CONTRACTORS Only Master Contractors that are awarded a contract under the Desktop, Laptop and Tablet 2015 Master Contract, 060B5400007, are eligible to submit a bid in response to this secondary competition Purchase Order Request for Proposal (PORFP). SMALL BUSINESS RESERVE (SBR) PROCUREMENT This is a Small Business Reserve Procurement for which award will be limited to certified small business vendors. Only businesses that meet the statutory requirements set forth in State Finance and Procurement Article, §§14-501—14-505, Annotated Code of Maryland, and that are certified by GOSBA Small Business Reserve Program are eligible for award of a contract. BID SUBMISSION INSTRUCTIONS Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system. Bids will not be accepted by email, fax, U.S. Mail, or hand delivery. You must be registered and Logged in to submit a bid on eMMA. Instructions on how to submit proposals electronically can be found at: https://procurement.maryland.gov/emma-qrgs/ Refer to Vendor QRG 4 – eMMA QRG Responding to Solicitations (IFB)
+
+Purchase Order Request for Proposals (PORFP)
+Hardware Master Contract
+
+1
+
+Section 1 –General Information
+
+--- [PORFP | Chunk 3 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c2_871206cb | Page 1 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Bid Submission Instructions]
+ent.maryland.gov/emma-qrgs/ Refer to Vendor QRG 4 – eMMA QRG Responding to Solicitations (IFB)
+
+Purchase Order Request for Proposals (PORFP)
+Hardware Master Contract
+
+1
+
+Section 1 –General Information
+
+PORFP Number:
+
+#E20P4600040
+eMMA Project Number: BPM044557
+PORFP Type:
+
+Fixed Price
+Functional Area/s (FA)
+for this PORFP:
+
+FA I (Printers and Associated Peripherals)
+FA V (Manufacturer’s Extended Warranty)
+
+Manufacturer Name
+
+Dell
+
+Designated Small
+Business Reserve?(SBR):
+
+Yes
+Minority Business Enterprise (MBE) Goal for FA IV Below
+(See “Hardware Master Contract MBE Participation Worksheet”):
+0 %
+PORFP Issue Date:
+mm/dd/yyyy
+05/24/2024
+PROPOSAL DUE
+DATE and TIME:
+06/10/2024
+Place of Performance:
+MD State Treasurer's Office
+80 Clavert Street
+Annapolis MD 21401
+Special Instructions:
+
+LIMITED TO MASTER CONTRACTORS
+Only Master Contractors that are awarded a contract under the
+Desktop,
+Laptop
+and
+Tablet
+2015
+Master
+Contract,
+060B5400007, are eligible to submit a bid in response to this
+secondary competition Purchase Order Request for Proposal
+(PORFP).
+
+SMALL BUSINESS RESERVE (SBR) PROCUREMENT
+This is a Small Business Reserve Procurement for which award
+will be limited to certified small business vendors. Only
+businesses that meet the statutory requirements set forth in
+State Finance and Procurement Article, §§14-501—14-505,
+Annotated Code of Maryland, and that are certified by GOSBA
+Small Business Reserve Program are eligible for award of a
+contract.
+
+--- [PORFP | Chunk 4 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c3_1115ba77 | Page 1 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Bid Submission Instructions]
+ts set forth in
+State Finance and Procurement Article, §§14-501—14-505,
+Annotated Code of Maryland, and that are certified by GOSBA
+Small Business Reserve Program are eligible for award of a
+contract.
+
+BID SUBMISSION INSTRUCTIONS
+Purchase Order Request for Proposal (PORFP) responses will only
+be accepted through the State's eMaryland Marketplace Advantage
+(eMMA) e-Procurement system. Bids will not be accepted by email,
+fax, U.S. Mail, or hand delivery. You must be registered and Logged
+in
+to
+submit a bid
+on
+eMMA.
+
+Instructions on how to submit proposals electronically can be found
+at: https://procurement.maryland.gov/emma-qrgs/
+Refer to Vendor QRG 4 – eMMA QRG Responding to Solicitations
+(IFB)
+
+--- [PORFP | Chunk 5 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c0_4c0706ff | Page 2 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Section 2 – Agency Point of]
+Questions Due (Closing) Date and Time: 06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject line, “QUESTION for Dell Laptop #E20P4600040”, and be submitted in writing via e-mail to the Procurement Officer no later than the date and time specified.
+
+Security Requirements (if applicable):: 1. The Department reserves the right to purchase more or less than the specified quantity to the extent limited by funding. 2. The Master Contractor must provide the estimated ship date/lead time for each item listed in the PORFPFAI 3. Please allow proposals/quotes provided in response to this PORFP to be valid for at least 90 days after the set due date above. 4. The Master Contractor must be an authorized reseller for Dell. The state reserves the right to requesta Letter of Authorization (LOA) from the Manufacturer or Distributor. 5. Purchase new and unused equipment. 6. The Master Contractor shall not impose a restocking fee if an item is returned due to damage or incorrect product shipped. 7. ENERGY STAR certified product 8. The Master Contractor must providea Mercury Affidavit: https://doit.maryland.gov/contracts/Documents/hardware co _ ntract/hwmercury affidavit.pdf _ 9. Delivery within 45 days of Award.
+
+--- [PORFP | Chunk 6 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c1_d8577ee7 | Page 2 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Section 2 – Agency Point of]
+fied product 8. The Master Contractor must providea Mercury Affidavit: https://doit.maryland.gov/contracts/Documents/hardware co _ ntract/hwmercury affidavit.pdf _ 9. Delivery within 45 days of Award.
+
+Invoicing Instructions:: 1. Email invoices to: STOaccountspayable@treasurer.state.md.us 2. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum the following: • Contractor name, mailing address, social security number or Federal Tax ID number, and phone number. • Reference the States assigned PORFP number. • Date, invoice number and amount due. 3. Proof of delivery including packing slip or delivery confirmation, and equipment serial numbers.
+
+Section 2 – Agency Point of Contact (POC) Information
+
+Agency / Division Name: - Agency / Division Name: - State Treasurer's Office/ Information Technology
+
+Purchase Order Request for Proposals (PORFP)
+Hardware Master Contract
+
+2
+Questions
+Due
+(Closing)
+Date
+and
+Time:
+06/01/2024 at 2:00 PM EDT
+Questions
+must
+be
+submitted
+in
+writing
+to
+thawkins@treasurer.state.md.us
+with
+the
+subject
+line,
+“QUESTION for Dell Laptop #E20P4600040”, and be
+submitted in writing via e-mail to the Procurement Officer no later
+than the date and time specified.
+
+Security Requirements (if
+applicable):
+1. The Department reserves the right to purchase more or less
+than the specified quantity to the extent limited by funding.
+
+--- [PORFP | Chunk 7 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c2_8914ab2f | Page 2 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Section 2 – Agency Point of]
+er
+than the date and time specified.
+
+Security Requirements (if
+applicable):
+1. The Department reserves the right to purchase more or less
+than the specified quantity to the extent limited by funding.
+
+2. The Master Contractor must provide the estimated ship
+date/lead time for each item listed in the PORFPFAI
+
+3. Please allow proposals/quotes provided in response to this
+PORFP to be valid for at least 90 days after the set due date
+above.
+
+4. The Master Contractor must be an authorized reseller for Dell.
+The state reserves the right to requesta Letter of Authorization
+(LOA) from the Manufacturer or Distributor.
+
+5. Purchase new and unused equipment.
+
+6. The Master Contractor shall not impose a restocking fee if an
+item is returned due to damage or incorrect product shipped.
+
+7. ENERGY STAR certified product
+
+8. The Master Contractor must providea Mercury Affidavit:
+https://doit.maryland.gov/contracts/Documents/hardware_co
+ntract/hwmercury_affidavit.pdf
+
+9. Delivery within 45 days of Award.
+
+Invoicing Instructions:
+
+1. Email invoices to:
+STOaccountspayable@treasurer.state.md.us
+
+2. Invoice(s) shall be submitted within 10 days of delivering the
+equipment and shall include at a minimum the following:
+• Contractor name, mailing address, social security number
+or Federal Tax ID number, and phone number.
+• Reference the States assigned PORFP number.
+• Date, invoice number and amount due.
+
+3. Proof of delivery including packing slip or delivery
+confirmation, and equipment serial numbers.
+
+--- [PORFP | Chunk 8 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c3_fb7bcb46 | Page 2 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Section 2 – Agency Point of]
+ phone number.
+• Reference the States assigned PORFP number.
+• Date, invoice number and amount due.
+
+3. Proof of delivery including packing slip or delivery
+confirmation, and equipment serial numbers.
+
+Section 2 – Agency Point of Contact (POC) Information
+
+Agency / Division Name:
+State Treasurer's Office/ Information Technology
+
+--- [PORFP | Chunk 9 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_tbl_0_part0_f5cf5180 | Page 3 | Table: True] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Specification Table]
+| Agency POC Name: | Field 2 | Field 3 | Field 4 | Tamaira Hawkins | Field 6 | Field 7 | Field 8 | Field 9 | Agency POC | Field 11 | Field 12 | Field 13 | Field 14 | Field 15 | 410-260-7533 | Field 17 | Field 18 | Field 19 | Field 20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |  |  | Phone Number: |  |  |  |  |  |  |  |  |  |  |
+| Agency POC Email Address: |  |  |  | thawkins@treasurer.state.md .us |  |  |  | Agency POC Fax: | Agency POC |  |  |  |  |  | N/A |  |  |  |  |
+|  |  |  |  |  |  |  |  |  | Fax: |  |  |  |  |  |  |  |  |  |  |
+| Agency POC Mailing Address: |  |  |  | MD State Treasurer’s Office 80 Calvert Street, Room 109 Annapolis, MD 21401 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Section 3 – Delivery Address / Work Site POC Information (if different from above) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Agency On-site Contact |  |  | James Simpson |  |  |  |  | Agency On-site |  |  |  |  |  | 410-260-6063 |  |  |  |  |
+|  | Name: |  |  |  |  |  |  |  | Phone Number: |  |  |  |  |  |  |  |  |  |  |
+|  | Agency On-site Email |  |  | jsimpson@treasurer.state. md.us |  |  |  |  | Agency On-site |  |  |  |  |  |  |  |  |  |  |
+|  | Address: |  |  |  |  |  |  |  | Fax: |  |  |  |  |  |  |  |  |  |  |
+| Agency On-site Address: | Agency On-site Address: |  |  | 80 Calvert Street, Room 109 Annapolis, MD 21401 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+--- [PORFP | Chunk 10 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_tbl_0_part1_85b3d96f | Page 3 | Table: True] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Specification Table]
+| Agency POC Name: | Field 2 | Field 3 | Field 4 | Tamaira Hawkins | Field 6 | Field 7 | Field 8 | Field 9 | Agency POC | Field 11 | Field 12 | Field 13 | Field 14 | Field 15 | 410-260-7533 | Field 17 | Field 18 | Field 19 | Field 20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Section 4 – Scope of Work |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | FA II - Printers and Associated Peripherals |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | (Provide product specifications below. If some or all specifications are unknown, |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Master Contractors may propose products based on a detailed description in the |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Business Need / Required Functionality field*) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| *Business Need / Required Functionality | *Business Need / |  |  | Office is in need of a refresh of laptops and must acquire enough laptops to accommodate MD529 employees who have been included in our staff as of June 1, 2023. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Required Functionality |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Product Name |  | Product Description |  |  |  |  | Model # |  |  |  |  |  | Qty |  |  |  |  | Due Date |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | mm/dd/yyyy |  |
+| 1. SI# CC7802 Dell Latitude 5550 |  | SI# CC7802 Dell Latitude 5550 *Laptops must be Microsoft Copilot ready* |  |  |  |  | SI# CC7802 |  |  |  |  | 30 |  |  |  |  | 06/10/2024 |  |  |
+
+--- [PORFP | Chunk 11 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_tbl_0_part2_79849647 | Page 3 | Table: True] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Specification Table]
+| Agency POC Name: | Field 2 | Field 3 | Field 4 | Tamaira Hawkins | Field 6 | Field 7 | Field 8 | Field 9 | Agency POC | Field 11 | Field 12 | Field 13 | Field 14 | Field 15 | 410-260-7533 | Field 17 | Field 18 | Field 19 | Field 20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2. Dell Thunderbolt 4 Dock – WD22TB4 |  | Dell Thunderbolt 4 Dock – WD22TB4 |  |  |  |  | WD22TB4 |  |  |  |  | 30 |  |  |  |  | 06/10/2024 |  |  |
+|  | FA V - Manufacturer’s Extended Warranty |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | (Provide a detailed description of warranty requirements and deliverables) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  | Deliverables |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Warranty Requirements |  |  |  |  |  |  |  |  |  | Start Date |  |  |  |  | End Date |  |  |  |
+|  |  |  |  |  |  |  |  |  |  |  | mm/dd/yyyy |  |  |  |  | mm/dd/yyyy |  |  |  |
+| 1. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years |  |  |  |  |  | Warranty certificate or Affidavit to be presented upon award |  |  |  | Date of Delivery |  |  |  |  | 3 years following the date of delivery |  |  |  |  |
+|  | Section 5 – Evaluation Criteria – Technical Proposal |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | (Provide a list of evaluation criteria in descending order of importance) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+--- [PORFP | Chunk 12 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_c0_8a39cf90 | Page 3 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Section 4 – Scope of Work]
+Purchase Order Request for Proposals (PORFP)
+Hardware Master Contract
+
+3
+
+Agency POC Name:
+Tamaira Hawkins
+Agency POC
+Phone Number:
+410-260-7533
+Agency POC Email
+Address:
+thawkins@treasurer.state.md
+.us
+Agency POC
+Fax:
+N/A
+Agency POC Mailing
+Address:
+MD State Treasurer’s Office
+80 Calvert Street, Room 109
+Annapolis, MD 21401
+
+Section 3 – Delivery Address / Work Site POC Information (if different from above)
+
+Agency On-site Contact
+Name:
+James Simpson
+Agency On-site
+Phone Number:
+410-260-6063
+Agency On-site Email
+Address:
+jsimpson@treasurer.state.
+md.us
+Agency On-site
+Fax:
+
+Agency On-site Address:
+80 Calvert Street, Room 109 Annapolis, MD 21401
+
+Section 4 – Scope of Work
+
+FA II - Printers and Associated Peripherals
+(Provide product specifications below. If some or all specifications are unknown,
+Master Contractors may propose products based on a detailed description in the
+Business Need / Required Functionality field*)
+*Business Need /
+Required Functionality
+Office is in need of a refresh of laptops and must acquire enough
+laptops to accommodate MD529 employees who have been
+included in our staff as of June 1, 2023.
+Product Name
+Product Description
+Model #
+Qty
+
+Due Date
+mm/dd/yyyy
+1. SI# CC7802 Dell
+Latitude 5550
+
+SI# CC7802 Dell Latitude
+5550
+*Laptops must be
+Microsoft Copilot ready*
+SI# CC7802
+
+30
+06/10/2024
+2. Dell Thunderbolt 4
+Dock – WD22TB4
+
+Dell Thunderbolt 4 Dock –
+WD22TB4
+
+WD22TB4
+
+30
+06/10/2024
+
+--- [PORFP | Chunk 13 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_c1_9f74d915 | Page 3 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Section 5 – Evaluation Criteria –]
+ 5550
+
+SI# CC7802 Dell Latitude
+5550
+*Laptops must be
+Microsoft Copilot ready*
+SI# CC7802
+
+30
+06/10/2024
+2. Dell Thunderbolt 4
+Dock – WD22TB4
+
+Dell Thunderbolt 4 Dock –
+WD22TB4
+
+WD22TB4
+
+30
+06/10/2024
+
+FA V - Manufacturer’s Extended Warranty
+(Providea detailed description of warranty requirements and deliverables)
+
+Warranty Requirements
+
+Deliverables
+
+Start Date
+mm/dd/yyyy
+
+End Date
+mm/dd/yyyy
+1. Dell Limited Hardware Warranty
+Extended for all machines
+purchased - 3 Years
+Warranty
+certificate or
+Affidavit to be
+presented upon
+award
+Date of
+Delivery
+3 years
+following the
+date of delivery
+
+Section 5 – Evaluation Criteria – Technical Proposal
+(Providea list of evaluation criteria in descending order of importance)
+
+--- [PORFP | Chunk 14 | ID: Bid2_PORFP_Dell_Laptop_Final_p4_c0_ec646d5a | Page 4 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.4 | Section: General]
+Evaluation Criteria
+
+1. Accuracy of Bid (Meets All Requirements)
+
+2. Price
+
+Basis for Award Recommendation Evaluation criteri a for award will be established at the PORFP level. PORFPs will be awarded in accordance with the competitive Sealed Proposals process under COMAR 21.05.03. The agency POC will recommend award to the Master Contractor whose proposal is determined to be the most advantageous to the State, considering price and the evaluation factors set forth in the PORFP. The agency intends to make an award to one vendor for both Functional Area requirements. The agency POC will initiate and delivera PO to the selected Master Contractor.
+
+Purchase Order Request for Proposals (PORFP)
+Hardware Master Contract
+
+4
+
+Evaluation Criteria
+
+1. Accuracy of Bid (Meets All Requirements)
+
+2. Price
+
+Basis for Award Recommendation
+Evaluation criteri a for award will be established at the PORFP level. PORFPs will be awarded in
+accordance with the competitive Sealed Proposals process under COMAR 21.05.03. The agency
+POC will recommend award to the Master Contractor whose proposal is determined to be the
+most advantageous to the State, considering price and the evaluation factors set forth in the
+PORFP. The agency intends to make an award to one vendor for both Functional Area
+requirements. The agency POC will initiate and delivera PO to the selected Master Contractor.
+
+================================================================================
+4. Bid1 'LENGTH OF CONTRACT' CHUNK AFTER LAYOUT-BOX FIX (2 chunks)
+================================================================================
+
+--- [LENGTH OF CONTRACT | Chunk 1 | ID: Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_82e8eaf3 | Page 2 | Table: False] ---
+[Bid1 | RFP | JA 207652 Student and Staff Computing | p.2 | Section: Alzate, Jasmine]
+LENGTH OF CONTRACT
+
+The term of this proposal shall be for a three (3) year agreement with two (2) successive one (1) year extensions based on the long-range needs of the District and mutual consent of both parties not to exceed five (5) years total.
+
+The Dallas Independent School District (Dallas ISD or District) is soliciting offers for the goods and/or services specified in this document. 1. Questions concerning this solicitation document should be addressed in writing to the Buyer's Email. 2. Questions must be submitted by the deadline to allow sufficient time for responses prior to receipt/opening date/time. 3. Responses to questions other than administrative questions will be provided to all potential offerors by means of an addendum to the solicitation. All vendors are encouraged to participate even if vendors are the sole source providers. This proposal is being issued in accordance with Title 2 of the Code of Federal Regulations (2CFR) Part 200
+
+--- [LENGTH OF CONTRACT | Chunk 2 | ID: Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_merged_39cd16c7 | Page 2 | Table: False] ---
+[Bid1 | RFP | JA 207652 Student and Staff Computing | p.2 | Section: Alzate, Jasmine]
+on. All vendors are encouraged to participate even if vendors are the sole source providers. This proposal is being issued in accordance with Title 2 of the Code of Federal Regulations (2CFR) Part 200
+
+Buyer
+ALZATE, JASMINE
+Email
+JALZATE@dallasisd.org
+1 Header Information
+1.1 General Information
+First Advertisement Date/Issue Date
+26-MAY-2024 08:00:00
+Second Advertisement Date
+02-JUN-2024 08:00:00
+Pre-Proposal Meeting
+10-JUN-2024 14:00:00
+Questions Deadline
+11-JUN-2024 16:00:00
+Questions Response from the District
+13-JUN-2024 18:00:00
+Solicitation Due
+27-JUN-2024 14:00:00
+Anticipated Evaluation & Sel
+11-JUL-2024 14:00:00
+Anticipated Approval/Award
+22-AUG-2024 18:00:00
+Pre-Proposal
+A pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10,
+2024. Please submit (in writing) any questions regarding this RFP. Only written questions will be
+considered. It is highly encouraged that all potential proposers participate and attend the preproposal.
+Join TEAMS Meeting: https://www.microsoft.com/en-us/microsoft-teams/join-a-meeting
+Meeting ID: 270 031 467 036
+Passcode: N9ndKY
+1.2 Terms
+Initial Term:
+3
+Renewal 1:
+1
+Renewal 2:
+1
+Any contract that results from this solicitation and upon Mutual Agreement of the awarded vendor and the
+District, may be extended not to exceed a total of 5 years(s). If either party intends not to renew the Contract,
+that party must give written notice to the other party no fewer than ninety (90) days prior to the expiration of the
+then current term of the Contract. If the District fails to timely exercise any of the options to renew, all remaining
+options to renew shall expire and terminate
+1.3 Requirements
+LENGTH OF CONTRACT
+The term of this proposal shall be for a three (3) year agreement with two (2) successive one (1) year
+extensions based on the long-range needs of the District and mutual consent of both parties not to exceed
+five (5) years total.
+SCOPE AND SPECIFICATIONS OF THE
+PROPOSAL
+The Dallas Independent School District (Dallas ISD or District) is soliciting offers for the goods and/or
+services specified in this document.
+1. Questions concerning this solicitation document should be addressed in writing to the Buyer's Email.
+2. Questions must be submitted by the deadline to allow sufficient time for responses prior to receipt/opening
+date/time.
+3. Responses to questions other than administrative questions will be provided to all potential offerors by
+means of an addendum to the solicitation.
+All vendors are encouraged to participate even if vendors are the sole source providers.
+This proposal is being issued in accordance with Title 2 of the Code of Federal Regulations (2CFR) Part 200
+
+requirements to procure vendors who provide goods or services purchased by Dallas ISD using federal dollars. This proposal may be used with local, state, federal, and grant-funded programs.
+
+================================================================================
+5. FIXED CONTRACT_AFFIDAVIT CHUNKS (5 chunks)
+================================================================================
+
+--- [Contract Affidavit | Chunk 1 | ID: Bid2_Contract_Affidavit_p1_c0_5504f3fc | Page 1] ---
+[Bid2 | Affidavit | Contract Affidavit | p.1 | Section: Financial Disclosure Affirmationi]
+A.
+AUTHORITYI hereby affirm that I,
+
+(name of affiant) am the
+(title) and duly authorized representative of
+(name of business entity) and that I possess the legal
+authority to make this affidavit on behalf of the business for which I am acting.
+B.
+CERTIFICATION OF REGISTRATIONOR QUALIFICATION WITH THE STATE
+DEPARTMENT OF ASSESSMENTS AND TAXATIONI FURTHER AFFIRM THAT:
+The business named above is a (check applicable box):
+(1) Corporation - * domestic or * foreign;
+(2) Limited Liability Company - * domestic or * foreign;
+(3) Partnership - * domestic or * foreign;
+(4) Statutory Trust - * domestic or * foreign;
+(5) * Sole Proprietorship.
+and is registered or qualified as required under Maryland Law. I further affirm that the above
+business is in good standing both in Maryland and (IF APPLICABLE) in the jurisdiction where it is
+presently organized, and has filed all of its annual reports, together with filing fees, with the
+Maryland State Department of Assessments and Taxation. The name and address of its resident
+agent (IF APPLICABLE) filed with the State Department of Assessments and Taxation is:
+Name and Department ID Number:
+
+Address:
+
+and that if it does business under a trade name, it has filed a certificate with the State Department of
+Assessments and Taxation that correctly identifies that true name and address of the principal or
+owner as:
+Name and Department ID Number:
+
+Address:
+
+--- [Contract Affidavit | Chunk 2 | ID: Bid2_Contract_Affidavit_p1_c1_5313c54d | Page 1] ---
+[Bid2 | Affidavit | Contract Affidavit | p.1 | Section: Financial Disclosure Affirmationi]
+as filed a certificate with the State Department of
+Assessments and Taxation that correctly identifies that true name and address of the principal or
+owner as:
+Name and Department ID Number:
+
+Address:
+
+C.
+FINANCIAL DISCLOSURE AFFIRMATIONI
+FURTHER AFFIRM THAT:
+I am aware of, and the above business will comply with, the provisions of State Finance and
+Procurement Article, §13-221, Annotated Code of Maryland, which require that every business that
+enters into contracts, leases, or other agreements with the State of Maryland or its agencies during a calendar year under which the business is to receive in the aggregate $100,000 or more shall, within
+30 days of the time when the aggregate value of the contracts, leases, or other agreements reaches
+$100,000, file with the Secretary of State of Maryland certain specified information to include
+disclosure of beneficial ownership of the business.
+D.
+POLITICAL CONTRIBUTION DISCLOSURE AFFIRMATIONI
+FURTHER AFFIRM THAT:
+I am aware of, and the above business will comply with, Election Law Article, Title 14, Annotated
+Code of Maryland, which requires that every person that enters into a procurement contract with the
+State, a county, or a municipal corporation, or other political subdivision of the State, during a calendar year in which the person receives a contract with a governmental entity in the amount of
+
+--- [Contract Affidavit | Chunk 3 | ID: Bid2_Contract_Affidavit_p2_c0_8a565b17 | Page 2] ---
+[Bid2 | Affidavit | Contract Affidavit | p.2 | Section: General]
+$200,000 or more, shall file with the State Board of Elections statements disclosing: (a) any
+contributions made during the reporting period to a candidate for elective office in any primary or
+general election; and (b) the name of each candidate to whom one or more contributions in a
+cumulative amount of $500 or more were made during the reporting period. The statement shall be
+filed with the State Board of Elections: (a) before execution of a contract by the State, a county, a
+municipal corporation, or other political subdivision of the State, and shall cover the 24 months prior
+to when a contract was awarded; and (b) if the contribution is made after the execution of a contract,
+then twice a year, throughout the contract term, on or before: (i) May 31, to cover the six (6) month
+period ending April 30; and (ii) November 30, to cover the six (6) month period ending October 31.
+E.
+DRUG AND ALCOHOL-FREE WORKPLACE
+(Applicable to all contracts unless the contract is for a law enforcement agency and the agency head
+or the agency head’s designee has determined that application of COMAR 21.11.08 and this
+certification would be inappropriate in connection with the law enforcement agency's undercover
+operations.)
+I CERTIFY THAT:
+(1) Terms defined in COMAR 21.11.08 shall have the same meanings when used in this
+certification.
+(2) By submission of its Proposal, the business, if other than an individual, certifies and agrees that,
+with respect to its employees to be employed under a contract resulting from this solicitation, the
+business shall:
+(a) Maintaina workplace free of drug and alcohol abuse during the term of the contract;
+(b) Publisha statement notifying its employees that the unlawful manufacture, distribution,
+dispensing, possession, or use of drugs, and the abuse of drugs or alcohol is prohibited in the
+business' workplace and specifying the actions that will be taken against employees for
+violation of these prohibitions;
+(c) Prohibit its employees from working under the influence of drugs or alcohol;
+(d) Not hire or assign to work on the contract anyone who the business knows, or in the exercise
+of due diligence should know, currently abuses drugs or alcohol and is not actively engaged
+in a bon a fide drug or alcohol abuse assistance or rehabilitation program;
+(e) Promptly inform the appropriate law enforcement agency of every drug-related crime that
+occurs in its workplace if the business has observed the violation or otherwise has reliable
+information that a violation has occurred;
+(f)
+Establish drug and alcohol abuse awareness programs to inform its employees about:
+(i)
+The dangers of drug and alcohol abuse in the workplace;
+(ii) The business's policy of maintaining a drug and alcohol free workplace;
+(iii) Any available drug and alcohol counseling, rehabilitation, and employee assistance
+programs; and
+(iv) The penalties that may be imposed upon employees who abuse drugs and alcohol in
+the workplace;
+(g) Provide all employees engaged in the performance of the contract with a copy of the
+statement required by §E(2)(b), above;
+(h) Notify its employees in the statement required by §E(2)(b), above, that as a condition of
+continued employment on the contract, the employee shall:
+(i)
+Abide by the terms of the statement; and
+
+--- [Contract Affidavit | Chunk 4 | ID: Bid2_Contract_Affidavit_p3_c0_88459a72 | Page 3] ---
+[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: General]
+(ii) Notify the employer of any criminal drug or alcohol abuse conviction for an offense
+occurring in the workplace not later than 5 days after a conviction;
+(i)
+Notify the procurement officer within 10 days after receiving notice under §E(2)(h)(ii),
+above, or otherwise receiving actual notice of a conviction;
+(j)
+Within 30 days after receiving notice under §E(2)(h)(ii), above, or otherwise receiving actual
+notice of a conviction, impose either of the following sanctions or remedial measures on any
+employee who is convicted of a drug or alcohol abuse offense occurring in the workplace:
+(i)
+Take appropriate personnel action against an employee, up to and including
+termination; or
+(ii) Require an employee to satisfactorily participate in a bon a fide drug or alcohol
+abuse assistance or rehabilitation program; and
+(k) Makea good faith effort to maintain a drug and alcohol free workplace through
+implementation of §E(2)(a)—(j), above.
+(3) If the business is an individual, the individual shall certify and agree as set forth in §E(4), below,
+that the individual shall not engage in the unlawful manufacture, distribution, dispensing,
+possession, or use of drugs or the abuse of drugs or alcohol in the performance of the contract.
+(4) I acknowledge and agree that:
+(a) The award of the contract is conditional upon compliance with COMAR 21.11.08 and this
+certification;
+(b) The violation of the provisions of COMAR 21.11.08 or this certification shall be cause to
+suspend payments under, or terminate the contract for default under COMAR 21.07.01.11 or
+21.07.03.15, as applicable; and
+(c) The violation of the provisions of COMAR 21.11.08 or this certification in connection with
+the contract may, in the exercise of the discretion of the Board of Public Works, result in
+suspension and debarment of the business under COMAR 21.08.03.
+F.
+CERTA IN AFFIRMATIONS VALIDI
+FURTHER AFFIRM THAT:
+To the best of my knowledge, information, and belief, each of the affirmations, certifications, or
+acknowledgements contained in that certain Proposal Affidavit dated
+, 20
+, and
+executed by ________________ for the purpose of obtaining the contract to which this Exhibit is
+attached remains true and correct in all respects as if made as of the date of this Contract Affidavit
+and as if fully set forth herein.
+I DO SOLEMNLY DECLARE AND AFFIRM UNDER THE PENALTIES OF PERJURY THAT
+THE CONTENTS OF THIS AFFIDAVIT ARE TRUE AND CORRECT TO THE BEST OF MY
+KNOWLEDGE, INFORMATION, AND BELIEF.
+Date:
+
+--- [Contract Affidavit | Chunk 5 | ID: Bid2_Contract_Affidavit_p3_c1_875835e5 | Page 3] ---
+[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: General]
+y set forth herein.
+I DO SOLEMNLY DECLARE AND AFFIRM UNDER THE PENALTIES OF PERJURY THAT
+THE CONTENTS OF THIS AFFIDAVIT ARE TRUE AND CORRECT TO THE BEST OF MY
+KNOWLEDGE, INFORMATION, AND BELIEF.
+Date:
+
+By:
+
+(print name of Authorized Representative and Affiant)
+
+(signature of Authorized Representative and Affiant)
+
+================================================================================
+6. CORRECTED DELL SPECS CHUNKS (4 chunks)
+================================================================================
+
+--- [Dell Specs | Chunk 1 | ID: Bid2_Dell_Laptop_Specs_p1_merged_2cb9bacd | Page 1 | Table: True] ---
+[Bid2 | Specifications | Dell Laptop Specs | p.1 | Section: Specification Table]
+| SKU | Description |
+| --- | --- |
+| 210-BLYZ | Dell Latitude 5550 XCTO Base |
+| 379-BFNZ | Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo) |
+| 619-ARSB | Windows 11 Pro, English, Brazilian Portuguese PT-BR, French, Spanish |
+| 658-BCSB | No Microsoft Office License Included - 30 day Trial Offer Only |
+| 338-CNRG | Assembly Base MTL 5550 |
+| 338-CNRK | Integrated Intel graphics for Intel Core Ultra 5 125U processor |
+| 321-BKTQ | Latitude 5550 Bottom Door, MTL U15 |
+| 409-BCXY | Intel Rapid Storage Technology Driver |
+| 631-BBSQ | Intel vPro Management Disabled |
+| 370-BBTL | 16 GB: 2 x 8 GB, DDR5, 5600 MT/s (5200 MT/s with 13th Gen Intel Core processors) |
+| 400-BRFT | 256 GB, M.2 2230, TLC, Gen 4 PCIe NVMe, SSD |
+| 391-BJHB | 15.6", FHD 1920x1080, 60Hz, IPS, Non-Touch, AG, 250 nit, 45% NTSC, FHD Cam |
+| 583-BLNH | English US backlit AI hotkey keyboard with numeric keypad, 99-key |
+| 555-BKQC | Intel AX211 WLAN Driver |
+| 555-BKLQ | Intel Wi-Fi 6E (6 where 6E unavailable) AX211, 2x2, 802.11ax, Bluetooth 5.3 wireless card |
+| 451-BDGX | 3-cell, 54 Wh, ExpressCharge Capable, ExpressCharge Boost Capable |
+| 492-BDMN | 65W AC adapter, USB Type-C, EcoDesign |
+| 346-BKLV | No Security |
+| 537-BBDO | E4 Power Cord 1M for US |
+| 340-DMNY | Latitude 5550 Quick Start Guide |
+| 340-AGIK | SERI Guide (ENG/FR/Multi) |
+| 387-BBPC | ENERGY STAR Qualified |
+| 817-BBBB | Custom Configuration |
+| 658-BFQB | Dell Additional Software |
+| 340-DMMK | Mix Model MTL 65WADPT |
+| 389-FGSN | Intel Core Ultra 5 Non-vPro Label |
+| 319-BBKK | FHD HDR RGB Camera, TNR, Camera Shutter, Microphone |
+| 634-BRWG | Windows AutoPilot |
+| 379-BDZB | EPEAT 2018 Registered (Gold) |
+
+SI# CC7802 Dell Latitude 5550
+
+--- [Dell Specs | Chunk 2 | ID: Bid2_Dell_Laptop_Specs_p2_tbl_0_d093055f | Page 2 | Table: True] ---
+[Bid2 | Specifications | Dell Laptop Specs | p.2 | Section: Specification Table]
+| SKU | Description |
+| --- | --- |
+| 362-7806 | CFI,Information,MIAS, Post Burn,Factory Install |
+| 364-1846 | CFI Titan Code for CFI FIDA or Bypass SI |
+| 364-4107 | CFI,Information, Validation,Select Any Microsoft OS |
+| 365-0257 | CFI Routing SKU |
+| 366-0135 | Custom Asset Report |
+| 366-0141 | Consigned Asset Tag |
+| 371-0941 | CFI,Information Client,Only |
+| 375-3088 | CFI,Information,CSRouting,Eligible,Factory Install |
+| 383-0464 | CFI,LBL,POLY,SML,CC7801,FACTORY INSTALL |
+
+--- [Dell Specs | Chunk 3 | ID: Bid2_Dell_Laptop_Specs_p3_c0_310698d2 | Page 3 | Table: False] ---
+[Bid2 | Specifications | Dell Laptop Specs | p.3 | Section: General]
+Important Notes
+Terms of Sale
+This Quote will, if Customer issues a purchase order for the quoted items that is accepted by Supplier, constitute a contract between the
+entity issuing this Quote (“Supplier”) and the entity to whom this Quote was issued (“Customer”). Unless otherwise stated herein, pricing is
+valid for thirty days from the date of this Quote. All product, pricing and other information is based on the latest information available and is
+subject to change. Supplier reserves the right to cancel this Quote and Customer purchase orders arising from pricing errors. Taxes and/or
+freight charges listed on this Quote are only estimates. The final amounts shall be stated on the relevant invoice. Additional freight charges
+will be applied if Customer requests expedited shipping. Please indicate any tax exemption status on your purchase order and send your tax
+exemption certificate to Tax_Department@dell.com or ARSalesTax@emc.com, as applicable.
+Governing Terms: This Quote is subject to: (a) a separate written agreement between Customer or Customer’s affiliate and Supplier or a
+Supplier´s affiliate to the extent that it expressly applies to the products and/or services in this Quote or, to the extent there is no such
+agreement, to the applicable set of Dell’s Terms of Sale (available at www.dell.com/terms or www.dell.com/oemterms), or for cloud/as-a-
+Service offerings, the applicable cloud terms of service (identified on the Offer Specific Terms referenced below); and (b) the terms
+referenced herein (collectively, the “Governing Terms”). Different Governing Terms may apply to different products and services on this
+Quote. The Governing Terms apply to the exclusion of all terms and conditions incorporated in or referred to in any documentation submitted
+by Customer to Supplier.
+Supplier Software Licenses and Services Descriptions: Customer’s use of any Supplier software is subject to the license terms
+accompanying the software, or in the absence of accompanying terms, the applicable terms posted on www.Dell.com/eula. Descriptions and
+terms for Supplier-branded standard services are stated at www.dell.com/servicecontracts/global or for certain infrastructure products at
+www.dellemc.com/en-us/customer-services/product-warranty-and-service-descriptions.htm.
+Offer-Specific, Third Party and Program Specific Terms: Customer’s use of third-party software is subject to the license terms that
+accompany the software. Certain Supplier-branded and third-party products and services listed on this Quote are subject to additional,
+specific terms stated on www.dell.com/offeringspecificterms (“Offer Specific Terms”).
+In case of Resale only: Should Customer procure any products or services for resale, whether on standalone basis or as part of a solution,
+Customer shall include the applicable software license terms, services terms, and/or offer-specific terms in a written agreement with the enduser and provide written evidence of doing so upon receipt of request from Supplier.
+In case of Financing only: If Customer intends to enter into a financing arrangement (“Financing Agreement”) for the products and/or
+services on this Quote with Dell Financial Services LLC or other funding source pre-approved by Supplier (“FS”), Customer may issue its
+purchase order to Supplier or to FS. If issued to FS, Supplier will fulfill and invoice FS upon confirmation that: (a) FS intends to enter intoa
+Financing Agreement with Customer for this order; and (b) FS agrees to procure these items from Supplier. Notwithstanding the Financing
+Agreement, Customer’s use (and Customer’s resale of and the end-user’s use) of these items in the order is subject to the applicable
+governing agreement between Customer and Supplier, except that title shall transfer from Supplier to FS instead of to Customer. If FS
+notifies Supplier after shipment that Customer is no longer pursuinga Financing Agreement for these items, or if Customer fails to enter into
+such Financing Agreement within 120 days after shipment by Supplier, Customer shall promptly pay the Supplier invoice amounts directly to
+Supplier.
+Customer represents that this transaction does not involve: (a) use of U.S. Government funds; (b) use by or resale to the U.S. Government;
+or (c) maintenance and support of the product(s) listed in this document within classified spaces. Customer further represents that this
+transaction does not require Supplier’s compliance with any statute, regulation or information technology standard applicable to a U.S.
+Government procurement.
+For certain products shipped to end users in California, a State Environmental Fee will be applied to Customer’s invoice. Supplier
+encourages customers to dispose of electronic equipment properly.
+Electronically linked terms and descriptions are available in hard copy upon request.
+^DELL BUSINESS CREDIT (DBC): Offered to business customers by WebBank, who determines qualifications for and terms of credit.
+Taxes, shipping and other charges are extr a and vary. The Total Minimum Payment Due is the greater of either $20 or 3% of the New
+Balance shown on the statement rounded up to the next dollar, plus all past due amounts. Dell and the Dell logo are trademarks of Dell Inc.
+
+--- [Dell Specs | Chunk 4 | ID: Bid2_Dell_Laptop_Specs_p3_c1_2015caaf | Page 3 | Table: False] ---
+[Bid2 | Specifications | Dell Laptop Specs | p.3 | Section: General]
+um Payment Due is the greater of either $20 or 3% of the New
+Balance shown on the statement rounded up to the next dollar, plus all past due amounts. Dell and the Dell logo are trademarks of Dell Inc.
+
+Dell Marketing LP. U.S. only. Dell Marketing LP. is located at One Dell Way, Mail Stop 8129, Round Rock, TX 78682

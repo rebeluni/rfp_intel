@@ -25,7 +25,8 @@ class DocumentMetadata(BaseModel):
     file_path: str = Field(description="Relative or absolute path to the source file")
     doc_type: DocType = Field(description="Inferred document type")
     addendum_number: Optional[int] = Field(default=None, description="Numeric addendum/amendment index if applicable")
-    page_number: int = Field(default=1, description="1-indexed page number in the original document")
+    page_number: int = Field(default=1, description="1-indexed physical page number in the original document")
+    page_label: Optional[str] = Field(default=None, description="Printed page label (e.g. 'Page 3 of 5' or roman numeral)")
     document_date: Optional[str] = Field(default=None, description="Document issuance date if found")
     published_date: Optional[str] = Field(default=None, description="Publication or issuance date")
     section: Optional[str] = Field(default=None, description="Nearest section or heading title")
@@ -53,6 +54,7 @@ class DocumentChunk(BaseModel):
             "doc_type": self.metadata.doc_type.value,
             "addendum_number": self.metadata.addendum_number,
             "page_number": self.metadata.page_number,
+            "page_label": self.metadata.page_label,
             "document_date": self.metadata.document_date or self.metadata.published_date,
             "published_date": self.metadata.published_date or self.metadata.document_date,
             "section": self.metadata.section,
@@ -71,10 +73,12 @@ class ParsedTable(BaseModel):
 class ParsedPage(BaseModel):
     """A single parsed page of a document."""
     page_number: int
+    page_label: Optional[str] = None
     raw_text: str
     cleaned_text: str
     tables: List[ParsedTable] = Field(default_factory=list)
     is_scanned: bool = False
+    is_blank: bool = False
 
 
 class ParsedDocument(BaseModel):

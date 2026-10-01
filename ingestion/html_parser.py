@@ -43,7 +43,7 @@ class HTMLParser:
         if contact_info:
             kv_dict["Contact Info"] = contact_info
 
-        # Normalize specific date labels
+        # Normalize specific date labels into standard metadata fields
         published_date = None
         for k in ["Publication", "Publication Date", "Date Issued", "Posted Date", "Published Date"]:
             if k in kv_dict and kv_dict[k]:
@@ -55,6 +55,17 @@ class HTMLParser:
             if k in kv_dict and kv_dict[k]:
                 closing_date = kv_dict[k]
                 break
+
+        # Standardize date labels in kv_dict
+        if published_date:
+            kv_dict["published_date"] = published_date
+        if closing_date:
+            kv_dict["closing_date"] = closing_date
+
+        # Remove redundant pre-normalized date keys from display dict
+        for old_k in ["Publication", "Publication Date", "Date Issued", "Posted Date", "Closing Date", "Due Date"]:
+            if old_k in kv_dict and old_k not in ["published_date", "closing_date"]:
+                del kv_dict[old_k]
 
         # Build clean labeled sections
         structured_sections: List[str] = []
@@ -75,7 +86,8 @@ class HTMLParser:
                 desc_val = TextCleaner.clean_text(desc_div.get_text())
 
         if desc_val:
-            structured_sections.append(f"### Scope & Description\n{desc_val}")
+            cleaned_scope = cls._dedupe_scope_text(desc_val)
+            structured_sections.append(f"### Scope & Description\n{cleaned_scope}")
 
         # 3. Structured Tables
         if parsed_tables:
@@ -230,3 +242,88 @@ class HTMLParser:
             md_lines.append("| " + " | ".join(safe_cells) + " |")
 
         return "\n".join(md_lines)
+
+    @classmethod
+    def _dedupe_scope_text(cls, text: str) -> str:
+        """
+        Deduplicate repeated phrases in portal scope text, stripping 'See more'
+        and emitting clean one-row-per-item lines with quantity and due date.
+        """
+        if not text:
+            return ""
+        # Strip UI buttons: See more, See less, Read more
+        text = re.sub(r"\b(?:See\s+more|See\s+less|Read\s+more)\b", "", text, flags=re.IGNORECASE).strip()
+
+        # Check if text contains numbered items: '1. ... 2. ...'
+        if not re.search(r"\b\d+\.\s+", text):
+            return TextCleaner.clean_text(text)
+
+        item_chunks = re.split(r"(?=\b\d+\.\s+)", text)
+        cleaned_items = []
+        for chunk in item_chunks:
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            num_m = re.match(r"^(\d+)\.\s*(.*)", chunk, flags=re.DOTALL)
+            if not num_m:
+                cleaned_items.append(chunk)
+                continue
+            num, rest = num_m.group(1), num_m.group(2).strip()
+
+            # Extract tail quantity and due date if present: e.g. '30 06/10/2024'
+            qty = None
+            due_date = None
+            tail_m = re.search(r"\b(\d{1,4})\s+(\d{2}/\d{2}/\d{4})\b", rest)
+            if tail_m:
+                qty = tail_m.group(1)
+                due_date = tail_m.group(2)
+                rest = rest[:tail_m.start()] + rest[tail_m.end():]
+            else:
+                date_m = re.search(r"\b(\d{2}/\d{2}/\d{4})\b", rest)
+                if date_m:
+                    due_date = date_m.group(1)
+                    rest = rest.replace(due_date, "")
+
+            # Extract notes (e.g. *Laptops must be Microsoft Copilot ready*)
+            note = ""
+            note_m = re.search(r"(\*[^*]+\*)", rest)
+            if note_m:
+                note = note_m.group(1).strip()
+                rest = rest.replace(note_m.group(0), "")
+
+            # Deduplicate repeated word sequences in rest
+            words = rest.split()
+            deduped_words = []
+            i = 0
+            while i < len(words):
+                matched = False
+                max_span = min(15, len(words) - i)
+                for span in range(max_span // 2, 0, -1):
+                    if i + 2 * span <= len(words):
+                        p1 = words[i:i + span]
+                        p2 = words[i + span:i + 2 * span]
+                        if p1 == p2:
+                            deduped_words.extend(p1)
+                            i += 2 * span
+                            matched = True
+                            break
+                if not matched:
+                    deduped_words.append(words[i])
+                    i += 1
+
+            item_title = " ".join(deduped_words).strip()
+            # If item_title has a trailing repeated code matching the start (e.g. SI# CC7802 ... SI# CC7802)
+            first_two = " ".join(item_title.split()[:2]) if len(item_title.split()) >= 2 else ""
+            if first_two and item_title.endswith(first_two) and len(item_title) > len(first_two) + 5:
+                item_title = item_title[:-len(first_two)].strip()
+
+            row = f"{num}. {item_title}"
+            if note:
+                row += f" {note}"
+            if qty:
+                row += f" | Quantity: {qty}"
+            if due_date:
+                row += f" | Due Date: {due_date}"
+            cleaned_items.append(row)
+
+        return "\n".join(cleaned_items)

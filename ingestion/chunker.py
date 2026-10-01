@@ -67,7 +67,8 @@ class DocumentChunker:
             prose_chunks = self._chunk_text(
                 text=prose_text,
                 doc=doc,
-                page_number=page.page_number
+                page_number=page.page_number,
+                page_label=page.page_label
             )
             page_chunks.extend(prose_chunks)
 
@@ -102,6 +103,7 @@ class DocumentChunker:
                 doc_type=doc.doc_type,
                 addendum_number=doc.addendum_number,
                 page_number=page.page_number,
+                page_label=page.page_label,
                 document_date=doc.document_date,
                 published_date=doc.document_date,
                 section=section_name,
@@ -138,6 +140,7 @@ class DocumentChunker:
                         doc_type=doc.doc_type,
                         addendum_number=doc.addendum_number,
                         page_number=page.page_number,
+                        page_label=page.page_label,
                         document_date=doc.document_date,
                         published_date=doc.document_date,
                         section=section_name,
@@ -166,6 +169,7 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page.page_number,
+                    page_label=page.page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
                     section=section_name,
@@ -185,7 +189,8 @@ class DocumentChunker:
         self,
         text: str,
         doc: ParsedDocument,
-        page_number: int
+        page_number: int,
+        page_label: Optional[str] = None
     ) -> List[DocumentChunk]:
         """Split text along section headers or sliding window with paragraph/sentence breaks."""
         chunks: List[DocumentChunk] = []
@@ -221,6 +226,7 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page_number,
+                    page_label=page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
                     section=current_section,
@@ -256,6 +262,7 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page_number,
+                    page_label=page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
                     section=current_section,
@@ -311,7 +318,8 @@ class DocumentChunker:
     def _build_context_header(self, doc: ParsedDocument, page_number: int, section: str) -> str:
         """
         Build contextual breadcrumb header.
-        Format: [Bid1 | Addendum 1 | RFP JA-207652 | p.1 | Section: <heading>]
+        Format: [Bid1 | Addendum 1 | Clean Title Cut At Word Boundary | p.1 | Section: <heading>]
+        No underscores, cut at word boundary, no literal '...'.
         """
         # Document type label
         if doc.doc_type == DocType.ADDENDUM:
@@ -327,20 +335,51 @@ class DocumentChunker:
         else:
             doc_label = "RFP"
 
-        # Short clean title (strip long hashes or extensions)
-        clean_title = Path(doc.file_name).stem
-        clean_title = re.sub(r"__+", " ", clean_title).strip()
-        if len(clean_title) > 35:
-            clean_title = clean_title[:32] + "..."
+        # Short clean title without underscores or portal noise
+        stem = Path(doc.file_name).stem
+        clean_title = re.sub(r"[_\-]+", " ", stem).strip()
+        # Remove noisy portal boilerplate phrases
+        clean_title = re.sub(r"\b(?:SOURCING\s*\d+|Bid\s+Information|\{\d+\}|BidNet\s+Direct)\b", "", clean_title, flags=re.IGNORECASE)
+        clean_title = re.sub(r"\s+", " ", clean_title).strip()
 
-        clean_section = section[:35] if section else "General"
+        # Cut at a word boundary (max 42 chars) without literal '...'
+        if len(clean_title) > 42:
+            truncated = clean_title[:42]
+            last_space = truncated.rfind(" ")
+            if last_space > 20:
+                clean_title = truncated[:last_space].strip()
+            else:
+                clean_title = truncated.strip()
+
+        clean_section = section.strip() if section else "General"
+        # Also clean section of any trailing punctuation or excess length
+        if len(clean_section) > 35:
+            truncated_sec = clean_section[:35]
+            last_space = truncated_sec.rfind(" ")
+            if last_space > 15:
+                clean_section = truncated_sec[:last_space].strip()
+            else:
+                clean_section = truncated_sec.strip()
 
         return f"[{doc.bid_id} | {doc_label} | {clean_title} | p.{page_number} | Section: {clean_section}]"
 
     def _detect_heading(self, text: str) -> Optional[str]:
-        """Detect section headers in text snippet."""
+        """Detect section headers in text snippet, rejecting codes, SKUs, and table rows."""
         lines = [l.strip() for l in text.splitlines() if l.strip()]
         for line in lines[:5]:
+            # Reject table rows
+            if line.startswith("|") or line.endswith("|"):
+                continue
+
+            # Reject SKUs, part numbers, codes (e.g. 210-BLYZ, 362-7806, CC7802, SOL-1234)
+            if re.match(r"^[\w\d]+[-_][\w\d]+$", line):
+                continue
+
+            # Reject lines with high digit concentration or phone numbers
+            digits = sum(c.isdigit() for c in line)
+            if digits > 0 and (digits / len(line) > 0.18 or digits >= 5):
+                continue
+
             # Pattern 1: Section 1 - General Information
             sec_match = re.match(
                 r"^(?:Section|SECTION|Article|ARTICLE|Part|PART)\s+([0-9A-Za-z.-]+(?:\s*[-:–]\s*[^\n]+)?)",
@@ -352,11 +391,22 @@ class DocumentChunker:
             # Pattern 2: Markdown headers # Section Title
             h_match = re.match(r"^#{1,4}\s+([^\n]+)", line)
             if h_match:
-                return h_match.group(1).strip()
+                candidate = h_match.group(1).strip()
+                if not re.match(r"^[\w\d]+[-_][\w\d]+$", candidate):
+                    return candidate
 
-            # Pattern 3: Short all-caps headings
+            # Pattern 3: Short all-caps headings (e.g. LENGTH OF CONTRACT, SCOPE OF WORK)
+            words = re.findall(r"\b[A-Za-z]{3,}\b", line)
+            known_headers = {
+                "OVERVIEW", "INTRODUCTION", "SCOPE", "SPECIFICATIONS", "REQUIREMENTS",
+                "SUMMARY", "BACKGROUND", "DELIVERABLES", "TIMELINE", "SCHEDULE",
+                "PRICING", "EVALUATION", "ATTACHMENTS", "EXHIBITS", "INSTRUCTIONS",
+                "CONTRACT", "GENERAL", "PURPOSE", "ELIGIBILITY", "SUBMISSION"
+            }
             if len(line) < 55 and line.isupper() and not line.endswith(".") and len(line) > 4:
-                return line.title()
+                # Must have at least 2 words or contain a known header keyword
+                if len(words) >= 2 or any(w in known_headers for w in words):
+                    return line.title()
 
         return None
 
