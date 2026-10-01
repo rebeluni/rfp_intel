@@ -15,6 +15,8 @@ class TextCleaner:
             return ""
         # Remove zero-width spaces and soft hyphens
         text = text.replace("\u200b", "").replace("\ufeff", "").replace("\xad", "")
+        # Replace private-use area characters (bullets, boxes, symbols)
+        text = re.sub(r"[\uf000-\uf8ff]", "* ", text)
         # Replace non-breaking spaces with standard space
         text = text.replace("\xa0", " ")
         # Replace multiple horizontal spaces/tabs with single space

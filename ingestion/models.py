@@ -14,6 +14,7 @@ class DocType(str, Enum):
     ADDENDUM = "addendum"
     SPECS = "specs"
     AFFIDAVIT = "affidavit"
+    FORM = "form"
     OTHER = "other"
 
 
@@ -25,7 +26,9 @@ class DocumentMetadata(BaseModel):
     doc_type: DocType = Field(description="Inferred document type")
     addendum_number: Optional[int] = Field(default=None, description="Numeric addendum/amendment index if applicable")
     page_number: int = Field(default=1, description="1-indexed page number in the original document")
-    document_date: Optional[str] = Field(default=None, description="Document issuance/publication date if found")
+    document_date: Optional[str] = Field(default=None, description="Document issuance date if found")
+    published_date: Optional[str] = Field(default=None, description="Publication or issuance date")
+    section: Optional[str] = Field(default=None, description="Nearest section or heading title")
     is_table: bool = Field(default=False, description="Whether this chunk represents a structured table")
     table_caption: Optional[str] = Field(default=None, description="Optional caption or heading for the table")
     extra: Dict[str, Any] = Field(default_factory=dict, description="Arbitrary additional metadata")
@@ -34,7 +37,8 @@ class DocumentMetadata(BaseModel):
 class DocumentChunk(BaseModel):
     """An individual text/table chunk stored in search indices."""
     chunk_id: str = Field(description="Unique deterministic identifier for the chunk")
-    text: str = Field(description="Normalized text content or markdown table representation")
+    text: str = Field(description="Normalized text content or markdown table representation with context header")
+    context_header: Optional[str] = Field(default=None, description="Contextual breadcrumb header")
     metadata: DocumentMetadata = Field(description="Associated document metadata")
 
     def to_search_dict(self) -> Dict[str, Any]:
@@ -42,13 +46,16 @@ class DocumentChunk(BaseModel):
         return {
             "chunk_id": self.chunk_id,
             "text": self.text,
+            "context_header": self.context_header,
             "bid_id": self.metadata.bid_id,
             "file_name": self.metadata.file_name,
             "file_path": self.metadata.file_path,
             "doc_type": self.metadata.doc_type.value,
             "addendum_number": self.metadata.addendum_number,
             "page_number": self.metadata.page_number,
-            "document_date": self.metadata.document_date,
+            "document_date": self.metadata.document_date or self.metadata.published_date,
+            "published_date": self.metadata.published_date or self.metadata.document_date,
+            "section": self.metadata.section,
             "is_table": self.metadata.is_table,
         }
 

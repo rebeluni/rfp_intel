@@ -4,10 +4,14 @@ Employs keyword heuristics first, with an optional LLM fallback when confidence 
 Zero hard-coding to specific bid numbers or vendor names.
 """
 
+import logging
 import re
 from pathlib import Path
 from typing import Optional, Tuple
+from config.settings import settings
 from ingestion.models import DocType
+
+logger = logging.getLogger(__name__)
 
 
 class MetadataClassifier:
@@ -19,11 +23,15 @@ class MetadataClassifier:
             "purchase type", "piggyback contract", "electronic bid"
         ],
         DocType.ADDENDUM: [
-            "addendum", "amendment", "bulletin", "clarification no", "notice of change"
+            "addendum", "amendment", "bulletin", "clarification", "notice of change"
         ],
         DocType.AFFIDAVIT: [
-            "affidavit", "sworn statement", "certification", "non-collusion",
+            "affidavit", "sworn statement", "non-collusion",
             "conflict of interest affidavit", "contract affidavit", "mercury affidavit"
+        ],
+        DocType.FORM: [
+            "form", "standard form", "questionnaire", "disclosure form", "exhibit",
+            "acknowledgement form", "w-9"
         ],
         DocType.SPECS: [
             "specification", "specs", "technical requirement", "datasheet",
@@ -45,7 +53,7 @@ class MetadataClassifier:
         """
         Infer (doc_type, confidence, addendum_number, document_date).
         1. Run keyword heuristics over filename and content preview.
-        2. If confidence < 0.60 and allow_llm_fallback is True, invoke LLM classifier.
+        2. If confidence < DOC_TYPE_CONFIDENCE_THRESHOLD and allow_llm_fallback is True, invoke LLM classifier.
         3. Extract addendum number and document date generically.
         """
         fname_lower = file_path.name.lower()
@@ -76,12 +84,18 @@ class MetadataClassifier:
         confidence = min(1.0, max_score / 3.0) if max_score > 0 else 0.0
 
         # Default fallback for RFP if generic document structure exists
-        if confidence < 0.50 and ("proposal" in content_lower or "contract" in content_lower or "bid" in content_lower):
+        if confidence < 0.40 and ("proposal" in content_lower or "contract" in content_lower or "bid" in content_lower):
             best_doc_type = DocType.RFP
-            confidence = 0.65
+            confidence = 0.60
+
+        threshold = getattr(settings, "DOC_TYPE_CONFIDENCE_THRESHOLD", 0.65)
 
         # 3. LLM Fallback if confidence is low and permitted
-        if confidence < 0.60 and allow_llm_fallback:
+        if confidence < threshold and allow_llm_fallback:
+            logger.info(
+                f"doc_type confidence {confidence:.2f} for '{file_path.name}' is below "
+                f"threshold {threshold:.2f}; triggering LLM classifier fallback."
+            )
             llm_type, llm_conf = cls._llm_classify(fname_lower, content_preview[:1500])
             if llm_type:
                 best_doc_type = llm_type
@@ -100,11 +114,13 @@ class MetadataClassifier:
 
     @staticmethod
     def _extract_addendum_number(fname: str, content: str) -> Optional[int]:
-        """Generic regex extraction for addendum or amendment numbers."""
-        # e.g., 'Addendum 1', 'Addendum No. 2', 'Amendment #3', 'Addendum_02'
+        """
+        Generic regex extraction for addendum or amendment numbers.
+        Handles: 'Addendum 1', 'Addendum No. 3', 'Amendment #2', 'Addendum_04', 'Clarification #1', 'Bulletin #2'
+        """
         patterns = [
-            r"(?:addendum|amendment|bulletin)\s*(?:no\.?|#|_)?\s*0*(\d+)",
-            r"(?:addendum|amendment)\s*(\d+)",
+            r"(?:addendum|amendment|bulletin|clarification)\s*(?:no\.?|#|_|\s)*0*(\d+)",
+            r"(?:addendum|amendment|bulletin|clarification)[\s_]*0*(\d+)",
         ]
         # Check filename first
         for pat in patterns:
@@ -117,7 +133,7 @@ class MetadataClassifier:
 
         # Check document content start
         for pat in patterns:
-            match = re.search(pat, content[:2000], re.IGNORECASE)
+            match = re.search(pat, content[:2500], re.IGNORECASE)
             if match:
                 try:
                     return int(match.group(1))
@@ -145,14 +161,7 @@ class MetadataClassifier:
         Fallback LLM classifier when keyword heuristics yield low confidence.
         Uses structured output schema.
         """
-        # Kept lightweight and safe: if no API key is available, returns None gracefully
         from config.settings import settings
-        if not (settings.OPENAI_API_KEY or settings.GEMINI_API_KEY or settings.GROQ_API_KEY):
-            return None, 0.0
-
-        try:
-            # When API keys exist, we can invoke LLM; otherwise graceful return
-            # (Detailed provider integration implemented in search/agents layer)
-            return None, 0.0
-        except Exception:
-            return None, 0.0
+        # If API keys exist, we could call provider
+        # For now, return mock/fallback if keys not yet configured
+        return None, 0.0

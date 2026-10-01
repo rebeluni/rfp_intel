@@ -71,6 +71,9 @@ class Settings(BaseModel):
     CONFIDENCE_PASS_THRESHOLD: float = Field(
         default_factory=lambda: float(os.getenv("CONFIDENCE_PASS_THRESHOLD", "0.70"))
     )
+    DOC_TYPE_CONFIDENCE_THRESHOLD: float = Field(
+        default_factory=lambda: float(os.getenv("DOC_TYPE_CONFIDENCE_THRESHOLD", "0.65"))
+    )
 
     # Server / UI Configuration
     API_HOST: str = Field(default_factory=lambda: os.getenv("API_HOST", "0.0.0.0"))
