@@ -26,6 +26,8 @@ class DocumentMetadata(BaseModel):
     doc_type: DocType = Field(description="Inferred document type")
     addendum_number: Optional[int] = Field(default=None, description="Numeric addendum/amendment index if applicable")
     page_number: int = Field(default=1, description="1-indexed physical page number in the original document")
+    page_start: Optional[int] = Field(default=None, description="Starting physical page number of the chunk")
+    page_end: Optional[int] = Field(default=None, description="Ending physical page number of the chunk")
     page_label: Optional[str] = Field(default=None, description="Printed page label (e.g. 'Page 3 of 5' or roman numeral)")
     document_date: Optional[str] = Field(default=None, description="Document issuance date if found")
     published_date: Optional[str] = Field(default=None, description="Publication or issuance date")
@@ -44,6 +46,8 @@ class DocumentChunk(BaseModel):
 
     def to_search_dict(self) -> Dict[str, Any]:
         """Convert chunk into a searchable payload."""
+        p_start = self.metadata.page_start or self.metadata.page_number
+        p_end = self.metadata.page_end or self.metadata.page_number
         return {
             "chunk_id": self.chunk_id,
             "text": self.text,
@@ -54,6 +58,8 @@ class DocumentChunk(BaseModel):
             "doc_type": self.metadata.doc_type.value,
             "addendum_number": self.metadata.addendum_number,
             "page_number": self.metadata.page_number,
+            "page_start": p_start,
+            "page_end": p_end,
             "page_label": self.metadata.page_label,
             "document_date": self.metadata.document_date or self.metadata.published_date,
             "published_date": self.metadata.published_date or self.metadata.document_date,
@@ -79,6 +85,9 @@ class ParsedPage(BaseModel):
     tables: List[ParsedTable] = Field(default_factory=list)
     is_scanned: bool = False
     is_blank: bool = False
+    has_vector_outlines: bool = False
+    widget_count: int = 0
+    widgets: List[Dict[str, Any]] = Field(default_factory=list)
 
 
 class ParsedDocument(BaseModel):
@@ -92,6 +101,7 @@ class ParsedDocument(BaseModel):
     document_date: Optional[str] = None
     pages: List[ParsedPage] = Field(default_factory=list)
     chunks: List[DocumentChunk] = Field(default_factory=list)
+    coverage_report: Dict[str, Any] = Field(default_factory=dict, description="Per-document extraction and OCR coverage report")
 
     @property
     def total_pages(self) -> int:

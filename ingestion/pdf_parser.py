@@ -56,6 +56,8 @@ class PDFParser:
 
         skip_tables = prelim_doc_type in [DocType.AFFIDAVIT, DocType.FORM]
 
+        coverage_records: List[dict] = []
+
         for page_idx in range(len(doc)):
             page_num = page_idx + 1
             page = doc[page_idx]
@@ -64,34 +66,84 @@ class PDFParser:
             page_text = page.get_text("text")
             char_count = len(page_text.strip())
 
-            # 2. Check for empty, blank, or scanned page
+            # 2. Check for empty, blank, vector-outlined, or scanned page
             is_scanned = False
             is_blank = False
+            has_vector_outlines = False
             images = page.get_images()
+            drawings = page.get_drawings()
+            widgets = list(page.widgets())
+            ocr_attempted = False
+            ocr_status = "none"
 
-            if char_count == 0:
-                logger.warning(f"Page {page_num} of '{file_path.name}' is empty (0 characters).")
-                if len(images) > 0:
+            widget_list = []
+            if widgets:
+                for w in widgets:
+                    widget_list.append({
+                        "name": w.field_name,
+                        "value": w.field_value or "",
+                        "type": w.field_type_string
+                    })
+
+            if char_count < 30:
+                if len(drawings) > 20:
+                    has_vector_outlines = True
+                    logger.warning(
+                        f"Page {page_num} of '{file_path.name}': non-extractable (vector outlines) "
+                        f"({len(drawings)} drawing objects, {char_count} text chars)."
+                    )
+                    # Read form widget values if available (e.g. IRS W-9 form fields on p.54)
+                    if widgets:
+                        widget_lines = [f"### Form Fields (Page {page_num})"]
+                        for w in widgets:
+                            val = w.field_value or "[Unfilled/Blank]"
+                            widget_lines.append(f"- **{w.field_name}**: {val}")
+                        page_text = "\n".join(widget_lines)
+                        char_count = len(page_text.strip())
+
+                    # Attempt OCR if tool is available
+                    ocr_attempted = True
+                    ocr_text, ocr_status = cls._ocr_page(page)
+                    if ocr_text:
+                        page_text = (page_text + "\n\n" + ocr_text).strip()
+                elif char_count == 0 and len(images) == 0 and not widgets:
+                    is_blank = True
+                    logger.warning(f"Page {page_num} of '{file_path.name}' is empty (0 characters).")
+                else:
                     is_scanned = True
                     logger.warning(
-                        f"Page {page_num} of '{file_path.name}' has 0 text chars but {len(images)} images; triggering OCR."
+                        f"Page {page_num} of '{file_path.name}' appears scanned "
+                        f"({char_count} chars < 30 threshold); triggering OCR fallback."
                     )
-                    ocr_text = cls._ocr_page(page)
+                    ocr_attempted = True
+                    ocr_text, ocr_status = cls._ocr_page(page)
                     if ocr_text:
                         page_text = ocr_text
-                else:
-                    is_blank = True
-            elif char_count < 30:
-                is_scanned = True
-                logger.warning(
-                    f"Page {page_num} of '{file_path.name}' appears scanned "
-                    f"({char_count} chars < 30 threshold); triggering OCR fallback."
-                )
-                if len(images) > 0:
-                    ocr_text = cls._ocr_page(page)
-                    if ocr_text:
-                        logger.info(f"OCR extracted {len(ocr_text)} characters on page {page_num}.")
-                        page_text = ocr_text
+
+            # Record coverage status for this page
+            page_status = "extractable"
+            if is_blank:
+                page_status = "blank"
+            elif has_vector_outlines:
+                page_status = "non-extractable (vector outlines)"
+            elif is_scanned:
+                page_status = "scanned (image)"
+            elif widgets and char_count < 30:
+                page_status = "form_widgets_only"
+
+            coverage_records.append({
+                "page_number": page_num,
+                "status": page_status,
+                "char_count": len(page_text.strip()),
+                "raw_char_count": len(page.get_text("text").strip()),
+                "drawings_count": len(drawings),
+                "images_count": len(images),
+                "widget_count": len(widgets),
+                "widgets": widget_list[:15],
+                "has_vector_outlines": has_vector_outlines,
+                "ocr_attempted": ocr_attempted,
+                "ocr_status": ocr_status,
+            })
 
             page_tables: List[ParsedTable] = []
 
@@ -132,7 +184,10 @@ class PDFParser:
                 cleaned_text="",  # populated in second pass
                 tables=page_tables,
                 is_scanned=is_scanned,
-                is_blank=is_blank
+                is_blank=is_blank,
+                has_vector_outlines=has_vector_outlines,
+                widget_count=len(widgets),
+                widgets=widget_list
             ))
 
         doc.close()
@@ -165,6 +220,15 @@ class PDFParser:
             content_preview=first_page_preview
         )
 
+        doc_coverage = {
+            "file_name": file_path.name,
+            "total_pages": len(parsed_pages),
+            "pages": coverage_records,
+            "has_vector_outlines": any(r.get("has_vector_outlines") for r in coverage_records),
+            "non_extractable_pages": [r["page_number"] for r in coverage_records if r.get("has_vector_outlines")],
+            "form_widget_pages": [r["page_number"] for r in coverage_records if r.get("widget_count", 0) > 0],
+        }
+
         return ParsedDocument(
             file_name=file_path.name,
             file_path=str(file_path),
@@ -174,7 +238,8 @@ class PDFParser:
             addendum_number=addendum_num,
             document_date=doc_date,
             pages=parsed_pages,
-            chunks=[]
+            chunks=[],
+            coverage_report=doc_coverage
         )
 
     @classmethod
@@ -373,12 +438,11 @@ class PDFParser:
         return "\n\n".join(prose_blocks)
 
     @staticmethod
-    def _ocr_page(page: pymupdf.Page) -> str:
-        """Optional OCR fallback using pytesseract if available."""
+    def _ocr_page(page: pymupdf.Page) -> Tuple[str, str]:
+        """Optional OCR fallback using pytesseract or system OCR if available."""
         import shutil
         if not shutil.which("tesseract"):
-            logger.debug("tesseract binary not installed on system; skipping OCR fallback.")
-            return ""
+            return "", "tesseract_not_installed"
 
         try:
             import pytesseract
@@ -388,10 +452,9 @@ class PDFParser:
             pix = page.get_pixmap(dpi=150)
             img = Image.open(io.BytesIO(pix.tobytes("png")))
             text = pytesseract.image_to_string(img)
-            return text.strip()
+            return text.strip(), "ocr_success"
         except ImportError:
-            logger.debug("pytesseract or PIL not installed; skipping OCR fallback.")
-            return ""
+            return "", "pytesseract_not_installed"
         except Exception as e:
             logger.warning(f"OCR execution failed: {e}")
-            return ""
+            return "", f"ocr_error: {e}"

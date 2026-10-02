@@ -67,6 +67,12 @@ class HTMLParser:
             if old_k in kv_dict and old_k not in ["published_date", "closing_date"]:
                 del kv_dict[old_k]
 
+        # Remove redundant raw contact keys if already captured in Contact Info
+        if contact_info:
+            redundant_keys = [k for k, v in kv_dict.items() if k != "Contact Info" and (k in contact_info or v in contact_info)]
+            for rk in redundant_keys:
+                del kv_dict[rk]
+
         # Build clean labeled sections
         structured_sections: List[str] = []
 
@@ -153,10 +159,17 @@ class HTMLParser:
                 if k and v and len(k) < 80 and not k.startswith("-"):
                     # Standardize label
                     norm_k = re.sub(r"[:\s]+$", "", k)
+                    # Filter out phone numbers used as keys
+                    if re.match(r"^(\+?1[-. ]?)?\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}$", norm_k.strip()):
+                        continue
                     if norm_k not in kv:
                         kv[norm_k] = v
 
-        return kv
+        # Also strip any definition-list keys that are phone numbers
+        return {
+            k: v for k, v in kv.items()
+            if not re.match(r"^(\+?1[-. ]?)?\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}$", k.strip())
+        }
 
     @classmethod
     def _extract_contact_info(cls, soup: BeautifulSoup, kv_dict: Dict[str, str]) -> Optional[str]:

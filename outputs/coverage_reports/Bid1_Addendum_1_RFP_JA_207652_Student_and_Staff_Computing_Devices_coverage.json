@@ -1,0 +1,74 @@
+{
+  "file_name": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+  "total_pages": 5,
+  "pages": [
+    {
+      "page_number": 1,
+      "status": "extractable",
+      "char_count": 3490,
+      "raw_char_count": 3490,
+      "drawings_count": 1,
+      "images_count": 1,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 2,
+      "status": "extractable",
+      "char_count": 3044,
+      "raw_char_count": 3044,
+      "drawings_count": 1,
+      "images_count": 1,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 3,
+      "status": "extractable",
+      "char_count": 2699,
+      "raw_char_count": 2699,
+      "drawings_count": 1,
+      "images_count": 2,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 4,
+      "status": "extractable",
+      "char_count": 3146,
+      "raw_char_count": 3146,
+      "drawings_count": 1,
+      "images_count": 1,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 5,
+      "status": "extractable",
+      "char_count": 678,
+      "raw_char_count": 678,
+      "drawings_count": 7,
+      "images_count": 1,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    }
+  ],
+  "has_vector_outlines": false,
+  "non_extractable_pages": [],
+  "form_widget_pages": []
+}

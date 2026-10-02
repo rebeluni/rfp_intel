@@ -2,11 +2,8 @@
 1. ADDENDUM 1 FULL CHUNKS (9 chunks)
 ================================================================================
 
---- [Addendum 1 | Chunk 1 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_b2922e2f | Page 1] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: Addendum No. 1]
-ADDENDUM No. 1
-RFP JA-207652 Student and Staff Computing Devices
-
+--- [Addendum 1 | Chunk 1 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_a7799afa | Page 1] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: General]
 The Purpose of this Addendum is to provide responses to the vendors’ questions related to this RFP.
 
 1.
@@ -101,8 +98,11 @@ Example: If you pay for
 an additional warranty and that company goes under, if your warranty was not underwritten
 you would lose your investment.
 
---- [Addendum 1 | Chunk 2 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c1_fb40a62f | Page 1] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: Addendum No. 1]
+If it were underwritten the warranty would continue as
+purchased.
+
+--- [Addendum 1 | Chunk 2 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c1_6dc600c2 | Page 1] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.1 | Section: General]
 The
 system will only take one input, additional warranty information and pricing can be
 submitted as an attachment.
@@ -149,14 +149,10 @@ being proposed, should be included in this field.
 Will DISD consider extending the submission deadline out a few more weeks to allow sufficient
 time for vendors to complete a compliant response after the addendum(s) has been posted?
 
-Answer:
 Dallas ISD does not anticipate extending the submission deadline.
 
---- [Addendum 1 | Chunk 3 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c0_170223c7 | Page 2] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.2 | Section: Addendum No. 1]
-ADDENDUM No. 1
-RFP JA-207652 Student and Staff Computing Devices
-
+--- [Addendum 1 | Chunk 3 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c0_a2809a91 | Page 2] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.2 | Section: General]
 12.
 
 References are particularly important to our company as well as DISD.
@@ -252,14 +248,14 @@ On page 12, of the RFP, it asks for references within the Dallas/Ft Worth Area.
 What
 proximity/mileage range should be considered?
 
---- [Addendum 1 | Chunk 4 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c1_e03eee12 | Page 2] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.2 | Section: Addendum No. 1]
-Will an Onsite project manager be required?
-
 Answer:
-Any awarded vendor will need to coordinate a schedule of deliveries with the
-Dallas ISD ED TECH department.
+References do not solely need to come from districts/companies within the
+Dallas/Fort Worth Area; there is no proximity/mileage that needs to be considered.
 
+21.
+
+--- [Addendum 1 | Chunk 4 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c1_f4bb3dbe | Page 2] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.2 | Section: General]
 20.
 
 On page 12, of the RFP, it asks for references within the Dallas/Ft Worth Area.
@@ -301,11 +297,8 @@ Answer:
 The “Bid Minimum Release Amount” is a system default field, this can be
 disregarded.
 
---- [Addendum 1 | Chunk 5 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c0_179d7c0e | Page 3] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: Addendum No. 1]
-ADDENDUM No. 1
-RFP JA-207652 Student and Staff Computing Devices
-
+--- [Addendum 1 | Chunk 5 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c0_5dd040fe | Page 3] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: General]
 25. In RFP Section 2.1 Line Information (pricing table) #11, will you please clarify if you would like us
 to include a minimum price for one of the optional warranty line items in the “quoted price”
 field then include the various additional warranty options (tier based) in an attachment. Also,
@@ -371,8 +364,8 @@ Additional programs can be included as additional pricing in the attachments sec
 
 30.
 
---- [Addendum 1 | Chunk 6 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c1_2969c089 | Page 3] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: Addendum No. 1]
+--- [Addendum 1 | Chunk 6 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p3_c1_7d67be77 | Page 3] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.3 | Section: General]
 Answer:
 As a minimum requirement, Dallas ISD is asking for a one-year warranty for
 student Chromebooks and three years for student and staff Windows laptops.
@@ -383,14 +376,10 @@ Additional programs can be included as additional pricing in the attachments sec
 
 SCOPE: Does Dallas ISD need to etch and asset tag each device or is it one or the other?
 
-Answer:
 Both are required.
 
---- [Addendum 1 | Chunk 7 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c0_16134dfc | Page 4] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.4 | Section: Addendum No. 1]
-ADDENDUM No. 1
-RFP JA-207652 Student and Staff Computing Devices
-
+--- [Addendum 1 | Chunk 7 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c0_12842034 | Page 4] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.4 | Section: General]
 31.
 
 FORM 1295 - CERTIFICATE OF INTERESTED PARTIES: The RFP states that "This form must then be
@@ -480,12 +469,10 @@ large quantities.
 
 38.
 
---- [Addendum 1 | Chunk 8 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c1_69cbb36f | Page 4] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.4 | Section: Addendum No. 1]
-36.
+Laptop Chargers: Why 65w chargers being requested for the Chrome?
 
-Laptop Battery Life: How are they measuring battery life?
-
+--- [Addendum 1 | Chunk 8 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c1_4347c9fe | Page 4] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.4 | Section: General]
 Answer:
 This will be based on the manufacturer's specifications.
 
@@ -520,11 +507,8 @@ will respectfully request the removal of said deviations/exceptions.
 Submissions may be
 deemed nonresponsive otherwise and could be removed from consideration.
 
---- [Addendum 1 | Chunk 9 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p5_c0_c6caced9 | Page 5] ---
-[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.5 | Section: Addendum No. 1]
-ADDENDUM No. 1
-RFP JA-207652 Student and Staff Computing Devices
-
+--- [Addendum 1 | Chunk 9 | ID: Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p5_c0_dd05b923 | Page 5] ---
+[Bid1 | Addendum 1 | Addendum 1 RFP JA 207652 Student and | p.5 | Section: General]
 The information in this Addendum is hereby incorporated and made part of any contract awarded
 pursuant to this solicitation.
 
@@ -600,12 +584,8 @@ END OF ADDENDUM
 3. PORFP_-_Dell_Laptop_Final.pdf FULL CHUNKS (4 chunks)
 ================================================================================
 
---- [PORFP | Chunk 1 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c0_f451a2b7 | Page 1 | Table: False] ---
-[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Bid Submission Instructions]
-Hardware Master Contract
-
-1
-
+--- [PORFP | Chunk 1 | ID: Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f | Page 1 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.1 | Section: Section 1 –General Information]
 Section 1 –General Information
 
 PORFP Number:
@@ -664,11 +644,9 @@ at: https://procurement.maryland.gov/emma-qrgs/
 Refer to Vendor QRG 4 – eMMA QRG Responding to Solicitations
 (IFB)
 
---- [PORFP | Chunk 2 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c0_5efe18e0 | Page 2 | Table: False] ---
-[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Section 2 – Agency Point of]
-Hardware Master Contract
-
-2 Questions Due (Closing)
+--- [PORFP | Chunk 2 | ID: Bid2_PORFP_Dell_Laptop_Final_p2_c0_060ad1b3 | Page 2 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Bid Submission Instructions]
+Questions Due (Closing)
 Date and Time:
 06/01/2024 at 2:00 PM EDT
 Questions must be submitted in writing to thawkins@treasurer.state.md.us
@@ -725,18 +703,14 @@ Section 2 – Agency Point of Contact (POC) Information
 Agency / Division Name:
 State Treasurer's Office/ Information Technology
 
---- [PORFP | Chunk 3 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_c0_42cc2e8a | Page 3 | Table: False] ---
-[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Section 5 – Evaluation Criteria –]
-Hardware Master Contract
-
-3
-
+--- [PORFP | Chunk 3 | ID: Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23 | Page 3 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Section 2 – Agency Point of]
 Agency POC Name:
 Tamaira Hawkins Agency POC Phone Number:
 410-260-7533 Agency POC Email
 Address:
-thawkins@treasurer.state.md
-.us Agency POC Fax:
+thawkins@treasurer.state.md.us
+Agency POC Fax:
 N/A
 Agency POC Mailing
 Address:
@@ -806,12 +780,8 @@ presented upon award Date of Delivery 3 years following the date of delivery
 Section 5 – Evaluation Criteria – Technical Proposal
 (Provide a list of evaluation criteria in descending order of importance)
 
---- [PORFP | Chunk 4 | ID: Bid2_PORFP_Dell_Laptop_Final_p4_c0_d3ce90ba | Page 4 | Table: False] ---
-[Bid2 | RFP | PORFP Dell Laptop Final | p.4 | Section: General]
-Hardware Master Contract
-
-4
-
+--- [PORFP | Chunk 4 | ID: Bid2_PORFP_Dell_Laptop_Final_p4_c0_98e1f1b6 | Page 4 | Table: False] ---
+[Bid2 | RFP | PORFP Dell Laptop Final | p.4 | Section: Section 5 – Evaluation Criteria –]
 Evaluation Criteria
 
 1. Accuracy of Bid (Meets All Requirements)
@@ -830,8 +800,8 @@ requirements. The agency POC will initiate and deliver a PO to the selected Mast
 4. Bid1 'LENGTH OF CONTRACT' CHUNK AFTER LAYOUT-BOX FIX (1 chunks)
 ================================================================================
 
---- [LENGTH OF CONTRACT | Chunk 1 | ID: Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_79121acd | Page 2 | Table: False] ---
-[Bid1 | RFP | JA 207652 Student and Staff Computing | p.2 | Section: Scope And Specifications Of The]
+--- [LENGTH OF CONTRACT | Chunk 1 | ID: Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_a1ba94ce | Page 2 | Table: False] ---
+[Bid1 | RFP | JA 207652 Student and Staff Computing | p.2 | Section: Purchasing Department]
 Buyer ALZATE, JASMINE
 Email JALZATE@dallasisd.org 1 Header Information
 1.1 General Information
@@ -902,8 +872,8 @@ means of an addendum to the solicitation.
 5. FIXED CONTRACT_AFFIDAVIT CHUNKS (5 chunks)
 ================================================================================
 
---- [Contract Affidavit | Chunk 1 | ID: Bid2_Contract_Affidavit_p1_c0_7698b328 | Page 1] ---
-[Bid2 | Affidavit | Contract Affidavit | p.1 | Section: Financial Disclosure Affirmation I]
+--- [Contract Affidavit | Chunk 1 | ID: Bid2_Contract_Affidavit_p1_c0_4593abdf | Page 1] ---
+[Bid2 | Affidavit | Contract Affidavit | p.1 | Section: Authority]
 A.
 AUTHORITY
 I hereby affirm that I,
@@ -963,8 +933,8 @@ Code of Maryland, which requires that every person that enters into a procuremen
 State, a county, or a municipal corporation, or other political subdivision of the State, during a
 calendar year in which the person receives a contract with a governmental entity in the amount of
 
---- [Contract Affidavit | Chunk 2 | ID: Bid2_Contract_Affidavit_p2_c0_7d6b19e3 | Page 2] ---
-[Bid2 | Affidavit | Contract Affidavit | p.2 | Section: Drug And Alcohol-Free Workplace]
+--- [Contract Affidavit | Chunk 2 | ID: Bid2_Contract_Affidavit_p2_c0_4c21bd12 | Page 2] ---
+[Bid2 | Affidavit | Contract Affidavit | p.2 | Section: Further Affirm That:]
 $200,000 or more, shall file with the State Board of Elections statements disclosing: (a) any
 contributions made during the reporting period to a candidate for elective office in any primary or
 general election; and (b) the name of each candidate to whom one or more contributions in a
@@ -1026,8 +996,8 @@ continued employment on the contract, the employee shall:
 (i)
 Abide by the terms of the statement; and
 
---- [Contract Affidavit | Chunk 4 | ID: Bid2_Contract_Affidavit_p3_c0_5bb6b5b6 | Page 3] ---
-[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: Certain Affirmations Valid I]
+--- [Contract Affidavit | Chunk 4 | ID: Bid2_Contract_Affidavit_p3_c0_7aef83a8 | Page 3] ---
+[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: Drug And Alcohol-Free Workplace]
 (ii) Notify the employer of any criminal drug or alcohol abuse conviction for an offense
 occurring in the workplace not later than 5 days after a conviction;
 (i)
@@ -1067,8 +1037,8 @@ acknowledgements contained in that certain Proposal Affidavit dated
 attached remains true and correct in all respects as if made as of the date of this Contract Affidavit
 and as if fully set forth herein.
 
---- [Contract Affidavit | Chunk 5 | ID: Bid2_Contract_Affidavit_p3_c1_1d4d4b73 | Page 3] ---
-[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: Certain Affirmations Valid I]
+--- [Contract Affidavit | Chunk 5 | ID: Bid2_Contract_Affidavit_p3_c1_dd16de82 | Page 3] ---
+[Bid2 | Affidavit | Contract Affidavit | p.3 | Section: Further Affirm That:]
 CERTAIN AFFIRMATIONS VALID I
 FURTHER AFFIRM THAT:
 To the best of my knowledge, information, and belief, each of the affirmations, certifications, or

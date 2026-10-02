@@ -61,6 +61,16 @@ class IngestionPipeline:
                 parsed_documents.append(doc)
                 all_chunks.extend(chunks)
 
+                # Save coverage report if present
+                if doc.coverage_report:
+                    import json, re
+                    cov_dir = Path("outputs/coverage_reports")
+                    cov_dir.mkdir(parents=True, exist_ok=True)
+                    slug = re.sub(r"[^a-zA-Z0-9]+", "_", Path(doc.file_name).stem).strip("_")
+                    cov_path = cov_dir / f"{bid_id}_{slug}_coverage.json"
+                    with open(cov_path, "w", encoding="utf-8") as cf:
+                        json.dump(doc.coverage_report, cf, indent=2)
+
                 logger.info(
                     f"Parsed '{file_path.name}': doc_type={doc.doc_type.value}, "
                     f"pages={doc.total_pages}, chunks={len(chunks)}"

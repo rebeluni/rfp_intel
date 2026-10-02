@@ -8,7 +8,7 @@ and generates collision-free IDs using full file slugs and short hashes.
 import hashlib
 import re
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from config.settings import settings
 from ingestion.cleaner import TextCleaner
 from ingestion.models import (
@@ -39,23 +39,29 @@ class DocumentChunker:
     def chunk_document(self, doc: ParsedDocument) -> List[DocumentChunk]:
         """Generate chunks for all pages of a parsed document and merge tiny fragments."""
         raw_chunks: List[DocumentChunk] = []
+        active_section: Optional[str] = None
 
         for page in doc.pages:
-            page_chunks = self._chunk_page(doc, page)
+            page_chunks, active_section = self._chunk_page(doc, page, active_section)
             raw_chunks.extend(page_chunks)
 
-        # Merge chunks under ~40 tokens into their neighbours
+        # Merge chunks under ~40 tokens into their neighbours on the same page
         merged_chunks = self._merge_small_chunks(raw_chunks, doc)
         doc.chunks = merged_chunks
         return merged_chunks
 
-    def _chunk_page(self, doc: ParsedDocument, page: ParsedPage) -> List[DocumentChunk]:
+    def _chunk_page(
+        self,
+        doc: ParsedDocument,
+        page: ParsedPage,
+        active_section: Optional[str] = None
+    ) -> Tuple[List[DocumentChunk], Optional[str]]:
         """Chunk a single page, treating tables as cohesive chunks."""
         page_chunks: List[DocumentChunk] = []
 
         # 1. Chunk structured tables first if present
         for tbl_idx, tbl in enumerate(page.tables):
-            table_chunks = self._chunk_table(doc, page, tbl, f"tbl_{tbl_idx}")
+            table_chunks = self._chunk_table(doc, page, tbl, f"tbl_{tbl_idx}", active_section)
             page_chunks.extend(table_chunks)
 
         # 2. Chunk prose / non-table text
@@ -64,11 +70,12 @@ class DocumentChunker:
             prose_text = prose_text.split("### Specification / Bid Tables:")[0].strip()
 
         if prose_text:
-            prose_chunks = self._chunk_text(
+            prose_chunks, active_section = self._chunk_text(
                 text=prose_text,
                 doc=doc,
                 page_number=page.page_number,
-                page_label=page.page_label
+                page_label=page.page_label,
+                active_section=active_section
             )
             page_chunks.extend(prose_chunks)
 
@@ -88,14 +95,15 @@ class DocumentChunker:
             if not is_dup:
                 unique_chunks.append(chk)
 
-        return unique_chunks
+        return unique_chunks, active_section
 
     def _chunk_table(
         self,
         doc: ParsedDocument,
         page: ParsedPage,
         table: ParsedTable,
-        suffix: str
+        suffix: str,
+        active_section: Optional[str] = None
     ) -> List[DocumentChunk]:
         """Keep table intact or split row-wise while repeating headers."""
         md = table.markdown.strip()
@@ -105,7 +113,7 @@ class DocumentChunker:
         chunks: List[DocumentChunk] = []
         lines = md.splitlines()
 
-        section_name = self._detect_heading(page.cleaned_text)
+        section_name = self._detect_heading(page.cleaned_text) or active_section
         if not section_name:
             if doc.doc_type == DocType.SPECS:
                 section_name = "Specifications"
@@ -125,6 +133,8 @@ class DocumentChunker:
                 doc_type=doc.doc_type,
                 addendum_number=doc.addendum_number,
                 page_number=page.page_number,
+                page_start=page.page_number,
+                page_end=page.page_number,
                 page_label=page.page_label,
                 document_date=doc.document_date,
                 published_date=doc.document_date,
@@ -162,6 +172,8 @@ class DocumentChunker:
                         doc_type=doc.doc_type,
                         addendum_number=doc.addendum_number,
                         page_number=page.page_number,
+                        page_start=page.page_number,
+                        page_end=page.page_number,
                         page_label=page.page_label,
                         document_date=doc.document_date,
                         published_date=doc.document_date,
@@ -191,6 +203,8 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page.page_number,
+                    page_start=page.page_number,
+                    page_end=page.page_number,
                     page_label=page.page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
@@ -217,18 +231,20 @@ class DocumentChunker:
         text: str,
         doc: ParsedDocument,
         page_number: int,
-        page_label: Optional[str] = None
-    ) -> List[DocumentChunk]:
+        page_label: Optional[str] = None,
+        active_section: Optional[str] = None
+    ) -> Tuple[List[DocumentChunk], Optional[str]]:
         """
         Split text using word- and sentence-aligned boundaries.
         Target chunk size: ~500 tokens. Overlap: ~75 tokens.
         Guarantees zero mid-word or mid-sentence cuts.
+        Section label = heading in effect at the START of the chunk.
         """
         chunks: List[DocumentChunk] = []
 
         paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
         if not paragraphs:
-            return []
+            return [], active_section
 
         # Break overly long paragraphs into full sentences
         segments: List[str] = []
@@ -242,18 +258,29 @@ class DocumentChunker:
         current_segments: List[str] = []
         current_token_count = 0
         seq = 0
-        current_section = self._detect_heading(text) or "General"
+
+        # Section in effect at start of this first chunk:
+        # Check if the very first line of the chunk is a heading
+        first_line = ""
+        if segments:
+            seg_lines = [l.strip() for l in segments[0].splitlines() if l.strip()]
+            first_line = seg_lines[0] if seg_lines else ""
+        first_heading = self._detect_heading_line(first_line) if first_line else None
+        if first_heading:
+            active_section = first_heading
+        chunk_start_section = active_section or self._detect_heading(text) or "General"
 
         for seg in segments:
-            detected_h = self._detect_heading(seg)
-            if detected_h:
-                current_section = detected_h
+            for l in seg.splitlines():
+                dh = self._detect_heading_line(l)
+                if dh:
+                    active_section = dh
 
             seg_tokens = self._count_tokens(seg)
 
             if current_token_count + seg_tokens > self.chunk_size and current_segments:
                 body_text = "\n\n".join(current_segments)
-                context_hdr = self._build_context_header(doc, page_number, current_section)
+                context_hdr = self._build_context_header(doc, page_number, chunk_start_section)
                 full_text = f"{context_hdr}\n{body_text}"
                 chunk_id = self._generate_chunk_id(doc.bid_id, doc.file_name, page_number, f"c{seq}", full_text)
 
@@ -264,10 +291,12 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page_number,
+                    page_start=page_number,
+                    page_end=page_number,
                     page_label=page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
-                    section=current_section,
+                    section=chunk_start_section,
                     is_table=False
                 )
                 chunks.append(DocumentChunk(
@@ -291,6 +320,8 @@ class DocumentChunker:
 
                 current_segments = overlap_segments + [seg]
                 current_token_count = overlap_tokens + seg_tokens
+                # Next chunk's section is the heading active at its start
+                chunk_start_section = active_section
             else:
                 current_segments.append(seg)
                 current_token_count += seg_tokens
@@ -298,7 +329,7 @@ class DocumentChunker:
         if current_segments:
             body_text = "\n\n".join(s for s in current_segments if s.strip())
             if body_text.strip():
-                context_hdr = self._build_context_header(doc, page_number, current_section)
+                context_hdr = self._build_context_header(doc, page_number, chunk_start_section)
                 full_text = f"{context_hdr}\n{body_text}"
                 chunk_id = self._generate_chunk_id(doc.bid_id, doc.file_name, page_number, f"c{seq}", full_text)
 
@@ -309,10 +340,12 @@ class DocumentChunker:
                     doc_type=doc.doc_type,
                     addendum_number=doc.addendum_number,
                     page_number=page_number,
+                    page_start=page_number,
+                    page_end=page_number,
                     page_label=page_label,
                     document_date=doc.document_date,
                     published_date=doc.document_date,
-                    section=current_section,
+                    section=chunk_start_section,
                     is_table=False
                 )
                 chunks.append(DocumentChunk(
@@ -322,14 +355,18 @@ class DocumentChunker:
                     metadata=meta
                 ))
 
-        return chunks
+        return chunks, active_section
 
     def _merge_small_chunks(
         self,
         chunks: List[DocumentChunk],
         doc: ParsedDocument
     ) -> List[DocumentChunk]:
-        """Merge tiny chunks (< 40 tokens / ~40 words) into neighbouring chunks."""
+        """
+        Merge tiny chunks (< 40 tokens / ~40 words) into neighbouring chunks on the SAME page.
+        Never merges chunks across pages. If merging across pages were ever needed,
+        page_start and page_end would be cited.
+        """
         if len(chunks) <= 1:
             return chunks
 
@@ -341,10 +378,13 @@ class DocumentChunker:
             body_text = "\n".join(lines[1:]) if len(lines) > 1 else chk.text
             word_count = len(body_text.split())
 
-            # If small chunk and not a table, merge into preceding chunk
+            # If small chunk and not a table, merge into preceding chunk ON THE SAME PAGE ONLY
             if word_count < self.min_chunk_words and not chk.metadata.is_table and merged:
                 prev = merged[-1]
-                if prev.metadata.file_name == chk.metadata.file_name:
+                if (
+                    prev.metadata.file_name == chk.metadata.file_name
+                    and prev.metadata.page_number == chk.metadata.page_number
+                ):
                     prev.text = prev.text + "\n\n" + body_text
                     prev.chunk_id = self._generate_chunk_id(
                         prev.metadata.bid_id,
@@ -359,7 +399,13 @@ class DocumentChunker:
 
         return merged
 
-    def _build_context_header(self, doc: ParsedDocument, page_number: int, section: str) -> str:
+    def _build_context_header(
+        self,
+        doc: ParsedDocument,
+        page_number: int,
+        section: str,
+        page_end: Optional[int] = None
+    ) -> str:
         """
         Build contextual breadcrumb header.
         Format: [Bid1 | Addendum 1 | Clean Title Cut At Word Boundary | p.1 | Section: <heading>]
@@ -403,76 +449,88 @@ class DocumentChunker:
             else:
                 clean_section = truncated_sec.strip()
 
-        return f"[{doc.bid_id} | {doc_label} | {clean_title} | p.{page_number} | Section: {clean_section}]"
+        page_str = f"p.{page_number}-{page_end}" if (page_end and page_end != page_number) else f"p.{page_number}"
+        return f"[{doc.bid_id} | {doc_label} | {clean_title} | {page_str} | Section: {clean_section}]"
+
+    def _detect_heading_line(self, line: str) -> Optional[str]:
+        """Detect if a single line is a section header, rejecting codes, SKUs, and table rows."""
+        line = line.strip()
+        if not line:
+            return None
+
+        # Reject table rows
+        if line.startswith("|") or line.endswith("|"):
+            return None
+
+        # Reject termination markers (e.g. END OF ADDENDUM, END OF SOLICITATION)
+        if re.search(r"\bEND\s+OF\s+(?:ADDENDUM|SOLICITATION|DOCUMENT|SECTION|FILE|PROPOSAL)\b", line, re.IGNORECASE):
+            return None
+
+        # Reject person names (e.g. Alzate, Jasmine or ALZATE, JASMINE)
+        if re.match(r"^[A-Z][a-zA-Z]+,\s+[A-Z][a-zA-Z]+(?:\s+[A-Z]\.?)?$", line):
+            return None
+        if any(line.upper().startswith(p) for p in ["BUYER", "CONTACT", "OFFICER", "NAME:", "AFFIANT", "REPRESENTATIVE"]):
+            return None
+
+        # Reject SKUs, part numbers, codes (e.g. 210-BLYZ, 362-7806, CC7802, SOL-1234)
+        if re.match(r"^[\w\d]+[-_][\w\d]+$", line):
+            return None
+
+        # Reject lines with high digit concentration or phone numbers
+        digits = sum(c.isdigit() for c in line)
+        if digits > 0 and (digits / len(line) > 0.18 or digits >= 5):
+            return None
+
+        # Pattern 1: Section 1 - General Information
+        sec_match = re.match(
+            r"^(?:Section|SECTION|Article|ARTICLE|Part|PART)\s+([0-9A-Za-z.-]+(?:\s*[-:–]\s*[^\n]+)?)",
+            line
+        )
+        if sec_match:
+            return sec_match.group(0).strip()
+
+        # Pattern 2: Addendum heading (e.g. ADDENDUM No. 2, Addendum 1)
+        add_match = re.match(r"^(?:ADDENDUM|Addendum)\s*(?:No\.?|NUMBER)?\s*([0-9A-Za-z.-]+)?", line, re.IGNORECASE)
+        if add_match and not re.search(r"\bEND\s+OF\b", line, re.IGNORECASE):
+            return line.strip().title()
+
+        # Pattern 3: Markdown headers # Section Title
+        h_match = re.match(r"^#{1,4}\s+([^\n]+)", line)
+        if h_match:
+            candidate = h_match.group(1).strip()
+            if not re.match(r"^[\w\d]+[-_][\w\d]+$", candidate):
+                return candidate
+
+        # Pattern 4: Short all-caps headings (e.g. LENGTH OF CONTRACT, SCOPE OF WORK, FINANCIAL DISCLOSURE AFFIRMATION)
+        clean_l = re.sub(r"\b([A-Z]{4,})I\b", r"\1", line)  # strip fused Roman numeral I
+        words = re.findall(r"\b[A-Za-z]{3,}\b", clean_l)
+        known_headers = {
+            "OVERVIEW", "INTRODUCTION", "SCOPE", "SPECIFICATIONS", "REQUIREMENTS",
+            "SUMMARY", "BACKGROUND", "DELIVERABLES", "TIMELINE", "SCHEDULE",
+            "PRICING", "EVALUATION", "ATTACHMENTS", "EXHIBITS", "INSTRUCTIONS",
+            "CONTRACT", "GENERAL", "PURPOSE", "ELIGIBILITY", "SUBMISSION",
+            "AFFIRMATION", "AFFIDAVIT", "DISCLOSURE", "WORKPLACE", "AUTHORITY"
+        }
+        if len(clean_l) < 55 and clean_l.isupper() and not clean_l.endswith(".") and len(clean_l) > 4:
+            # Must not be a person name (LASTNAME, FIRSTNAME)
+            if "," in clean_l:
+                return None
+            # Must have at least 2 words or contain a known header keyword
+            if len(words) >= 2 or any(w in known_headers for w in words):
+                title_candidate = clean_l.title()
+                # Strip fused trailing i (e.g. Affirmationi -> Affirmation)
+                title_candidate = re.sub(r"(?<=[a-zA-Z]{4})[iI]$", "", title_candidate)
+                return title_candidate
+
+        return None
 
     def _detect_heading(self, text: str) -> Optional[str]:
         """Detect section headers in text snippet, rejecting codes, SKUs, and table rows."""
         lines = [l.strip() for l in text.splitlines() if l.strip()]
         for line in lines[:5]:
-            # Reject table rows
-            if line.startswith("|") or line.endswith("|"):
-                continue
-
-            # Reject termination markers (e.g. END OF ADDENDUM, END OF SOLICITATION)
-            if re.search(r"\bEND\s+OF\s+(?:ADDENDUM|SOLICITATION|DOCUMENT|SECTION|FILE|PROPOSAL)\b", line, re.IGNORECASE):
-                continue
-
-            # Reject person names (e.g. Alzate, Jasmine or ALZATE, JASMINE)
-            if re.match(r"^[A-Z][a-zA-Z]+,\s+[A-Z][a-zA-Z]+(?:\s+[A-Z]\.?)?$", line):
-                continue
-            if any(line.upper().startswith(p) for p in ["BUYER", "CONTACT", "OFFICER", "NAME:", "AFFIANT", "REPRESENTATIVE"]):
-                continue
-
-            # Reject SKUs, part numbers, codes (e.g. 210-BLYZ, 362-7806, CC7802, SOL-1234)
-            if re.match(r"^[\w\d]+[-_][\w\d]+$", line):
-                continue
-
-            # Reject lines with high digit concentration or phone numbers
-            digits = sum(c.isdigit() for c in line)
-            if digits > 0 and (digits / len(line) > 0.18 or digits >= 5):
-                continue
-
-            # Pattern 1: Section 1 - General Information
-            sec_match = re.match(
-                r"^(?:Section|SECTION|Article|ARTICLE|Part|PART)\s+([0-9A-Za-z.-]+(?:\s*[-:–]\s*[^\n]+)?)",
-                line
-            )
-            if sec_match:
-                return sec_match.group(0).strip()
-
-            # Pattern 2: Addendum heading (e.g. ADDENDUM No. 2, Addendum 1)
-            add_match = re.match(r"^(?:ADDENDUM|Addendum)\s*(?:No\.?|NUMBER)?\s*([0-9A-Za-z.-]+)?", line, re.IGNORECASE)
-            if add_match and not re.search(r"\bEND\s+OF\b", line, re.IGNORECASE):
-                return line.strip().title()
-
-            # Pattern 3: Markdown headers # Section Title
-            h_match = re.match(r"^#{1,4}\s+([^\n]+)", line)
-            if h_match:
-                candidate = h_match.group(1).strip()
-                if not re.match(r"^[\w\d]+[-_][\w\d]+$", candidate):
-                    return candidate
-
-            # Pattern 4: Short all-caps headings (e.g. LENGTH OF CONTRACT, SCOPE OF WORK, FINANCIAL DISCLOSURE AFFIRMATION)
-            clean_l = re.sub(r"\b([A-Z]{4,})I\b", r"\1", line)  # strip fused Roman numeral I
-            words = re.findall(r"\b[A-Za-z]{3,}\b", clean_l)
-            known_headers = {
-                "OVERVIEW", "INTRODUCTION", "SCOPE", "SPECIFICATIONS", "REQUIREMENTS",
-                "SUMMARY", "BACKGROUND", "DELIVERABLES", "TIMELINE", "SCHEDULE",
-                "PRICING", "EVALUATION", "ATTACHMENTS", "EXHIBITS", "INSTRUCTIONS",
-                "CONTRACT", "GENERAL", "PURPOSE", "ELIGIBILITY", "SUBMISSION",
-                "AFFIRMATION", "AFFIDAVIT", "DISCLOSURE", "WORKPLACE", "AUTHORITY"
-            }
-            if len(clean_l) < 55 and clean_l.isupper() and not clean_l.endswith(".") and len(clean_l) > 4:
-                # Must not be a person name (LASTNAME, FIRSTNAME)
-                if "," in clean_l:
-                    continue
-                # Must have at least 2 words or contain a known header keyword
-                if len(words) >= 2 or any(w in known_headers for w in words):
-                    title_candidate = clean_l.title()
-                    # Strip fused trailing i (e.g. Affirmationi -> Affirmation)
-                    title_candidate = re.sub(r"(?<=[a-zA-Z]{4})[iI]$", "", title_candidate)
-                    return title_candidate
-
+            h = self._detect_heading_line(line)
+            if h:
+                return h
         return None
 
     @staticmethod

@@ -125,6 +125,25 @@ class TextCleaner:
         # Collapse excess empty lines
         return re.sub(r"\n{3,}", "\n\n", "\n".join(reflowed))
 
+    @staticmethod
+    def fix_split_urls_and_emails(text: str) -> str:
+        """
+        Rejoin emails and URLs split across lines by PDF layout / line wrapping.
+        Example: 'thawkins@treasurer.state.md\\n.us' -> 'thawkins@treasurer.state.md.us'
+        'https://procurement.maryland.gov/emma-\\nqrgs/' -> 'https://procurement.maryland.gov/emma-qrgs/'
+        """
+        if not text:
+            return ""
+        # Split email domain: name@domain\n.us or user@treasurer.state.md\n.us
+        text = re.sub(r"([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)\n\s*(\.[a-zA-Z]{2,}\b)", r"\1\2", text)
+        # Split email before @: name\n@domain.com
+        text = re.sub(r"([A-Za-z0-9._%+-]+)\n\s*(@[A-Za-z0-9.-]+\.[a-zA-Z]{2,}\b)", r"\1\2", text)
+        # Split URL with trailing hyphen: https://...foo-\nbar
+        text = re.sub(r"(https?://[^\s]+)-\n\s*([a-zA-Z0-9_\-./?=&%#]+)", r"\1-\2", text)
+        # Split URL at slash: https://...foo/\nbar
+        text = re.sub(r"(https?://[^\s]+/\b)\n\s*([a-zA-Z0-9_\-./?=&%#]+)", r"\1\2", text)
+        return text
+
     @classmethod
     def strip_running_headers_footers(
         cls,
@@ -132,63 +151,69 @@ class TextCleaner:
     ) -> Tuple[List[str], List[Optional[str]]]:
         """
         Detect and strip repetitive header/footer lines that occur across multiple pages,
-        using digit-normalized pattern matching (e.g. 'Page # of #', 'Dallas ISD rev #.#').
+        using digit-normalized pattern matching (e.g. 'Page # of #', 'Dallas ISD rev #.#',
+        'Purchase Order Request for Proposals (PORFP)').
+        Also strips bare page numbers (solitary digits) in the top/bottom header-footer zones.
         Extracts page labels to metadata and returns (cleaned_pages, page_labels).
         """
         page_labels: List[Optional[str]] = []
         for page in pages_text:
-            # Check for page label in top or bottom lines
             lbl = None
-            for line in page.splitlines()[:3] + page.splitlines()[-3:]:
+            for line in page.splitlines()[:5] + page.splitlines()[-5:]:
                 m = re.search(r"^\s*Page\s+(\d+(?:\s*(?:of|\|)\s*\d+)?)", line, re.IGNORECASE)
                 if m:
                     lbl = m.group(1).strip()
                     break
             page_labels.append(lbl)
 
-        if len(pages_text) <= 2:
-            cleaned = []
-            for p in pages_text:
-                filtered = [
-                    l for l in p.splitlines()
-                    if not re.match(r"^\s*Page\s+\d+(?:\s*(?:of|\|)\s*\d+)?\s*$", l, re.IGNORECASE)
-                ]
-                cleaned.append(cls.clean_text("\n".join(filtered)))
-            return cleaned, page_labels
-
-        # Count digit-normalized line occurrences across pages (top line and bottom line only)
-        norm_occurrences = {}
-        for p_idx, page in enumerate(pages_text):
+        # Count digit-normalized line occurrences across pages in candidate header/footer positions
+        norm_occurrences: dict = {}
+        for page in pages_text:
             lines = [l.strip() for l in page.splitlines() if l.strip()]
             if not lines:
                 continue
-            candidate_lines = {lines[0], lines[-1]}
-            for line in candidate_lines:
+            if len(lines) <= 4:
+                candidates = [lines[0]] + ([lines[-1]] if len(lines) > 1 else [])
+            else:
+                candidates = lines[:3] + lines[-2:]
+            for line in set(candidates):
                 norm = re.sub(r"\d+", "#", line)
                 if len(norm) > 4 and norm != "#":
                     norm_occurrences[norm] = norm_occurrences.get(norm, 0) + 1
 
-        # Threshold: present in more than 35% of pages
+        # Threshold: present in 35% or more of pages (min 2 occurrences)
         threshold = max(2, int(len(pages_text) * 0.35))
         repeated_norm_lines = {norm for norm, count in norm_occurrences.items() if count >= threshold}
 
         cleaned_pages = []
         for page in pages_text:
             lines = page.splitlines()
+            non_empty_indices = [i for i, l in enumerate(lines) if l.strip()]
+            if len(non_empty_indices) <= 4:
+                top_indices = {non_empty_indices[0]} if non_empty_indices else set()
+                bottom_indices = {non_empty_indices[-1]} if len(non_empty_indices) > 1 else set()
+            else:
+                top_indices = set(non_empty_indices[:3])
+                bottom_indices = set(non_empty_indices[-2:])
+            hdr_ftr_indices = top_indices | bottom_indices
+
             cleaned_lines = []
             for idx, line in enumerate(lines):
                 stripped = line.strip()
                 norm = re.sub(r"\d+", "#", stripped)
 
-                # Header/footer positions: first line or last line
-                is_header_footer_pos = (idx == 0 or idx == len(lines) - 1)
+                is_hdr_ftr = idx in hdr_ftr_indices
+
+                # Strip bare page numbers in top/bottom header/footer zones
+                if is_hdr_ftr and re.match(r"^\d{1,3}$", stripped):
+                    continue
 
                 # Skip if matches a repeated digit-normalized pattern in header/footer position
-                if is_header_footer_pos and norm in repeated_norm_lines:
+                if is_hdr_ftr and norm in repeated_norm_lines:
                     continue
-                if re.match(r"^\s*Page\s+#(?:\s*(?:of|\|)\s*#)?\s*$", norm, re.IGNORECASE):
+                if is_hdr_ftr and re.match(r"^\s*Page\s+#(?:\s*(?:of|\|)\s*#)?\s*$", norm, re.IGNORECASE):
                     continue
-                if re.match(r"^Dallas\s+ISD\s+rev\s+#\.#$", norm, re.IGNORECASE):
+                if is_hdr_ftr and re.match(r"^Dallas\s+ISD\s+rev\s+#\.#$", norm, re.IGNORECASE):
                     continue
 
                 cleaned_lines.append(line)
@@ -200,6 +225,7 @@ class TextCleaner:
     def clean_text(cls, text: str) -> str:
         """Run standard text cleaning pipeline on a text snippet."""
         text = cls.fix_hyphenation(text)
+        text = cls.fix_split_urls_and_emails(text)
         text = cls.fix_kerning(text)
         text = cls.fix_fused_words(text)
         text = cls.reflow_vertical_lines(text)

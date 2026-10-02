@@ -1,0 +1,61 @@
+{
+  "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+  "total_pages": 4,
+  "pages": [
+    {
+      "page_number": 1,
+      "status": "extractable",
+      "char_count": 1962,
+      "raw_char_count": 1962,
+      "drawings_count": 154,
+      "images_count": 0,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 2,
+      "status": "extractable",
+      "char_count": 2068,
+      "raw_char_count": 2068,
+      "drawings_count": 65,
+      "images_count": 0,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 3,
+      "status": "extractable",
+      "char_count": 2080,
+      "raw_char_count": 2080,
+      "drawings_count": 329,
+      "images_count": 0,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    },
+    {
+      "page_number": 4,
+      "status": "extractable",
+      "char_count": 752,
+      "raw_char_count": 752,
+      "drawings_count": 36,
+      "images_count": 0,
+      "widget_count": 0,
+      "widgets": [],
+      "has_vector_outlines": false,
+      "ocr_attempted": false,
+      "ocr_status": "none"
+    }
+  ],
+  "has_vector_outlines": false,
+  "non_extractable_pages": [],
+  "form_widget_pages": []
+}

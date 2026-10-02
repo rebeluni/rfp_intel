@@ -325,3 +325,88 @@ class TestDocumentChunker:
         chunks = chunker.chunk_document(doc)
         # Verify p1 was merged into p2 or kept if different pages, but not fragmented
         assert len(chunks) <= 2
+
+    def test_no_cross_page_merging_preserves_pages(self):
+        """Regression test for Patch 2: never merge chunks across different pages."""
+        chunker = DocumentChunker(chunk_size=300, min_chunk_words=30)
+        p9 = ParsedPage(
+            page_number=9,
+            raw_text="Page nine has a substantial amount of content describing procurement procedures and instructions.",
+            cleaned_text="Page nine has a substantial amount of content describing procurement procedures and instructions.",
+            tables=[]
+        )
+        p10 = ParsedPage(
+            page_number=10,
+            raw_text="Short page ten note.",
+            cleaned_text="Short page ten note.",
+            tables=[]
+        )
+        doc = ParsedDocument(
+            file_name="JA-207652_FINAL.pdf",
+            file_path="/path/JA-207652_FINAL.pdf",
+            bid_id="Bid1",
+            doc_type=DocType.RFP,
+            pages=[p9, p10]
+        )
+        chunks = chunker.chunk_document(doc)
+        assert len(chunks) == 2
+        assert chunks[0].metadata.page_number == 9
+        assert chunks[1].metadata.page_number == 10
+        assert "p.9" in chunks[0].context_header
+        assert "p.10" in chunks[1].context_header
+
+    def test_section_label_heading_at_start_of_chunk(self):
+        """Regression test for Patch 3: section label = heading in effect at START of chunk."""
+        chunker = DocumentChunker(chunk_size=500)
+        p1 = ParsedPage(
+            page_number=1,
+            raw_text="Section 1 - General Information\nIntroductory information.\nBID SUBMISSION INSTRUCTIONS\nSubmission details.",
+            cleaned_text="Section 1 - General Information\nIntroductory information.\nBID SUBMISSION INSTRUCTIONS\nSubmission details.",
+            tables=[]
+        )
+        p2 = ParsedPage(
+            page_number=2,
+            raw_text="Continuing submission details.\nSection 2 - Point of Contact\nContact details.",
+            cleaned_text="Continuing submission details.\nSection 2 - Point of Contact\nContact details.",
+            tables=[]
+        )
+        doc = ParsedDocument(
+            file_name="PORFP.pdf",
+            file_path="/path/PORFP.pdf",
+            bid_id="Bid2",
+            doc_type=DocType.RFP,
+            pages=[p1, p2]
+        )
+        chunks = chunker.chunk_document(doc)
+        # Chunk 1 starts with Section 1
+        assert "Section 1" in chunks[0].metadata.section
+        # Chunk 2 starts with continuing submission details from bottom of p1 (Bid Submission Instructions)
+        assert "Bid Submission Instructions" in chunks[1].metadata.section
+
+    def test_rejoin_split_emails_and_urls(self):
+        """Regression test for Patch 4: rejoin emails/URLs split across line breaks."""
+        broken_email = "Agency POC Email Address:\nthawkins@treasurer.state.md\n.us\nOther text."
+        fixed_email = TextCleaner.fix_split_urls_and_emails(broken_email)
+        assert "thawkins@treasurer.state.md.us" in fixed_email
+
+        broken_url = "Portal link:\nhttps://procurement.maryland.gov/emma-\nqrgs/\nReference."
+        fixed_url = TextCleaner.fix_split_urls_and_emails(broken_url)
+        assert "https://procurement.maryland.gov/emma-qrgs/" in fixed_url
+
+    def test_portal_phone_key_removal(self, tmp_path):
+        """Regression test for Patch 5: remove portal lines where a phone number is used as a key."""
+        html_file = tmp_path / "portal_test.html"
+        html_file.write_text("""
+        <html><body>
+            <div class="field-label">Reference Number</div><div>00004079359</div>
+            <div class="field-label">Tamaira Hawkins</div><div>410-260-7533</div>
+            <div class="field-label">410-260-7533</div><div>Thawkins@treasurer.state.md.us</div>
+        </body></html>
+        """, encoding="utf-8")
+        parsed = HTMLParser.parse(html_file, bid_id="Bid2")
+        text = parsed.pages[0].cleaned_text
+        # Phone key must not appear as a key
+        assert "**410-260-7533**:" not in text
+        # Contact info should contain the assembled contact
+        assert "410-260-7533" in text
+        assert "Thawkins@treasurer.state.md.us" in text
