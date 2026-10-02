@@ -40,14 +40,15 @@ class Settings(BaseModel):
         default_factory=lambda: os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     )
 
-    # Embedding & Retrieval Settings
+    # Embedding & Retrieval Settings (Phase 2 Search Engine)
     EMBEDDING_MODEL_NAME: str = Field(
-        default_factory=lambda: os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
+        default_factory=lambda: os.getenv("EMBEDDING_MODEL_NAME", "BAAI/bge-small-en-v1.5")
     )
     EMBEDDING_DEVICE: str = Field(default_factory=lambda: os.getenv("EMBEDDING_DEVICE", "cpu"))
     EMBEDDING_QUERY_PREFIX: str = Field(
-        default_factory=lambda: os.getenv("EMBEDDING_QUERY_PREFIX", "")
+        default_factory=lambda: os.getenv("EMBEDDING_QUERY_PREFIX", "Represent this sentence for searching relevant passages: ")
     )
+    EMBEDDING_MAX_SEQ_LENGTH: int = Field(default_factory=lambda: int(os.getenv("EMBEDDING_MAX_SEQ_LENGTH", "512")))
 
     RERANKER_MODEL_NAME: str = Field(
         default_factory=lambda: os.getenv("RERANKER_MODEL_NAME", "cross-encoder/ms-marco-MiniLM-L-6-v2")
@@ -56,6 +57,8 @@ class Settings(BaseModel):
     RETRIEVAL_CANDIDATE_POOL: int = Field(
         default_factory=lambda: int(os.getenv("RETRIEVAL_CANDIDATE_POOL", "20"))
     )
+    RRF_K: int = Field(default_factory=lambda: int(os.getenv("RRF_K", "60")))
+    SEARCH_INDEX_DIR: Path = PROJECT_ROOT / ".storage" / "search_index"
 
     # Chunking Configuration (in tokens, matching plan ~500 / 75)
     CHUNK_SIZE: int = Field(default_factory=lambda: int(os.getenv("CHUNK_SIZE", "500")))
@@ -85,6 +88,7 @@ settings = Settings()
 # Ensure required directories exist
 settings.STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 settings.OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+settings.SEARCH_INDEX_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def load_fields_config() -> dict:

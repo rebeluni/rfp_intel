@@ -1,0 +1,209 @@
+{
+  "bids": [
+    "Bid1",
+    "Bid2"
+  ],
+  "matrix": [
+    {
+      "field_name": "Bid Number",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "JA-207652",
+        "Bid2": "BPM044557"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Title",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "RFP JA-207652 Student and Staff Computing Devices",
+        "Bid2": "[Bid2 | Portal Summary | Dell Laptops w Extended Warranty {3} | p.1 | Section: Portal Bid Details & Schedule]"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Due Date",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "27-JUN-2024 14:00:00",
+        "Bid2": "06/10/2024\n2"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Bid Submission Type",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Bid Submission Instructions] Questions Due (Closing) Date and Time: 06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Term of Bid",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "Three (3) years with two (2) one-year renewals (up to 5 years total)",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Pre Bid Meeting",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "Pre-Proposal Meeting 10-JUN-2024 14:00:00",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Installation",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "to \"describe your company's ability to perform each of the deployment services,\" etc.  How should vendors comply with the requirement to use the PDF version of the solicitation and yet respond to such attributes in the very limited space p",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Bid Bond Requirement",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document.",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Delivery Date",
+      "category": "dates_logistics",
+      "values": {
+        "Bid1": "that the awarded vendor meet the deadline for the agreed delivery.",
+        "Bid2": "9. Delivery within 45 days of Award."
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Payment Terms",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "At minimum, the contract should include the scope of work, payment terms, prompt payment clause and retainage clause.  Changes to the original M/WBE Commitment – After Contract Execution. The prime vendor shall notify the M/WBE Department",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Any Additional Documentation Required",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "numerated elsewhere in Contract documents.  Submission of a certificate of insurance/bond by the undersigned (or an agent/broker on behalf of the undersigned) represents that the coverages and perils covered by the insurance/bond meet or ex",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "MFG for Registration",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Identical or both not found."
+    },
+    {
+      "field_name": "Contract or Cooperative to use",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "siness Enterprise (MBE) Goal for FA IV Below (See “Hardware Master Contract MBE Participation Worksheet”): 0 % PORFP Issue Date: mm/dd/yyyy 05/24/2024 PROPOSAL DUE DATE and TIME: 06/10/2024 Place of Performance: MD State Treasurer's Office"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Model_no",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "Dell Latitude 5550 XCTO Base"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Part_no",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "210-BLYZ, 379-BFNZ, 619-ARSB, 658-BCSB, 338-CNRG"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Product",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "NOT_FOUND",
+        "Bid2": "ees who have been included in our staff as of June 1, 2023. Product Name Product Description Model # Qty  Due Date mm/dd/yyyy 1. SI# CC7802 Dell Latitude 5550  SI# CC7802 Dell Latitude 5550 *Laptops must be Microsoft Copilot ready* SI# CC78"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "contact_info",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": " Please direct all procurement questions to Sherri Williams at shewilli@dallasisd.org. Please direct all technical questions to Oracle Finance Development Team at DGOracleFDTeam@dallasisd.org.",
+        "Bid2": "06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject line, “QUESTION for Dell Laptop #E20P4600040”, and be"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "company_name",
+      "category": "commercial_legal",
+      "values": {
+        "Bid1": "Dallas ISD",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Bid Summary",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "ete Section 9 below.  No.  Will you self-perform the entire scope of work?  Yes. I plan to self-perform the entire scope of work with my own workforce. If you are a Certified M/WBE Prime complete Section 10 below.  No.  Section 8. | Certifi",
+        "Bid2": "0 Calvert Street, Room 109 Annapolis, MD 21401  Section 4 – Scope of Work  FA II - Printers and Associated Peripherals (Provide product specifications below. If some or all specifications are unknown, Master Contractors may propose products"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    },
+    {
+      "field_name": "Product Specification",
+      "category": "product_specs",
+      "values": {
+        "Bid1": "• Windows 11 Pro • Warranty: 3-year minimum Student Tablet Minimum Requirements • Enterprise Management Ready • Processor A13 • Display: 10.2\" Retina • Integrated Camera: 8MP Wide camera • Screen Resolutions 2160 x 1620 Multi-touch • Wirel",
+        "Bid2": "NOT_FOUND"
+      },
+      "difference_summary": "Distinct values across 2 bids."
+    }
+  ],
+  "risk_analysis": {
+    "Bid1": [
+      "Strict M/WBE compliance and affirmative action guidelines require specialized subcontractor documentation.",
+      "Dallas ISD bond funding stipulations require strict delivery schedules starting September 2024.",
+      "TEAMS pre-proposal meeting was conducted with mandatory attendance for potential proposers.",
+      "Addendum No. 2 extended the due date; proposals must acknowledge all addenda."
+    ],
+    "Bid2": [
+      "Maryland State Treasurer PORFP requires exact hardware SKU delivery without substitutions.",
+      "Requires strict State of Maryland Mercury Affidavit and Contract Affidavit notarizations.",
+      "Turnaround requires delivery to 80 Calvert Street within specified delivery window."
+    ]
+  },
+  "viability_scores": {
+    "Bid1": 70.0,
+    "Bid2": 55.0
+  },
+  "recommendations": {
+    "Bid1": "High-priority commercial bid. Ensure M/WBE forms and bond certifications are complete.",
+    "Bid2": "Direct hardware procurement. Confirm exact Dell Latitude 5550 pricing."
+  }
+}

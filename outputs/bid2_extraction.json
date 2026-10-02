@@ -1,0 +1,458 @@
+{
+  "bid_id": "Bid2",
+  "fields": {
+    "Bid Number": {
+      "field_name": "Bid Number",
+      "value": "BPM044557",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950",
+          "quote": "Request for Proposal (Informal) - **Solicitation Number**: BPM044557 - **Title**: Dell Laptops w/Extended Warranty - **Source ID**: SCRIBE - **Location**: Anne Arundel County - **Purchase Type**: Not Stated - **Piggyback Contract**: No - *",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Title": {
+      "field_name": "Title",
+      "value": "[Bid2 | Portal Summary | Dell Laptops w Extended Warranty {3} | p.1 | Section: Portal Bid Details & Schedule]",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950",
+          "quote": "[Bid2 | Portal Summary | Dell Laptops w Extended Warranty {3} | p.1 | Section: Portal Bid Details & Schedule]",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Due Date": {
+      "field_name": "Due Date",
+      "value": "06/10/2024\n2",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html",
+          "page_number": 1,
+          "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950",
+          "quote": "*Laptops must be Microsoft Copilot ready* | Quantity: 30 | Due Date: 06/10/2024 2. Dell Thunderbolt 4 Dock – WD22TB4 WD22TB4 | Quantity: 30 | Due Date: 06/10/2024",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Bid Submission Type": {
+      "field_name": "Bid Submission Type",
+      "value": "[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Bid Submission Instructions] Questions Due (Closing) Date and Time: 06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p2_c0_060ad1b3",
+          "quote": "[Bid2 | RFP | PORFP Dell Laptop Final | p.2 | Section: Bid Submission Instructions] Questions Due (Closing) Date and Time: 06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Term of Bid": {
+      "field_name": "Term of Bid",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "dates_logistics"
+    },
+    "Pre Bid Meeting": {
+      "field_name": "Pre Bid Meeting",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "dates_logistics"
+    },
+    "Installation": {
+      "field_name": "Installation",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "dates_logistics"
+    },
+    "Bid Bond Requirement": {
+      "field_name": "Bid Bond Requirement",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Delivery Date": {
+      "field_name": "Delivery Date",
+      "value": "9. Delivery within 45 days of Award.",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p2_c0_060ad1b3",
+          "quote": "9. Delivery within 45 days of Award.",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Payment Terms": {
+      "field_name": "Payment Terms",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Any Additional Documentation Required": {
+      "field_name": "Any Additional Documentation Required",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "MFG for Registration": {
+      "field_name": "MFG for Registration",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Contract or Cooperative to use": {
+      "field_name": "Contract or Cooperative to use",
+      "value": "siness Enterprise (MBE) Goal for FA IV Below (See “Hardware Master Contract MBE Participation Worksheet”): 0 % PORFP Issue Date: mm/dd/yyyy 05/24/2024 PROPOSAL DUE DATE and TIME: 06/10/2024 Place of Performance: MD State Treasurer's Office",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 1,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f",
+          "quote": "siness Enterprise (MBE) Goal for FA IV Below (See “Hardware Master Contract MBE Participation Worksheet”): 0 % PORFP Issue Date: mm/dd/yyyy 05/24/2024 PROPOSAL DUE DATE and TIME: 06/10/2024 Place of Performance: MD State Treasurer's Office",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Model_no": {
+      "field_name": "Model_no",
+      "value": "Dell Latitude 5550 XCTO Base",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 3,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23",
+          "quote": "[Bid2 | RFP | PORFP Dell Laptop Final | p.3 | Section: Section 2 – Agency Point of]\nAgency POC Name:\nTamaira Hawkins Agency POC Phone Number:\n410-260-",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Part_no": {
+      "field_name": "Part_no",
+      "value": "210-BLYZ, 379-BFNZ, 619-ARSB, 658-BCSB, 338-CNRG",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Dell_Laptop_Specs.pdf",
+          "page_number": 1,
+          "chunk_id": "Bid2_Dell_Laptop_Specs_p1_merged_7d4edb54",
+          "quote": "[Bid2 | Specifications | Dell Laptop Specs | p.1 | Section: Specification / Bid Tables:]\n| SKU | Description |\n| --- | --- |\n| 210-BLYZ | Dell Latitud",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Product": {
+      "field_name": "Product",
+      "value": "ees who have been included in our staff as of June 1, 2023. Product Name Product Description Model # Qty  Due Date mm/dd/yyyy 1. SI# CC7802 Dell Latitude 5550  SI# CC7802 Dell Latitude 5550 *Laptops must be Microsoft Copilot ready* SI# CC78",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 3,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23",
+          "quote": "ees who have been included in our staff as of June 1, 2023. Product Name Product Description Model # Qty  Due Date mm/dd/yyyy 1. SI# CC7802 Dell Latitude 5550  SI# CC7802 Dell Latitude 5550 *Laptops must be Microsoft Copilot ready* SI# CC78",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "contact_info": {
+      "field_name": "contact_info",
+      "value": "06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject line, “QUESTION for Dell Laptop #E20P4600040”, and be",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p2_c0_060ad1b3",
+          "quote": "06/01/2024 at 2:00 PM EDT Questions must be submitted in writing to thawkins@treasurer.state.md.us with the subject line, “QUESTION for Dell Laptop #E20P4600040”, and be",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "company_name": {
+      "field_name": "company_name",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Bid Summary": {
+      "field_name": "Bid Summary",
+      "value": "0 Calvert Street, Room 109 Annapolis, MD 21401  Section 4 – Scope of Work  FA II - Printers and Associated Peripherals (Provide product specifications below. If some or all specifications are unknown, Master Contractors may propose products",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "PORFP_-_Dell_Laptop_Final.pdf",
+          "page_number": 3,
+          "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23",
+          "quote": "0 Calvert Street, Room 109 Annapolis, MD 21401  Section 4 – Scope of Work  FA II - Printers and Associated Peripherals (Provide product specifications below. If some or all specifications are unknown, Master Contractors may propose products",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Product Specification": {
+      "field_name": "Product Specification",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "product_specs"
+    }
+  },
+  "validations": {
+    "Bid Number": {
+      "field_name": "Bid Number",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Title": {
+      "field_name": "Title",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Due Date": {
+      "field_name": "Due Date",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Bid Submission Type": {
+      "field_name": "Bid Submission Type",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Term of Bid": {
+      "field_name": "Term of Bid",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Pre Bid Meeting": {
+      "field_name": "Pre Bid Meeting",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Installation": {
+      "field_name": "Installation",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Bid Bond Requirement": {
+      "field_name": "Bid Bond Requirement",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Delivery Date": {
+      "field_name": "Delivery Date",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Payment Terms": {
+      "field_name": "Payment Terms",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Any Additional Documentation Required": {
+      "field_name": "Any Additional Documentation Required",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "MFG for Registration": {
+      "field_name": "MFG for Registration",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Contract or Cooperative to use": {
+      "field_name": "Contract or Cooperative to use",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Model_no": {
+      "field_name": "Model_no",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Part_no": {
+      "field_name": "Part_no",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Product": {
+      "field_name": "Product",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "contact_info": {
+      "field_name": "contact_info",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "company_name": {
+      "field_name": "company_name",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Bid Summary": {
+      "field_name": "Bid Summary",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Product Specification": {
+      "field_name": "Product Specification",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    }
+  },
+  "overall_compliance_score": 77.5,
+  "summary": "Extraction completed for Bid2: 11/20 fields identified with 20/20 validations passing (77.5% compliance score).",
+  "raw_evidence_count": 100
+}

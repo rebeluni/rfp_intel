@@ -1,0 +1,482 @@
+{
+  "bid_id": "Bid1",
+  "fields": {
+    "Bid Number": {
+      "field_name": "Bid Number",
+      "value": "JA-207652",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "page_number": 1,
+          "chunk_id": "Bid1_Addendum_2_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_a447e26a",
+          "quote": "ent and | p.1 | Section: Addendum No. 2] ADDENDUM No. 2 RFP JA-207652 Student and Staff Computing Devices  The Purpose of this Addendum is to extend the due date of this RFP.  The new due date for this RFP will be July 9, 2024 at 2:00 PM CS",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Title": {
+      "field_name": "Title",
+      "value": "RFP JA-207652 Student and Staff Computing Devices",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "page_number": 1,
+          "chunk_id": "Bid1_Addendum_2_RFP_JA_207652_Student_and_Staff_Computing_Devices_p1_c0_a447e26a",
+          "quote": "RFP JA-207652 Student and Staff Computing Devices",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Due Date": {
+      "field_name": "Due Date",
+      "value": "27-JUN-2024 14:00:00",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_a1ba94ce",
+          "quote": "0 Questions Response from the District 13-JUN-2024 18:00:00 Solicitation Due 27-JUN-2024 14:00:00 Anticipated Evaluation & Sel 11-JUL-2024 14:00:00 Anticipated Approval/Award 22-AUG-2024 18:00:00 Pre-Proposal A pre-proposal meeting will be",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Bid Submission Type": {
+      "field_name": "Bid Submission Type",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "dates_logistics"
+    },
+    "Term of Bid": {
+      "field_name": "Term of Bid",
+      "value": "Three (3) years with two (2) one-year renewals (up to 5 years total)",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_a1ba94ce",
+          "quote": "ting Meeting ID: 270 031 467 036 Passcode: N9ndKY 1.2 Terms Initial Term: 3 Renewal 1: 1 Renewal 2: 1 Any contract that results from this solicitation and upon Mutual Agreement of the awarded vendor and the District, may be extended not to",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Pre Bid Meeting": {
+      "field_name": "Pre Bid Meeting",
+      "value": "Pre-Proposal Meeting 10-JUN-2024 14:00:00",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p2_c0_a1ba94ce",
+          "quote": "024 08:00:00 Second Advertisement Date 02-JUN-2024 08:00:00 Pre-Proposal Meeting 10-JUN-2024 14:00:00 Questions Deadline 11-JUN-2024 16:00:00 Questions Response from the District 13-JUN-2024 18:00:00 Solicitation Due 27-JUN-2024 14:00:00 An",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Installation": {
+      "field_name": "Installation",
+      "value": "to \"describe your company's ability to perform each of the deployment services,\" etc.  How should vendors comply with the requirement to use the PDF version of the solicitation and yet respond to such attributes in the very limited space p",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "page_number": 4,
+          "chunk_id": "Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p4_c0_12842034",
+          "quote": "to \"describe your company's ability to perform each of the deployment services,\" etc.  How should vendors comply with the requirement to use the PDF version of the solicitation and yet respond to such attributes in the very limited space p",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Bid Bond Requirement": {
+      "field_name": "Bid Bond Requirement",
+      "value": "insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document.",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 9,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p9_c0_8aeb1588",
+          "quote": "insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document.",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Delivery Date": {
+      "field_name": "Delivery Date",
+      "value": "that the awarded vendor meet the deadline for the agreed delivery.",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+          "page_number": 2,
+          "chunk_id": "Bid1_Addendum_1_RFP_JA_207652_Student_and_Staff_Computing_Devices_p2_c0_a2809a91",
+          "quote": "that the awarded vendor meet the deadline for the agreed delivery.",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "dates_logistics"
+    },
+    "Payment Terms": {
+      "field_name": "Payment Terms",
+      "value": "At minimum, the contract should include the scope of work, payment terms, prompt payment clause and retainage clause.  Changes to the original M/WBE Commitment – After Contract Execution. The prime vendor shall notify the M/WBE Department",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 51,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p51_c0_7716dbe1",
+          "quote": "At minimum, the contract should include the scope of work, payment terms, prompt payment clause and retainage clause.  Changes to the original M/WBE Commitment – After Contract Execution. The prime vendor shall notify the M/WBE Department",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Any Additional Documentation Required": {
+      "field_name": "Any Additional Documentation Required",
+      "value": "numerated elsewhere in Contract documents.  Submission of a certificate of insurance/bond by the undersigned (or an agent/broker on behalf of the undersigned) represents that the coverages and perils covered by the insurance/bond meet or ex",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 17,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p17_c0_52c70045",
+          "quote": "numerated elsewhere in Contract documents.  Submission of a certificate of insurance/bond by the undersigned (or an agent/broker on behalf of the undersigned) represents that the coverages and perils covered by the insurance/bond meet or ex",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "MFG for Registration": {
+      "field_name": "MFG for Registration",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Contract or Cooperative to use": {
+      "field_name": "Contract or Cooperative to use",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "commercial_legal"
+    },
+    "Model_no": {
+      "field_name": "Model_no",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "product_specs"
+    },
+    "Part_no": {
+      "field_name": "Part_no",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "product_specs"
+    },
+    "Product": {
+      "field_name": "Product",
+      "value": null,
+      "status": "NOT_FOUND",
+      "confidence": 0.0,
+      "evidence": [],
+      "notes": "Value not explicitly stated in retrieved passages",
+      "specialist": "product_specs"
+    },
+    "contact_info": {
+      "field_name": "contact_info",
+      "value": " Please direct all procurement questions to Sherri Williams at shewilli@dallasisd.org. Please direct all technical questions to Oracle Finance Development Team at DGOracleFDTeam@dallasisd.org.",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 61,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p61_c0_2c6e4bce",
+          "quote": " Please direct all procurement questions to Sherri Williams at shewilli@dallasisd.org. Please direct all technical questions to Oracle Finance Development Team at DGOracleFDTeam@dallasisd.org.",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "company_name": {
+      "field_name": "company_name",
+      "value": "Dallas ISD",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 14,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p14_c1_db692cdc",
+          "quote": "Dallas ISD",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "commercial_legal"
+    },
+    "Bid Summary": {
+      "field_name": "Bid Summary",
+      "value": "ete Section 9 below.  No.  Will you self-perform the entire scope of work?  Yes. I plan to self-perform the entire scope of work with my own workforce. If you are a Certified M/WBE Prime complete Section 10 below.  No.  Section 8. | Certifi",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 45,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p45_c0_cf0441f6",
+          "quote": "ete Section 9 below.  No.  Will you self-perform the entire scope of work?  Yes. I plan to self-perform the entire scope of work with my own workforce. If you are a Certified M/WBE Prime complete Section 10 below.  No.  Section 8. | Certifi",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    },
+    "Product Specification": {
+      "field_name": "Product Specification",
+      "value": "• Windows 11 Pro • Warranty: 3-year minimum Student Tablet Minimum Requirements • Enterprise Management Ready • Processor A13 • Display: 10.2\" Retina • Integrated Camera: 8MP Wide camera • Screen Resolutions 2160 x 1620 Multi-touch • Wirel",
+      "status": "FOUND",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file_name": "JA-207652 Student and Staff Computing Devices FINAL.pdf",
+          "page_number": 5,
+          "chunk_id": "Bid1_JA_207652_Student_and_Staff_Computing_Devices_FINAL_p5_c0_e487e9c2",
+          "quote": "• Windows 11 Pro • Warranty: 3-year minimum Student Tablet Minimum Requirements • Enterprise Management Ready • Processor A13 • Display: 10.2\" Retina • Integrated Camera: 8MP Wide camera • Screen Resolutions 2160 x 1620 Multi-touch • Wirel",
+          "relevance_score": null
+        }
+      ],
+      "notes": null,
+      "specialist": "product_specs"
+    }
+  },
+  "validations": {
+    "Bid Number": {
+      "field_name": "Bid Number",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Title": {
+      "field_name": "Title",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Due Date": {
+      "field_name": "Due Date",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Bid Submission Type": {
+      "field_name": "Bid Submission Type",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Term of Bid": {
+      "field_name": "Term of Bid",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Pre Bid Meeting": {
+      "field_name": "Pre Bid Meeting",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Installation": {
+      "field_name": "Installation",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Bid Bond Requirement": {
+      "field_name": "Bid Bond Requirement",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Delivery Date": {
+      "field_name": "Delivery Date",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Payment Terms": {
+      "field_name": "Payment Terms",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Any Additional Documentation Required": {
+      "field_name": "Any Additional Documentation Required",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "MFG for Registration": {
+      "field_name": "MFG for Registration",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Contract or Cooperative to use": {
+      "field_name": "Contract or Cooperative to use",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Model_no": {
+      "field_name": "Model_no",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Part_no": {
+      "field_name": "Part_no",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "Product": {
+      "field_name": "Product",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Field correctly identified as not present in retrieved evidence.",
+      "suggested_value": null
+    },
+    "contact_info": {
+      "field_name": "contact_info",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "company_name": {
+      "field_name": "company_name",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Bid Summary": {
+      "field_name": "Bid Summary",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    },
+    "Product Specification": {
+      "field_name": "Product Specification",
+      "is_valid": true,
+      "is_grounded": true,
+      "has_addendum_conflict": false,
+      "issue_type": null,
+      "feedback": "Grounded in source text and verified.",
+      "suggested_value": null
+    }
+  },
+  "overall_compliance_score": 85.0,
+  "summary": "Extraction completed for Bid1: 14/20 fields identified with 20/20 validations passing (85.0% compliance score).",
+  "raw_evidence_count": 100
+}
