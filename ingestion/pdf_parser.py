@@ -8,6 +8,8 @@ and handles scanned, empty, or corrupt files gracefully.
 """
 
 import logging
+import re
+import shutil
 from pathlib import Path
 from typing import List, Optional, Tuple
 import pymupdf
@@ -92,7 +94,6 @@ class PDFParser:
                         page_text = ocr_text
 
             page_tables: List[ParsedTable] = []
-            layout_prose_additions: List[str] = []
 
             # 3. Extract tables only if document is not an affidavit or form
             if not skip_tables:
@@ -113,9 +114,6 @@ class PDFParser:
                                 rows=row_data,
                                 markdown=formatted_content
                             ))
-                        elif formatted_content:
-                            # Converted layout box (e.g. LENGTH OF CONTRACT) -> append to prose
-                            layout_prose_additions.append(formatted_content)
                 except Exception as e:
                     logger.warning(f"Table finder failed on '{file_path.name}' page {page_num}: {e}")
 
@@ -126,12 +124,7 @@ class PDFParser:
                         page_tables.append(spec_tbl)
                         page_text = remaining_prose
 
-            # Merge layout box prose into page text if present
-            if layout_prose_additions:
-                combined_text = "\n\n".join(layout_prose_additions) + "\n\n" + page_text
-            else:
-                combined_text = page_text
-
+            combined_text = page_text
             raw_pages_text.append(combined_text)
             parsed_pages.append(ParsedPage(
                 page_number=page_num,
@@ -200,26 +193,43 @@ class PDFParser:
         if not words:
             return None, ""
 
-        # Find SKU candidates in right region (x >= 280, 95 <= y <= 750)
-        sku_words = [w for w in words if w[0] >= 280 and 95 <= w[1] <= 750]
-        # Keep words that look like part numbers / SKUs
-        sku_tokens = [w for w in sku_words if any(c.isdigit() for c in w[4]) and ("-" in w[4] or len(w[4]) >= 6)]
+        # Find words matching SKU / part number patterns across the whole page
+        sku_pattern = re.compile(r"^[A-Za-z0-9]{3,}-[A-Za-z0-9]{3,}$")
+        candidate_skus = [w for w in words if sku_pattern.match(w[4])]
+
+        if len(candidate_skus) < 4:
+            return None, page.get_text("text")
+
+        # Dynamic column clustering: bucket candidate SKUs by horizontal x-position (every 30 pts)
+        from collections import defaultdict
+        skus_by_x = defaultdict(list)
+        for w in candidate_skus:
+            bucket = round(w[0] / 30) * 30
+            skus_by_x[bucket].append(w)
+
+        best_bucket = max(skus_by_x.keys(), key=lambda b: len(skus_by_x[b]))
+        sku_tokens = skus_by_x[best_bucket]
 
         if len(sku_tokens) < 4:
             return None, page.get_text("text")
 
         sku_tokens.sort(key=lambda w: w[1])
 
-        # Description words in left region (x < 280, 95 <= y <= 750)
-        desc_words = [w for w in words if w[0] < 280 and 95 <= w[1] <= 750]
+        # Dynamic column split: boundary is slightly to the left of the SKU column
+        col_x_min = min(w[0] for w in sku_tokens)
+        split_x = col_x_min - 10
+
+        # Description words are to the left of the SKU column within the table vertical span
+        y_min = min(w[1] for w in sku_tokens) - 15
+        y_max = max(w[3] for w in sku_tokens) + 15
+        desc_words = [w for w in words if w[2] <= split_x and y_min <= w[1] <= y_max]
 
         rows = []
         for i, sku in enumerate(sku_tokens):
             y_start = sku[1] - 8
-            y_end = sku_tokens[i + 1][1] - 8 if i + 1 < len(sku_tokens) else 9999
+            y_end = sku_tokens[i + 1][1] - 8 if i + 1 < len(sku_tokens) else y_max + 10
 
             d_words = [w for w in desc_words if y_start <= w[1] < y_end]
-            # Sort words in description by line then x
             d_words.sort(key=lambda w: (round(w[1] / 6), w[0]))
             desc_text = " ".join(w[4] for w in d_words).strip()
             desc_text = TextCleaner.clean_text(desc_text)
@@ -240,7 +250,7 @@ class PDFParser:
             md_lines.append(f"| {r[0]} | {safe_desc} |")
 
         # Collect prose outside the table area (e.g. top heading like 'SI# CC7802 Dell Latitude 5550')
-        top_words = [w for w in words if w[1] < 95 and not w[4].lower().startswith("page")]
+        top_words = [w for w in words if w[1] < y_min and not w[4].lower().startswith("page")]
         top_words.sort(key=lambda w: (round(w[1] / 6), w[0]))
         remaining_prose = " ".join(w[4] for w in top_words).strip()
 
@@ -259,10 +269,11 @@ class PDFParser:
         doc_type: Optional[DocType] = None
     ) -> Tuple[bool, str]:
         """
-        Differentiates real tabular data from layout boxes.
+        Differentiates real tabular data from layout boxes and form grids.
+        Drops/flattens tables that have 8+ columns or are mostly empty (>60% empty cells).
         Returns:
             (True, markdown_table_string) if valid real table
-            (False, prose_string) if layout box
+            (False, prose_string) if layout box / form
             (False, "") if empty/noise
         """
         if not rows or len(rows) < 2:
@@ -281,6 +292,14 @@ class PDFParser:
         max_cols = max(len(r) for r in filtered_rows)
         if max_cols < 2:
             return False, cls._rows_to_prose(filtered_rows)
+
+        # Check sparsity: drop/flatten form tables that have 8+ columns or are mostly empty
+        total_cells = len(filtered_rows) * max_cols
+        empty_cells = sum(sum(1 for c in r if not c.strip()) for r in filtered_rows)
+        empty_ratio = empty_cells / max(1, total_cells)
+
+        if max_cols >= 8 or empty_ratio > 0.60:
+            return False, ""
 
         # 1. Check column population: count how many columns have non-empty values
         col_counts = [0] * max_cols
@@ -324,7 +343,6 @@ class PDFParser:
             else:
                 headers = [f"Field {i+1}" for i in range(max_cols)]
         else:
-            # Replace empty header cells with fallback without Col_N
             headers = [h if h else f"Field {i+1}" for i, h in enumerate(headers)]
 
         md_lines = []

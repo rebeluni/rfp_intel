@@ -1,0 +1,30 @@
+# RFP Intelligence Platform Dependencies
+# Core & Configuration
+pydantic>=2.10.0
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# Document Ingestion & Extraction
+pymupdf>=1.24.0
+beautifulsoup4>=4.12.0
+pytesseract>=0.3.10
+pillow>=10.0.0
+
+# Search & Retrieval (Phase 2)
+rank-bm25>=0.2.2
+sentence-transformers>=3.0.0
+torch>=2.2.0
+
+# Multi-Agent Orchestration & LLMs (Phase 3)
+langgraph>=0.2.0
+langchain-core>=0.3.0
+httpx>=0.27.0
+
+# API & Web Interface (Phase 4)
+fastapi>=0.110.0
+uvicorn>=0.30.0
+
+# Testing & Quality Assurance
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.14.0

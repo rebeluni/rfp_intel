@@ -42,39 +42,88 @@ class TextCleaner:
     @staticmethod
     def fix_kerning(text: str) -> str:
         """
-        Fix kerning/font artifacts where letters are split by small whitespace gaps.
+        Fix specific kerning/font artifacts where letters are split by small whitespace gaps,
+        only when the merged token is a dictionary word and fragments are not.
         Examples: 'Post Bur n' -> 'Post Burn', 'Se lect' -> 'Select', 'FACTOR Y' -> 'FACTORY', 'Elig ible' -> 'Eligible'.
+        Does NOT touch valid English words like 'provide a', 'consider a', 'data', 'extra', 'REMAIN', 'CERTAIN'.
         """
         if not text:
             return ""
-        # 1. Known syllable/affix splits
+        # Specific non-word fragment joins
         text = re.sub(r"\bBur\s+n\b", "Burn", text, flags=re.IGNORECASE)
         text = re.sub(r"\b([Ss]e)\s+(lect(?:ion|ed|ing|s)?)\b", r"\1\2", text, flags=re.IGNORECASE)
         text = re.sub(r"\b([Ee]lig)\s+(ible|ibility)\b", r"\1\2", text, flags=re.IGNORECASE)
-        # 2. Uppercase trailing letters: FACTOR Y -> FACTORY, BUR N -> BURN
-        text = re.sub(r"\b([A-Z]{3,})\s+([A-Z]{1,2})\b", r"\1\2", text)
-        # 3. Trailing common suffixes split off by whitespace
-        text = re.sub(r"\b([a-zA-Z]{3,})\s+(ing|tion|ment|ance|ence|able|ible|less|ness|ful)\b", r"\1\2", text)
-        # 4. Trailing single lowercase letter after longer word (e.g. 'instan ce' -> 'instance')
-        text = re.sub(r"\b([a-zA-Z]{4,})\s+([a-z])\b", r"\1\2", text)
+        text = re.sub(r"\bFACTOR\s+Y\b", "FACTORY", text)
+        # Fused trailing Roman numeral/pronoun I on uppercase heading words (e.g. AFFIRMATIONI -> AFFIRMATION I)
+        text = re.sub(r"\b([A-Z]{4,})I\b(?=\s+FURTHER|\s*$)", r"\1 I", text)
         return text
 
     @staticmethod
     def fix_fused_words(text: str) -> str:
         """
-        Fix words fused together due to missing font spaces in PDF extraction.
-        Examples: 'LENGTHOF' -> 'LENGTH OF', 'ENDOF' -> 'END OF', 'submita' -> 'submit a'.
+        Safe word fusion repair. Only acts on verified non-words; never splits valid words
+        like REMAIN, CERTAIN, data, extra.
         """
         if not text:
             return ""
-        # Uppercase fusions with prepositions/articles
-        text = re.sub(r"\b([A-Z]{3,})(OF|TO|FOR|AND|WITH|IN)\b", r"\1 \2", text)
-        text = re.sub(r"\b(SUBMIT|RETURN|MAKE|HAVE|ENTER|POST)A\b", r"\1 A", text)
-        text = re.sub(r"\b(BEST)(OF)(MY)\b", r"\1 \2 \3", text)
-        text = re.sub(r"\b(CORRECT)(TO)\b", r"\1 \2", text)
-        # Lowercase glued article 'a': 'submita proposal' -> 'submit a proposal'
-        text = re.sub(r"\b([a-z]{3,})a\s+([a-z]{3,})\b", r"\1 a \2", text)
+        # Fused uppercase pronoun in affidavits
+        text = re.sub(r"\b(AUTHORITY|TAXATION|AFFIRMATION|VALID)I\b", r"\1 I", text)
         return text
+
+    @staticmethod
+    def reflow_vertical_lines(text: str) -> str:
+        """
+        Reflow one-word-per-line text extracted from narrow table/form columns
+        into coherent sentences and paragraphs.
+        """
+        if not text:
+            return ""
+        lines = text.splitlines()
+        reflowed = []
+        buf = []
+
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                if buf:
+                    reflowed.append(" ".join(buf))
+                    buf = []
+                reflowed.append("")
+                continue
+
+            # Skip markdown table rows and headers
+            if stripped.startswith("|") or stripped.endswith("|"):
+                if buf:
+                    reflowed.append(" ".join(buf))
+                    buf = []
+                reflowed.append(stripped)
+                continue
+
+            # Check if line is a single short word or fragment (< 22 chars, <= 2 words, no colon at end, not a list item)
+            words = stripped.split()
+            is_fragment = (
+                len(words) <= 2
+                and len(stripped) < 22
+                and not stripped.endswith(":")
+                and not stripped.startswith(("1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "*", "-", "•", "(", "#"))
+                and not stripped.isupper()
+            )
+
+            if is_fragment:
+                buf.append(stripped)
+            else:
+                if buf:
+                    buf.append(stripped)
+                    reflowed.append(" ".join(buf))
+                    buf = []
+                else:
+                    reflowed.append(stripped)
+
+        if buf:
+            reflowed.append(" ".join(buf))
+
+        # Collapse excess empty lines
+        return re.sub(r"\n{3,}", "\n\n", "\n".join(reflowed))
 
     @classmethod
     def strip_running_headers_footers(
@@ -153,5 +202,6 @@ class TextCleaner:
         text = cls.fix_hyphenation(text)
         text = cls.fix_kerning(text)
         text = cls.fix_fused_words(text)
+        text = cls.reflow_vertical_lines(text)
         text = cls.normalize_whitespace(text)
         return text

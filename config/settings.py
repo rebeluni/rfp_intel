@@ -57,9 +57,9 @@ class Settings(BaseModel):
         default_factory=lambda: int(os.getenv("RETRIEVAL_CANDIDATE_POOL", "20"))
     )
 
-    # Chunking Configuration
-    CHUNK_SIZE: int = Field(default_factory=lambda: int(os.getenv("CHUNK_SIZE", "1500")))
-    CHUNK_OVERLAP: int = Field(default_factory=lambda: int(os.getenv("CHUNK_OVERLAP", "200")))
+    # Chunking Configuration (in tokens, matching plan ~500 / 75)
+    CHUNK_SIZE: int = Field(default_factory=lambda: int(os.getenv("CHUNK_SIZE", "500")))
+    CHUNK_OVERLAP: int = Field(default_factory=lambda: int(os.getenv("CHUNK_OVERLAP", "75")))
     TABLE_MAX_CHUNK_SIZE: int = Field(
         default_factory=lambda: int(os.getenv("TABLE_MAX_CHUNK_SIZE", "3500"))
     )

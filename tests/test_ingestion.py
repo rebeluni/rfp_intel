@@ -36,6 +36,27 @@ class TestTextCleaner:
         assert "computing device" in fixed
         assert "state-of-the-art" in fixed
 
+    def test_kerning_regression_preserves_valid_words(self):
+        """Ensure clean_text does NOT corrupt valid English words, articles, or bid numbers."""
+        test_phrases = [
+            "provide a comprehensive proposal",
+            "consider a candidate",
+            "RFP JA-207652",
+            "TERMS AND CONDITIONS REMAIN UNCHANGED",
+            "CERTAIN AFFIRMATIONS VALID",
+            "data processing and extra costs",
+            "ISD M/WBE requirements",
+        ]
+        for phrase in test_phrases:
+            cleaned = TextCleaner.clean_text(phrase)
+            assert phrase in cleaned, f"Expected '{phrase}' to remain unchanged, but got '{cleaned}'"
+
+        # Verify legitimate non-word kerning fixes still work
+        assert TextCleaner.clean_text("Post Bur n,Factory Install") == "Post Burn,Factory Install"
+        assert TextCleaner.clean_text("Se lect Any OS") == "Select Any OS"
+        assert TextCleaner.clean_text("FACTOR Y INSTALL") == "FACTORY INSTALL"
+        assert TextCleaner.clean_text("CSRouting,Elig ible") == "CSRouting,Eligible"
+
     def test_strip_running_headers_footers(self):
         pages = [
             "Official Header Notice\nContent of page 1\nPage 1 of 3",

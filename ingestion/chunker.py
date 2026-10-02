@@ -72,7 +72,23 @@ class DocumentChunker:
             )
             page_chunks.extend(prose_chunks)
 
-        return page_chunks
+        # Deduplicate near-identical chunks on the same page
+        unique_chunks: List[DocumentChunk] = []
+        for chk in page_chunks:
+            is_dup = False
+            chk_words = set(re.findall(r"\w{3,}", chk.text.lower()))
+            for u in unique_chunks:
+                u_words = set(re.findall(r"\w{3,}", u.text.lower()))
+                if chk_words and u_words:
+                    intersection = len(chk_words & u_words)
+                    similarity = intersection / min(len(chk_words), len(u_words))
+                    if similarity > 0.85:
+                        is_dup = True
+                        break
+            if not is_dup:
+                unique_chunks.append(chk)
+
+        return unique_chunks
 
     def _chunk_table(
         self,
@@ -89,7 +105,13 @@ class DocumentChunker:
         chunks: List[DocumentChunk] = []
         lines = md.splitlines()
 
-        section_name = self._detect_heading(md) or "Specification Table"
+        section_name = self._detect_heading(page.cleaned_text)
+        if not section_name:
+            if doc.doc_type == DocType.SPECS:
+                section_name = "Specifications"
+            else:
+                section_name = f"Table (p.{page.page_number})"
+
         context_hdr = self._build_context_header(doc, page.page_number, section_name)
 
         # If table fits within maximum allowed table chunk size, keep it intact
@@ -128,7 +150,7 @@ class DocumentChunker:
             for r in data_rows:
                 current_rows.append(r)
                 current_block = header_block + "\n" + "\n".join(current_rows)
-                if len(current_block) >= self.chunk_size:
+                if len(current_block) >= self.chunk_size * 4:
                     chunk_body = f"{context_hdr}\n{current_block}"
                     chunk_id = self._generate_chunk_id(
                         doc.bid_id, doc.file_name, page.page_number, f"{suffix}_part{sub_idx}", chunk_body
@@ -185,6 +207,11 @@ class DocumentChunker:
 
         return chunks
 
+    @staticmethod
+    def _count_tokens(text: str) -> int:
+        """Count approximate tokens using word and punctuation boundaries."""
+        return len(re.findall(r"\w+|[^\w\s]", text))
+
     def _chunk_text(
         self,
         text: str,
@@ -192,29 +219,40 @@ class DocumentChunker:
         page_number: int,
         page_label: Optional[str] = None
     ) -> List[DocumentChunk]:
-        """Split text along section headers or sliding window with paragraph/sentence breaks."""
+        """
+        Split text using word- and sentence-aligned boundaries.
+        Target chunk size: ~500 tokens. Overlap: ~75 tokens.
+        Guarantees zero mid-word or mid-sentence cuts.
+        """
         chunks: List[DocumentChunk] = []
 
         paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
         if not paragraphs:
             return []
 
-        current_chunk_parts = []
-        current_len = 0
+        # Break overly long paragraphs into full sentences
+        segments: List[str] = []
+        for p in paragraphs:
+            if self._count_tokens(p) > 220:
+                sents = re.split(r"(?<=[.!?])\s+", p)
+                segments.extend(s.strip() for s in sents if s.strip())
+            else:
+                segments.append(p)
+
+        current_segments: List[str] = []
+        current_token_count = 0
         seq = 0
         current_section = self._detect_heading(text) or "General"
 
-        for para in paragraphs:
-            # Check if this paragraph introduces a new section heading
-            detected_h = self._detect_heading(para)
+        for seg in segments:
+            detected_h = self._detect_heading(seg)
             if detected_h:
                 current_section = detected_h
 
-            para_len = len(para)
+            seg_tokens = self._count_tokens(seg)
 
-            # If adding paragraph exceeds chunk_size and we already have content
-            if current_len + para_len > self.chunk_size and current_chunk_parts:
-                body_text = "\n\n".join(current_chunk_parts)
+            if current_token_count + seg_tokens > self.chunk_size and current_segments:
+                body_text = "\n\n".join(current_segments)
                 context_hdr = self._build_context_header(doc, page_number, current_section)
                 full_text = f"{context_hdr}\n{body_text}"
                 chunk_id = self._generate_chunk_id(doc.bid_id, doc.file_name, page_number, f"c{seq}", full_text)
@@ -240,16 +278,25 @@ class DocumentChunker:
                 ))
                 seq += 1
 
-                # Retain overlap from previous chunk
-                overlap_text = body_text[-self.chunk_overlap:] if len(body_text) > self.chunk_overlap else ""
-                current_chunk_parts = [overlap_text, para] if overlap_text else [para]
-                current_len = len(overlap_text) + para_len
-            else:
-                current_chunk_parts.append(para)
-                current_len += para_len
+                # Word/sentence-aligned sliding window overlap (~75 tokens)
+                overlap_segments = []
+                overlap_tokens = 0
+                for s in reversed(current_segments):
+                    s_tok = self._count_tokens(s)
+                    if overlap_tokens + s_tok <= self.chunk_overlap or not overlap_segments:
+                        overlap_segments.insert(0, s)
+                        overlap_tokens += s_tok
+                    else:
+                        break
 
-        if current_chunk_parts:
-            body_text = "\n\n".join(p for p in current_chunk_parts if p.strip())
+                current_segments = overlap_segments + [seg]
+                current_token_count = overlap_tokens + seg_tokens
+            else:
+                current_segments.append(seg)
+                current_token_count += seg_tokens
+
+        if current_segments:
+            body_text = "\n\n".join(s for s in current_segments if s.strip())
             if body_text.strip():
                 context_hdr = self._build_context_header(doc, page_number, current_section)
                 full_text = f"{context_hdr}\n{body_text}"
@@ -297,11 +344,8 @@ class DocumentChunker:
             # If small chunk and not a table, merge into preceding chunk
             if word_count < self.min_chunk_words and not chk.metadata.is_table and merged:
                 prev = merged[-1]
-                # Check if same page or adjacent page
                 if prev.metadata.file_name == chk.metadata.file_name:
-                    # Append body without duplicating header
                     prev.text = prev.text + "\n\n" + body_text
-                    # Update ID hash
                     prev.chunk_id = self._generate_chunk_id(
                         prev.metadata.bid_id,
                         prev.metadata.file_name,
@@ -338,7 +382,6 @@ class DocumentChunker:
         # Short clean title without underscores or portal noise
         stem = Path(doc.file_name).stem
         clean_title = re.sub(r"[_\-]+", " ", stem).strip()
-        # Remove noisy portal boilerplate phrases
         clean_title = re.sub(r"\b(?:SOURCING\s*\d+|Bid\s+Information|\{\d+\}|BidNet\s+Direct)\b", "", clean_title, flags=re.IGNORECASE)
         clean_title = re.sub(r"\s+", " ", clean_title).strip()
 
@@ -352,7 +395,6 @@ class DocumentChunker:
                 clean_title = truncated.strip()
 
         clean_section = section.strip() if section else "General"
-        # Also clean section of any trailing punctuation or excess length
         if len(clean_section) > 35:
             truncated_sec = clean_section[:35]
             last_space = truncated_sec.rfind(" ")
@@ -369,6 +411,16 @@ class DocumentChunker:
         for line in lines[:5]:
             # Reject table rows
             if line.startswith("|") or line.endswith("|"):
+                continue
+
+            # Reject termination markers (e.g. END OF ADDENDUM, END OF SOLICITATION)
+            if re.search(r"\bEND\s+OF\s+(?:ADDENDUM|SOLICITATION|DOCUMENT|SECTION|FILE|PROPOSAL)\b", line, re.IGNORECASE):
+                continue
+
+            # Reject person names (e.g. Alzate, Jasmine or ALZATE, JASMINE)
+            if re.match(r"^[A-Z][a-zA-Z]+,\s+[A-Z][a-zA-Z]+(?:\s+[A-Z]\.?)?$", line):
+                continue
+            if any(line.upper().startswith(p) for p in ["BUYER", "CONTACT", "OFFICER", "NAME:", "AFFIANT", "REPRESENTATIVE"]):
                 continue
 
             # Reject SKUs, part numbers, codes (e.g. 210-BLYZ, 362-7806, CC7802, SOL-1234)
@@ -388,25 +440,38 @@ class DocumentChunker:
             if sec_match:
                 return sec_match.group(0).strip()
 
-            # Pattern 2: Markdown headers # Section Title
+            # Pattern 2: Addendum heading (e.g. ADDENDUM No. 2, Addendum 1)
+            add_match = re.match(r"^(?:ADDENDUM|Addendum)\s*(?:No\.?|NUMBER)?\s*([0-9A-Za-z.-]+)?", line, re.IGNORECASE)
+            if add_match and not re.search(r"\bEND\s+OF\b", line, re.IGNORECASE):
+                return line.strip().title()
+
+            # Pattern 3: Markdown headers # Section Title
             h_match = re.match(r"^#{1,4}\s+([^\n]+)", line)
             if h_match:
                 candidate = h_match.group(1).strip()
                 if not re.match(r"^[\w\d]+[-_][\w\d]+$", candidate):
                     return candidate
 
-            # Pattern 3: Short all-caps headings (e.g. LENGTH OF CONTRACT, SCOPE OF WORK)
-            words = re.findall(r"\b[A-Za-z]{3,}\b", line)
+            # Pattern 4: Short all-caps headings (e.g. LENGTH OF CONTRACT, SCOPE OF WORK, FINANCIAL DISCLOSURE AFFIRMATION)
+            clean_l = re.sub(r"\b([A-Z]{4,})I\b", r"\1", line)  # strip fused Roman numeral I
+            words = re.findall(r"\b[A-Za-z]{3,}\b", clean_l)
             known_headers = {
                 "OVERVIEW", "INTRODUCTION", "SCOPE", "SPECIFICATIONS", "REQUIREMENTS",
                 "SUMMARY", "BACKGROUND", "DELIVERABLES", "TIMELINE", "SCHEDULE",
                 "PRICING", "EVALUATION", "ATTACHMENTS", "EXHIBITS", "INSTRUCTIONS",
-                "CONTRACT", "GENERAL", "PURPOSE", "ELIGIBILITY", "SUBMISSION"
+                "CONTRACT", "GENERAL", "PURPOSE", "ELIGIBILITY", "SUBMISSION",
+                "AFFIRMATION", "AFFIDAVIT", "DISCLOSURE", "WORKPLACE", "AUTHORITY"
             }
-            if len(line) < 55 and line.isupper() and not line.endswith(".") and len(line) > 4:
+            if len(clean_l) < 55 and clean_l.isupper() and not clean_l.endswith(".") and len(clean_l) > 4:
+                # Must not be a person name (LASTNAME, FIRSTNAME)
+                if "," in clean_l:
+                    continue
                 # Must have at least 2 words or contain a known header keyword
                 if len(words) >= 2 or any(w in known_headers for w in words):
-                    return line.title()
+                    title_candidate = clean_l.title()
+                    # Strip fused trailing i (e.g. Affirmationi -> Affirmation)
+                    title_candidate = re.sub(r"(?<=[a-zA-Z]{4})[iI]$", "", title_candidate)
+                    return title_candidate
 
         return None
 
