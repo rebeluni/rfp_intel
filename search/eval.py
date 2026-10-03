@@ -1,19 +1,25 @@
 """
-Evaluation Benchmark for Phase 2 Search Engine.
-Compares 4 retrieval modes:
-  1. Dense-only (BAAI/bge-small-en-v1.5)
-  2. BM25-only (Specialized compound/alphanumeric tokenizer)
-  3. Hybrid (RRF fusion, k=60)
-  4. Hybrid + Cross-Encoder Rerank (cross-encoder/ms-marco-MiniLM-L-6-v2)
-
-Ground truths are labeled by text substring + (file_name, page_number) so metrics survive re-chunking.
-Metrics: Recall@1, Recall@3, Recall@5, MRR.
+Evaluation Benchmark for RFP Intelligence Platform Search Engine.
+Strictly implements Item 10:
+  1. Checks expected_page (not just file name).
+  2. Uses specific target passages (not generic single tokens).
+  3. Removes queries that contain the answer in the question.
+  4. Renames modes: dense_only, bm25_only, hybrid_norerank, hybrid_rerank.
+  5. Adds realistic paraphrased queries across specialist domains.
+  6. Computes and reports Recall@1, Recall@3, Recall@5, MRR honestly.
 """
+
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import json
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from config.settings import settings
 from search.hybrid_retriever import HybridRetriever, SearchResult
 
@@ -27,215 +33,224 @@ class EvalBenchmarkItem:
     target_substring: str
     expected_file: str
     expected_page: int
-    query_type: str  # 'exact_match', 'specs', 'dates', 'legal', 'general'
+    query_type: str  # 'exact_match', 'specs', 'dates', 'legal', 'paraphrased'
     notes: str = ""
 
 
-# 22 Hand-Verified Benchmark Questions
+# Rigorous, Verified Benchmark Items with expected_page and no answer leakage
 BENCHMARK_ITEMS: List[EvalBenchmarkItem] = [
+    # 1. Exact Match / Identifiers (Queries do NOT contain the target answer)
     EvalBenchmarkItem(
-        query_id="Q01_bid_num_1",
-        query="What is the solicitation number for Student and Staff Computing Devices?",
+        query_id="Q01_solicitation_id",
+        query="What is the official solicitation identifier for the Student and Staff Computing Devices RFP?",
         target_substring="JA-207652",
         expected_file="Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
         expected_page=1,
         query_type="exact_match",
-        notes="Exact match solicitation number for Bid 1"
+        notes="BidNet portal solicitation number"
     ),
     EvalBenchmarkItem(
-        query_id="Q02_bid_num_2",
-        query="What is the eMMA project number or solicitation number for Dell Laptops?",
+        query_id="Q02_emma_project_num",
+        query="What is the eMaryland Marketplace Advantage project number for the Dell laptop solicitation?",
         target_substring="BPM044557",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
         expected_page=1,
         query_type="exact_match",
-        notes="Exact match eMMA project number for Bid 2"
+        notes="eMMA project identifier in header"
     ),
     EvalBenchmarkItem(
-        query_id="Q03_sku_base",
-        query="210-BLYZ",
+        query_id="Q03_chassis_base_sku",
+        query="What is the manufacturer base SKU code for the Dell Latitude 5550 XCTO laptop?",
         target_substring="210-BLYZ",
         expected_file="Dell_Laptop_Specs.pdf",
         expected_page=1,
-        query_type="exact_match",
-        notes="Exact SKU query for Dell Latitude 5550 XCTO Base"
+        query_type="specs",
+        notes="Base chassis part number lookup"
     ),
     EvalBenchmarkItem(
-        query_id="Q04_sku_processor",
-        query="What is the processor SKU for Intel Core Ultra 5 125U?",
+        query_id="Q04_processor_sku",
+        query="What part number is assigned to the Intel Core Ultra 5 125U processor in the laptop specs?",
         target_substring="379-BFNZ",
         expected_file="Dell_Laptop_Specs.pdf",
         expected_page=1,
-        query_type="exact_match",
+        query_type="specs",
         notes="Processor SKU lookup in technical specs"
     ),
     EvalBenchmarkItem(
-        query_id="Q05_email_poc",
-        query="thawkins@treasurer.state.md.us",
+        query_id="Q05_agency_contact_email",
+        query="What is the designated email address for the Maryland State Treasurer procurement contact?",
         target_substring="thawkins@treasurer.state.md.us",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
         expected_page=3,
         query_type="exact_match",
-        notes="Exact match email address for agency POC"
+        notes="Procurement officer contact email"
     ),
     EvalBenchmarkItem(
-        query_id="Q06_phone_poc",
-        query="What is the agency point of contact phone number for Tamaira Hawkins?",
+        query_id="Q06_agency_contact_phone",
+        query="What telephone number should be used to contact the procurement officer in the Maryland laptop RFP?",
         target_substring="410-260-7533",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
         expected_page=3,
         query_type="exact_match",
-        notes="Phone number lookup in PORFP"
+        notes="Procurement officer direct phone"
     ),
+
+    # 2. Specifications & Quantities
     EvalBenchmarkItem(
-        query_id="Q07_addendum1_usb",
-        query="Does the display monitor non-touch require a 3.1 USB port or is 3.0 ok?",
+        query_id="Q07_addendum_usb_spec",
+        query="What type of USB port revision is mandated for the non-touch display in Addendum 1?",
         target_substring="3.1 USB port",
         expected_file="Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
         expected_page=1,
         query_type="specs",
-        notes="Addendum 1 clarification item 1"
+        notes="Addendum 1 hardware clarification"
     ),
     EvalBenchmarkItem(
-        query_id="Q08_addendum2_header",
-        query="What addendum changes were made in Addendum No. 2 for JA-207652?",
-        target_substring="ADDENDUM No. 2",
-        expected_file="Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
-        expected_page=1,
-        query_type="general",
-        notes="Addendum 2 deadline extension notice"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q09_laptop_qty",
-        query="How many Dell Latitude laptops are to be purchased in the PORFP?",
-        target_substring="Quantity",
+        query_id="Q08_laptop_order_quantity",
+        query="How many total laptops are requested for purchase under the Maryland PORFP?",
+        target_substring="Quantity: 30",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
         expected_page=4,
         query_type="specs",
-        notes="Quantity (30) in Scope of Work table"
+        notes="Scope of Work quantity table"
     ),
     EvalBenchmarkItem(
-        query_id="Q10_delivery_address",
-        query="Where should the hardware be delivered for the Maryland State Treasurer?",
-        target_substring="80 Calvert Street",
-        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
-        expected_page=3,
-        query_type="dates_logistics",
-        notes="Delivery address in Section 2/3"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q11_contract_term",
-        query="What is the length of contract or contract duration for Dallas ISD?",
-        target_substring="LENGTH OF CONTRACT",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=2,
-        query_type="legal",
-        notes="Length of contract layout block on page 2"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q12_mwbe_forms",
-        query="What are the M/WBE form requirements for Dallas ISD submission?",
-        target_substring="M/WBE",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=14,
-        query_type="legal",
-        notes="M/WBE department instructions and forms"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q13_mercury_affidavit",
-        query="What are the mercury free equipment certification requirements?",
-        target_substring="Mercury",
-        expected_file="Mercury_Affidavit.pdf",
-        expected_page=1,
-        query_type="legal",
-        notes="State of Maryland Mercury Affidavit"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q14_contract_affidavit",
-        query="What corporate registration and tax payment affirmations are required?",
-        target_substring="CERTIFICATION OF REGISTRATION",
-        expected_file="Contract_Affidavit.pdf",
-        expected_page=1,
-        query_type="legal",
-        notes="Contract Affidavit Section B"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q15_eval_criteria",
-        query="What is the technical evaluation criteria and basis for award in Bid 2?",
-        target_substring="Accuracy of Bid (Meets All Requirements)",
-        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
-        expected_page=4,
-        query_type="legal",
-        notes="Technical evaluation criteria Section 5"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q16_prebid_conference",
-        query="When is the pre-proposal conference scheduled for Dallas ISD computing devices?",
-        target_substring="Pre-Proposal Meeting",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=2,
-        query_type="dates",
-        notes="Pre-proposal meeting schedule on page 2"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q17_questions_due",
-        query="What is the questions due deadline on the portal for Dallas ISD?",
-        target_substring="06/11/2024",
-        expected_file="Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
-        expected_page=1,
-        query_type="dates",
-        notes="Portal Questions Due date key"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q18_warranty_fa",
-        query="What functional area covers manufacturer extended warranty in Bid 2?",
-        target_substring="FA V",
-        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
-        expected_page=1,
-        query_type="specs",
-        notes="Functional Area V for Extended Warranty"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q19_power_adapter",
-        query="What power adapter wattage is specified for the Dell Latitude laptops?",
+        query_id="Q09_power_adapter_rating",
+        query="What wattage power adapter must be supplied with the Dell notebooks?",
         target_substring="65W AC adapter",
         expected_file="Dell_Laptop_Specs.pdf",
         expected_page=1,
         query_type="specs",
-        notes="AC adapter line item in specs table"
+        notes="Power adapter specs in bill of materials"
     ),
     EvalBenchmarkItem(
-        query_id="Q20_hot_swap",
-        query="What process is required for maintaining an inventory of hot swap devices?",
-        target_substring="hot swap",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=9,
-        query_type="general",
-        notes="Hot swap inventory question 11 on page 9"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q21_w9_requirement",
-        query="Where does the offeror need to submit the W9 form in the submission?",
-        target_substring="W9 Form",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=33,
-        query_type="legal",
-        notes="Required submission attachments table on page 33"
-    ),
-    EvalBenchmarkItem(
-        query_id="Q22_ram_specs",
-        query="What RAM memory configuration is required for the Latitude 5550?",
-        target_substring="16 GB",
+        query_id="Q10_memory_config",
+        query="What system RAM memory capacity and module layout is required for the laptops?",
+        target_substring="16 GB: 2 x 8 GB, DDR5",
         expected_file="Dell_Laptop_Specs.pdf",
         expected_page=1,
         query_type="specs",
-        notes="RAM configuration (16 GB: 2 x 8 GB DDR5)"
+        notes="RAM configuration specifications"
+    ),
+
+    # 3. Dates & Logistics
+    EvalBenchmarkItem(
+        query_id="Q11_addendum2_deadline_extension",
+        query="What is the revised proposal submission deadline after Addendum 2 was issued for Dallas ISD?",
+        target_substring="July 9, 2024 at 2:00 PM CST",
+        expected_file="Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
+        expected_page=1,
+        query_type="dates",
+        notes="Addendum 2 due date amendment"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q12_delivery_destination",
+        query="What physical street address is specified for equipment delivery to the Treasurer's office?",
+        target_substring="80 Calvert Street",
+        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
+        expected_page=3,
+        query_type="dates",
+        notes="Delivery address in Section 3"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q13_initial_contract_term",
+        query="What is the length and duration of the initial contract term for Dallas ISD?",
+        target_substring="Three (3) years with two (2) one-year renewal options",
+        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
+        expected_page=2,
+        query_type="dates",
+        notes="Contract term specification on page 2"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q14_questions_deadline_portal",
+        query="What is the deadline date for vendors to submit questions through BidNet Direct?",
+        target_substring="06/11/2024 05:00:00 PM CDT",
+        expected_file="Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
+        expected_page=1,
+        query_type="dates",
+        notes="Portal questions due cutoff"
+    ),
+
+    # 4. Legal, Compliance & Affidavits
+    EvalBenchmarkItem(
+        query_id="Q15_mercury_free_affirmation",
+        query="What environmental certification must vendors submit regarding mercury content?",
+        target_substring="not contain any mercury added component",
+        expected_file="Mercury_Affidavit.pdf",
+        expected_page=1,
+        query_type="legal",
+        notes="Maryland Mercury Affidavit core certification"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q16_contract_affidavit_tax",
+        query="What affirmation must the contractor make regarding Maryland state taxes?",
+        target_substring="has paid or has arranged for payment of all taxes due to the State of Maryland",
+        expected_file="Contract_Affidavit.pdf",
+        expected_page=1,
+        query_type="legal",
+        notes="Contract Affidavit Tax Affirmation Section C"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q17_award_evaluation_basis",
+        query="What is the basis for award and technical evaluation standard in the Maryland laptop procurement?",
+        target_substring="Award will be made to the responsive and responsible Master Contractor",
+        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
+        expected_page=4,
+        query_type="legal",
+        notes="Award evaluation section 5"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q18_mwbe_participation",
+        query="What documentation is required from the Minority and Women Business Enterprise department?",
+        target_substring="M/WBE Department",
+        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
+        expected_page=14,
+        query_type="legal",
+        notes="M/WBE instructions page 14"
+    ),
+
+    # 5. Paraphrased / Natural Language Queries (Item 10)
+    EvalBenchmarkItem(
+        query_id="Q19_para_due_date_bid1",
+        query="When do vendor bids have to be turned in for the school computing devices contract?",
+        target_substring="July 9, 2024 at 2:00 PM CST",
+        expected_file="Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf",
+        expected_page=1,
+        query_type="paraphrased",
+        notes="Paraphrased due date query for Bid 1"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q20_para_prebid_meeting",
+        query="Is there a vendor pre-proposal conference scheduled for the Dallas school district bid?",
+        target_substring="Pre-Proposal Meeting",
+        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
+        expected_page=2,
+        query_type="paraphrased",
+        notes="Paraphrased pre-bid meeting query"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q21_para_warranty_support",
+        query="How long is the manufacturer warranty coverage for the Maryland state laptops?",
+        target_substring="4 Years Hardware Service with Onsite",
+        expected_file="Dell_Laptop_Specs.pdf",
+        expected_page=2,
+        query_type="paraphrased",
+        notes="Paraphrased warranty duration lookup"
+    ),
+    EvalBenchmarkItem(
+        query_id="Q22_para_submission_method",
+        query="How should the Dallas ISD proposal documents be delivered by the vendor?",
+        target_substring="Proposals must be submitted through the District's electronic procurement system",
+        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
+        expected_page=2,
+        query_type="paraphrased",
+        notes="Paraphrased submission instructions"
     ),
 ]
 
 
 class RetrievalEvaluator:
-    """Evaluates search retrieval modes against hand-verified benchmark items."""
+    """Evaluates search retrieval modes strictly enforcing text match, file match, and page match."""
 
     def __init__(self, retriever: Optional[HybridRetriever] = None):
         self.retriever = retriever or HybridRetriever()
@@ -248,12 +263,18 @@ class RetrievalEvaluator:
     ) -> Dict[str, Any]:
         """
         Evaluate a single benchmark item for a given retrieval mode.
-        Checks whether any top-k result contains target_substring AND matches expected file.
+        Checks:
+          1. text_match: target_substring in chunk text
+          2. file_match: file_name matches expected file
+          3. page_match: res.page_number == expected_page (or page_start <= expected_page <= page_end)
         """
+        # Map internal mode names
+        internal_mode = "hybrid" if mode == "hybrid_rerank" else mode
+
         results: List[SearchResult] = self.retriever.search(
             query=item.query,
             top_k=top_k,
-            mode=mode,
+            mode=internal_mode,
         )
 
         matched_rank: Optional[int] = None
@@ -265,8 +286,12 @@ class RetrievalEvaluator:
                 item.expected_file.lower() in res.file_name.lower()
                 or res.file_name.lower() in item.expected_file.lower()
             )
-            # Match is successful if the ground-truth text substring is present in the cited document
-            if text_match and file_match:
+            # Item 10: Strict expected_page verification
+            p_start = res.page_start or res.page_number
+            p_end = res.page_end or res.page_number
+            page_match = (p_start <= item.expected_page <= p_end)
+
+            if text_match and file_match and page_match:
                 matched_rank = rank
                 matched_chunk_id = res.chunk_id
                 break
@@ -283,20 +308,19 @@ class RetrievalEvaluator:
             "recall_at_3": 1 if (matched_rank and matched_rank <= 3) else 0,
             "recall_at_5": 1 if (matched_rank and matched_rank <= 5) else 0,
             "reciprocal_rank": reciprocal_rank,
-            "top_result_citation": results[0].format_citation() if results else "None",
-            "top_result_snippet": results[0].text[:200] if results else "None",
+            "top_citation": results[0].format_citation() if results else "None",
         }
 
     def run_benchmark(self, modes: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Run all benchmark items across modes and compute aggregate metrics.
         """
-        modes = modes or ["dense_only", "bm25_only", "hybrid_norerank", "hybrid"]
+        modes = modes or ["dense_only", "bm25_only", "hybrid_norerank", "hybrid_rerank"]
         mode_metrics = {}
         all_eval_details = {m: [] for m in modes}
 
         for m in modes:
-            logger.info(f"Running evaluation benchmark on mode: '{m}'...")
+            logger.info(f"Running rigorous evaluation on mode: '{m}'...")
             items_evaluated = []
             for item in BENCHMARK_ITEMS:
                 res = self.evaluate_item(item, mode=m, top_k=5)
@@ -321,3 +345,35 @@ class RetrievalEvaluator:
             "metrics": mode_metrics,
             "details": all_eval_details,
         }
+
+    def print_results_table(self, benchmark_res: Dict[str, Any]) -> str:
+        """Format an honest Markdown comparison table."""
+        metrics = benchmark_res["metrics"]
+        lines = [
+            "| Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Description |",
+            "| :--- | :---: | :---: | :---: | :---: | :--- |",
+        ]
+        descriptions = {
+            "dense_only": "Dense semantic search (bge-small-en-v1.5)",
+            "bm25_only": "Sparse keyword search with alphanumeric tokenizer",
+            "hybrid_norerank": "Reciprocal Rank Fusion (BM25 + Dense, k=60)",
+            "hybrid_rerank": "Hybrid + Cross-Encoder Re-ranker (ms-marco-MiniLM)",
+        }
+        for mode, data in metrics.items():
+            desc = descriptions.get(mode, "")
+            lines.append(
+                f"| `{mode}` | {data['recall_at_1']:.4f} | {data['recall_at_3']:.4f} | "
+                f"{data['recall_at_5']:.4f} | {data['mrr']:.4f} | {desc} |"
+            )
+        table_str = "\n".join(lines)
+        return table_str
+
+
+if __name__ == "__main__":
+    from search.index_manager import IndexManager
+    idx = IndexManager()
+    retriever = HybridRetriever(bm25_index=idx.bm25_index, dense_indexer=idx.dense_indexer)
+    evaluator = RetrievalEvaluator(retriever=retriever)
+    res = evaluator.run_benchmark()
+    table = evaluator.print_results_table(res)
+    print("\n" + table)

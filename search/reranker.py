@@ -10,6 +10,8 @@ from sentence_transformers import CrossEncoder
 from config.settings import settings
 from ingestion.models import DocumentChunk
 
+import threading
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,17 +26,19 @@ class CrossEncoderReranker:
         self.model_name = model_name or settings.RERANKER_MODEL_NAME
         self.device = device or settings.EMBEDDING_DEVICE
         self._model: Optional[CrossEncoder] = None
+        self._lock = threading.RLock()
 
     @property
     def model(self) -> CrossEncoder:
-        """Lazy load CrossEncoder model."""
-        if self._model is None:
-            try:
-                self._model = CrossEncoder(self.model_name, device=self.device)
-            except Exception:
-                logger.warning(f"Network error loading '{self.model_name}', falling back to local cached files...")
-                self._model = CrossEncoder(self.model_name, device=self.device, local_files_only=True)
-        return self._model
+        """Lazy load CrossEncoder model with thread lock."""
+        with self._lock:
+            if self._model is None:
+                try:
+                    self._model = CrossEncoder(self.model_name, device=self.device)
+                except Exception:
+                    logger.warning(f"Network error loading '{self.model_name}', falling back to local cached files...")
+                    self._model = CrossEncoder(self.model_name, device=self.device, local_files_only=True)
+            return self._model
 
     def rerank(
         self,
@@ -52,8 +56,9 @@ class CrossEncoderReranker:
         chunks = [c[0] for c in candidates]
         pairs = [(query, c.text) for c in chunks]
 
-        # Score all pairs with cross-encoder
-        scores = self.model.predict(pairs, show_progress_bar=False)
+        # Score all pairs with cross-encoder with lock
+        with self._lock:
+            scores = self.model.predict(pairs, show_progress_bar=False)
 
         scored_candidates: List[Tuple[DocumentChunk, float]] = []
         for chunk, score in zip(chunks, scores):

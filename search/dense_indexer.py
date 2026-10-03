@@ -9,6 +9,7 @@ Features:
 
 import logging
 import pickle
+import threading
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import numpy as np
@@ -42,30 +43,28 @@ class DenseIndexer:
         self.chunk_id_to_idx: Dict[str, int] = {}
 
         self._model: Optional[SentenceTransformer] = None
+        self._lock = threading.RLock()
         self.load()
 
     @property
     def model(self) -> SentenceTransformer:
-        """Lazy-loaded SentenceTransformer model with max_seq_length validation."""
-        if self._model is None:
-            try:
-                self._model = SentenceTransformer(self.model_name, device=self.device)
-            except Exception:
-                logger.warning(f"Network error loading '{self.model_name}', falling back to local cached files...")
-                self._model = SentenceTransformer(self.model_name, device=self.device, local_files_only=True)
+        """Lazy-loaded SentenceTransformer model with max_seq_length validation and thread lock."""
+        with self._lock:
+            if self._model is None:
+                try:
+                    self._model = SentenceTransformer(self.model_name, device=self.device)
+                except Exception:
+                    logger.warning(f"Network error loading '{self.model_name}', falling back to local cached files...")
+                    self._model = SentenceTransformer(self.model_name, device=self.device, local_files_only=True)
 
-            # Verify max_seq_length >= chunk size (512 tokens)
-            target_seq_len = max(settings.EMBEDDING_MAX_SEQ_LENGTH, settings.CHUNK_SIZE)
-            if self._model.max_seq_length < target_seq_len:
-                logger.info(
-                    f"Expanding model.max_seq_length from {self._model.max_seq_length} to {target_seq_len} "
-                    f"to ensure chunk text is not truncated."
-                )
-                self._model.max_seq_length = target_seq_len
-            else:
-                logger.info(f"Verified model.max_seq_length={self._model.max_seq_length} >= {target_seq_len}.")
-
-        return self._model
+                # Verify max_seq_length >= chunk size (512 tokens)
+                target_seq_len = max(settings.EMBEDDING_MAX_SEQ_LENGTH, settings.CHUNK_SIZE)
+                if self._model.max_seq_length < target_seq_len:
+                    logger.info(
+                        f"Setting {self.model_name} max_seq_length from {self._model.max_seq_length} to {target_seq_len}"
+                    )
+                    self._model.max_seq_length = target_seq_len
+            return self._model
 
     def add_chunks(self, new_chunks: List[DocumentChunk], batch_size: int = 32) -> None:
         """Add new chunks to the dense index, compute embeddings, and persist."""
@@ -143,11 +142,12 @@ class DenseIndexer:
 
         # Prepend query prefix if configured (BGE asymmetric search requirement)
         formatted_query = f"{self.query_prefix}{query}" if self.query_prefix else query
-        query_vec = self.model.encode(
-            [formatted_query],
-            normalize_embeddings=True,
-            convert_to_numpy=True
-        )[0]
+        with self._lock:
+            query_vec = self.model.encode(
+                [formatted_query],
+                normalize_embeddings=True,
+                convert_to_numpy=True
+            )[0]
 
         # Cosine similarity (vectors are normalized so dot product = cosine sim)
         sim_scores = np.dot(self.vectors, query_vec)

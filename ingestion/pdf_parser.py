@@ -92,14 +92,19 @@ class PDFParser:
                         f"Page {page_num} of '{file_path.name}': non-extractable (vector outlines) "
                         f"({len(drawings)} drawing objects, {char_count} text chars)."
                     )
-                    # Read form widget values if available (e.g. IRS W-9 form fields on p.54)
+                    # Read form widget values if available, skipping completely blank form widgets
                     if widgets:
-                        widget_lines = [f"### Form Fields (Page {page_num})"]
-                        for w in widgets:
-                            val = w.field_value or "[Unfilled/Blank]"
-                            widget_lines.append(f"- **{w.field_name}**: {val}")
-                        page_text = "\n".join(widget_lines)
-                        char_count = len(page_text.strip())
+                        filled_widgets = [w for w in widgets if w.field_value and str(w.field_value).strip()]
+                        if filled_widgets:
+                            widget_lines = [f"### Form Fields (Page {page_num})"]
+                            for w in filled_widgets:
+                                widget_lines.append(f"- **{w.field_name}**: {w.field_value.strip()}")
+                            page_text = "\n".join(widget_lines)
+                            char_count = len(page_text.strip())
+                        else:
+                            # Skip blank form widgets completely
+                            page_text = ""
+                            char_count = 0
 
                     # Attempt OCR if tool is available
                     ocr_attempted = True

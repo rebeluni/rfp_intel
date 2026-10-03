@@ -1,37 +1,64 @@
 """
 Data models for Multi-Agent Extraction Engine (Phase 3).
-Defines schemas for field extractions, evidence citations, validations, and cross-bid comparisons.
+Strictly matches Section 8.1 of the RFP Intelligence specification:
+  - fields: Dict[str, FieldOutput] where FieldOutput has value, sources [{file, page}], confidence, notes
+  - addendum_changes: List[AddendumChange] (field, old_value, new_value, source, reason)
+  - validation: ValidationSummary (passed: List[str], failed: List[str], not_found: List[str])
+No field may have empty sources unless null.
 """
 
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
-class FieldEvidence(BaseModel):
-    """Verbatim evidence citation supporting an extracted value."""
-    file_name: str = Field(description="Source file name containing the evidence")
-    page_number: int = Field(description="Physical page number in the source document")
-    chunk_id: str = Field(description="Unique ID of the document chunk")
-    quote: str = Field(description="Exact verbatim quote from the source text")
-    relevance_score: Optional[float] = Field(default=None, description="Retrieval or confidence score")
+class FieldSource(BaseModel):
+    """Citation source matching Section 8.1: file, page, and chunk quote verification."""
+    file: str = Field(description="Source file name containing the evidence")
+    page: int = Field(description="Physical page number in the source document")
+    quote: Optional[str] = Field(default=None, description="Exact contiguous verbatim quote from the cited chunk")
+    chunk_id: Optional[str] = Field(default=None, description="Unique chunk identifier")
 
     def format_citation(self) -> str:
-        return f"[{self.file_name} (p.{self.page_number})]: \"{self.quote.strip()}\""
+        q_str = f': "{self.quote.strip()}"' if self.quote else ""
+        return f"[{self.file} (p.{self.page})]{q_str}"
 
 
-class ExtractedField(BaseModel):
-    """Extracted field value with metadata and citations."""
-    field_name: str = Field(description="Standardized name of the field from fields.yaml")
+# Backwards compatibility alias
+FieldEvidence = FieldSource
+
+
+class FieldOutput(BaseModel):
+    """Field schema matching Section 8.1: value, sources, confidence, notes."""
     value: Optional[Any] = Field(default=None, description="Extracted value, or null if NOT_FOUND")
-    status: str = Field(default="FOUND", description="'FOUND', 'NOT_FOUND', or 'AMBIGUOUS'")
-    confidence: float = Field(default=1.0, ge=0.0, le=1.0, description="Extraction confidence score")
-    evidence: List[FieldEvidence] = Field(default_factory=list, description="List of evidence citations")
-    notes: Optional[str] = Field(default=None, description="Extraction or context notes")
+    sources: List[FieldSource] = Field(default_factory=list, description="Verbatim citations with file and page")
+    confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="Confidence computed from retrieval + validation")
+    notes: Optional[str] = Field(default=None, description="Context, addendum annotations, or absence explanation")
+    status: Optional[str] = Field(default=None, description="'FOUND' or 'NOT_FOUND'")
     specialist: Optional[str] = Field(default=None, description="Assigned specialist category")
 
 
+# Backwards compatibility alias
+ExtractedField = FieldOutput
+
+
+class AddendumChange(BaseModel):
+    """Record of an amended field value caused by an addendum."""
+    field: str = Field(description="Name of the amended field")
+    old_value: Optional[str] = Field(default=None, description="Base value before addendum")
+    new_value: str = Field(description="Amended value from addendum, preserving exact timezone and details")
+    source: FieldSource = Field(description="Citation in the addendum document")
+    reason: Optional[str] = Field(default=None, description="Explanation of amendment")
+
+
+class ValidationSummary(BaseModel):
+    """Validation breakdown matching Section 8.1."""
+    passed: List[str] = Field(default_factory=list, description="Fields passing deterministic grounding & checks")
+    failed: List[str] = Field(default_factory=list, description="Fields failing validation or contiguous quote check")
+    not_found: List[str] = Field(default_factory=list, description="Fields confirmed absent in documents")
+
+
 class FieldValidation(BaseModel):
-    """Validation report for an extracted field."""
+    """Detailed per-field validation result."""
     field_name: str
     is_valid: bool = Field(description="True if extraction is grounded and passes checks")
     is_grounded: bool = Field(description="True if verbatim quote is found in retrieved source text")
@@ -42,10 +69,11 @@ class FieldValidation(BaseModel):
 
 
 class BidExtractionResult(BaseModel):
-    """Complete extraction result for a single bid package."""
+    """Complete extraction package matching Section 8.1 format."""
     bid_id: str = Field(description="Bid package identifier (e.g. 'Bid1', 'Bid2')")
-    fields: Dict[str, ExtractedField] = Field(description="Extracted fields dictionary keyed by field_name")
-    validations: Dict[str, FieldValidation] = Field(default_factory=dict, description="Per-field validation results")
+    fields: Dict[str, FieldOutput] = Field(description="Extracted fields dictionary keyed by field_name")
+    addendum_changes: List[AddendumChange] = Field(default_factory=list, description="Full addendum change log")
+    validation: ValidationSummary = Field(default_factory=ValidationSummary, description="Validation summary")
     overall_compliance_score: float = Field(default=0.0, ge=0.0, le=100.0, description="Completeness & compliance %")
     summary: Optional[str] = Field(default=None, description="Executive summary of the bid")
     raw_evidence_count: int = Field(default=0, description="Total chunks retrieved during extraction")

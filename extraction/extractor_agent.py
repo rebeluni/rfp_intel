@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import yaml
 from config.settings import settings
 from search.hybrid_retriever import HybridRetriever, SearchResult
-from extraction.models import ExtractedField, FieldEvidence
+from extraction.models import FieldOutput, ExtractedField, FieldSource, FieldEvidence
 from extraction.llm_client import BaseLLMClient, get_llm_client
 
 logger = logging.getLogger(__name__)
@@ -84,6 +84,7 @@ class ExtractorAgent:
         field_def = self.field_definitions.get(field_name, {})
         evidence = self.retrieve_evidence_for_field(field_name, field_def, bid_id, top_k=top_k)
         extracted = self.llm_client.extract_field(field_name, field_def, evidence)
+        extracted.specialist = field_def.get("specialist")
         return extracted, evidence
 
     def extract_all_fields(

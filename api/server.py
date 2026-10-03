@@ -106,40 +106,9 @@ def search_documents(req: SearchRequest) -> List[SearchResult]:
 @app.post("/ask")
 def ask_question(req: AskRequest) -> Dict[str, Any]:
     try:
-        results = retriever.search(
-            query=req.question,
-            top_k=req.top_k,
-            bid_id=req.bid_id,
-            mode="hybrid",
-        )
-
-        if not results:
-            return {
-                "question": req.question,
-                "answer": "Not found in documents.",
-                "evidence": [],
-            }
-
-        evidence = [
-            {
-                "citation": res.format_citation(),
-                "file_name": res.file_name,
-                "page_number": res.page_number,
-                "section": res.section,
-                "score": res.rerank_score or res.rrf_score,
-                "snippet": res.text[:400] + "...",
-            }
-            for res in results
-        ]
-
-        # Top passage snippet as direct evidence
-        top_res = results[0]
-        return {
-            "question": req.question,
-            "top_citation": top_res.format_citation(),
-            "evidence": evidence,
-        }
-
+        from search.qa_agent import QAAgent
+        qa = QAAgent(retriever=retriever)
+        return qa.ask(question=req.question, bid_id=req.bid_id, top_k=req.top_k)
     except Exception as e:
         logger.error(f"Ask error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))

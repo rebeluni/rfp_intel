@@ -136,6 +136,8 @@ class TextCleaner:
             return ""
         # Split email domain: name@domain\n.us or user@treasurer.state.md\n.us
         text = re.sub(r"([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)\n\s*(\.[a-zA-Z]{2,}\b)", r"\1\2", text)
+        # Split email domain where dot precedes newline: state.\nmd.us or treasurer.state.\nmd.us
+        text = re.sub(r"([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]*\.)\n\s*([a-zA-Z0-9.-]+\b)", r"\1\2", text)
         # Split email before @: name\n@domain.com
         text = re.sub(r"([A-Za-z0-9._%+-]+)\n\s*(@[A-Za-z0-9.-]+\.[a-zA-Z]{2,}\b)", r"\1\2", text)
         # Split URL with trailing hyphen: https://...foo-\nbar

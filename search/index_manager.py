@@ -35,10 +35,15 @@ class IndexManager:
         self.manifest = manifest or HashManifest()
         self.pipeline = pipeline or IngestionPipeline()
 
+    def index_bid_directory(self, folder_path: Path, bid_id: Optional[str] = None) -> Tuple[int, int, int]:
+        """Index a bid directory ensuring proper bid_id association."""
+        return self.index_folder(folder_path, incremental=True, bid_id=bid_id)
+
     def index_folder(
         self,
         folder_path: Path,
-        incremental: bool = True
+        incremental: bool = True,
+        bid_id: Optional[str] = None,
     ) -> Tuple[int, int, int]:
         """
         Index a bid folder incrementally.
@@ -79,12 +84,13 @@ class IndexManager:
         for f in files_to_process:
             try:
                 # Use pipeline parsing for the single file
+                target_bid = bid_id or folder_path.name
                 if f.suffix.lower() in [".html", ".htm"]:
                     from ingestion.html_parser import HTMLParser
-                    doc = HTMLParser.parse(f, bid_id=folder_path.name)
+                    doc = HTMLParser.parse(f, bid_id=target_bid)
                 else:
                     from ingestion.pdf_parser import PDFParser
-                    doc = PDFParser.parse(f, bid_id=folder_path.name)
+                    doc = PDFParser.parse(f, bid_id=target_bid)
 
                 chunks = self.pipeline.chunker.chunk_document(doc)
                 new_chunks_to_add.extend(chunks)
