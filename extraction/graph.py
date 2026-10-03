@@ -179,27 +179,46 @@ class ExtractionPipeline:
             return {"retrieved_evidence": evidence_map}
 
     def _extract_fields_node(self, state: ExtractionState) -> Dict[str, Any]:
-        """Node 3: Extractor Agent extracts structured fields via LLM."""
+        """Node 3: Extractor Agent extracts structured fields via LLM in parallel threads per specialist group."""
         field_defs = state["field_defs"]
         evidence_map = state["retrieved_evidence"]
         bid_id = state["bid_id"]
+        groups = state.get("specialist_groups", {})
 
         with self.tracer.start_step("extractor", {"bid_id": bid_id, "fields_to_extract": len(field_defs)}) as ctx:
-            print(f"[*] Extracting {len(field_defs)} target fields with Gemini 2.5 Flash...", flush=True)
+            print(f"[*] Extracting {len(field_defs)} target fields with Gemini across specialist groups in parallel...", flush=True)
             extracted_map: Dict[str, FieldOutput] = {}
 
-            for f_name, f_def in field_defs.items():
-                passages = evidence_map.get(f_name, [])
-                ext = self.llm_client.extract_field(f_name, f_def, passages)
-                ext.specialist = f_def.get("specialist")
-                extracted_map[f_name] = ext
-                print(f"  [+] {f_name}: {ext.value}", flush=True)
+            def extract_group(group_name: str, field_list: List[str]) -> Dict[str, FieldOutput]:
+                res: Dict[str, FieldOutput] = {}
+                for f_name in field_list:
+                    f_def = field_defs.get(f_name, {})
+                    passages = evidence_map.get(f_name, [])
+                    ext = self.llm_client.extract_field(f_name, f_def, passages)
+                    ext.specialist = f_def.get("specialist", group_name)
+                    res[f_name] = ext
+                    print(f"  [+] [{group_name}] {f_name}: {ext.value}", flush=True)
+                return res
+
+            with ThreadPoolExecutor(max_workers=3) as executor:
+                futures = {
+                    executor.submit(extract_group, group_name, f_list): group_name
+                    for group_name, f_list in groups.items()
+                    if f_list
+                }
+                for fut in as_completed(futures):
+                    group_res = fut.result()
+                    extracted_map.update(group_res)
+
+            tokens = self.llm_client.get_tokens()
+            ctx.add_tokens(tokens)
 
             found_count = sum(1 for f in extracted_map.values() if f.value is not None)
             ctx.complete({
                 "extracted_fields_count": len(extracted_map),
-                "found_fields_count": found_count
-            })
+                "found_fields_count": found_count,
+                "cumulative_tokens": tokens
+            }, tokens=tokens)
 
             return {"extracted_fields": extracted_map}
 
@@ -283,29 +302,25 @@ class ExtractionPipeline:
         """Node 6: Explicit Addendum Reconciliation Agent (Item 3)."""
         bid_id = state["bid_id"]
         fields_map = state["extracted_fields"]
+        summary = state.get("validation_summary", ValidationSummary())
 
         with self.tracer.start_step("reconciliation", {"bid_id": bid_id, "field_count": len(fields_map)}) as ctx:
             logger.info(f"[Reconciliation] Reconciling all fields against ordered addenda chunks for '{bid_id}'...")
 
             reconciled_fields, change_log = self.reconciler.reconcile_fields(
                 bid_id=bid_id,
-                fields_map=fields_map
+                fields_map=fields_map,
+                summary=summary
             )
 
-            # Ensure validation summary accounts for any amended fields
-            summary = state.get("validation_summary", ValidationSummary())
-            for change in change_log:
-                if change.field not in summary.passed:
-                    summary.passed.append(change.field)
-                if change.field in summary.failed:
-                    summary.failed.remove(change.field)
-                if change.field in summary.not_found:
-                    summary.not_found.remove(change.field)
+            tokens = self.llm_client.get_tokens()
+            ctx.add_tokens(tokens)
 
             ctx.complete({
                 "addendum_changes_count": len(change_log),
-                "amended_fields": [c.field for c in change_log]
-            })
+                "amended_fields": [c.field for c in change_log],
+                "cumulative_tokens": tokens
+            }, tokens=tokens)
 
             return {
                 "extracted_fields": reconciled_fields,
@@ -320,8 +335,23 @@ class ExtractionPipeline:
 
         with self.tracer.start_step("qa_node", {"bid_id": bid_id}) as ctx:
             logger.info(f"[Q&A Node] Verifying Q&A readiness and synthesized summaries for '{bid_id}'...")
-            ctx.complete({"qa_ready": True, "indexed_bid": bid_id})
-            return {}
+            title_field = fields_map.get("solicitation_title") or fields_map.get("title")
+            bid_title = title_field.value if title_field else None
+            agency_field = fields_map.get("issuing_agency") or fields_map.get("agency")
+            agency_name = agency_field.value if agency_field else None
+            solicitation_num_field = fields_map.get("solicitation_number") or fields_map.get("bid_number")
+            solicitation_num = solicitation_num_field.value if solicitation_num_field else None
+
+            qa_meta = {
+                "bid_id": bid_id,
+                "title": bid_title,
+                "issuing_agency": agency_name,
+                "solicitation_number": solicitation_num,
+                "fields_ready": len([f for f in fields_map.values() if f.value is not None]),
+                "status": "ready"
+            }
+            ctx.complete({"qa_ready": True, "metadata": qa_meta})
+            return {"qa_metadata": qa_meta}
 
     def _finalize_node(self, state: ExtractionState) -> Dict[str, Any]:
         """Node 8: Finalize extraction result matching Section 8.1 schema and save structured trace."""
@@ -334,19 +364,37 @@ class ExtractionPipeline:
         with self.tracer.start_step("finalizer", {"bid_id": bid_id}) as ctx:
             logger.info(f"[Finalizer] Packaging Section 8.1 extraction result for '{bid_id}'...")
 
-            # Calculate compliance score
+            # Enforce Section 8.1 requirement:
+            # Delete the FieldSource(file="Solicitation Document", page=1) fallback.
+            # A found value without a real citation must fail validation and become null.
+            for f_name, f_out in fields_map.items():
+                if f_out.value is None:
+                    f_out.sources = []
+                    if f_name not in summary.not_found and f_name not in summary.failed:
+                        summary.not_found.append(f_name)
+                    if f_name in summary.passed:
+                        summary.passed.remove(f_name)
+                elif not f_out.sources:
+                    logger.warning(
+                        f"[Finalizer] Field '{f_name}' had value '{f_out.value}' but NO valid citation. "
+                        f"Failing validation and setting to null."
+                    )
+                    f_out.value = None
+                    f_out.confidence = 0.0
+                    f_out.status = "NOT_FOUND"
+                    f_out.notes = "Failed validation: No valid citation found in documents"
+                    f_out.sources = []
+                    if f_name in summary.passed:
+                        summary.passed.remove(f_name)
+                    if f_name not in summary.failed:
+                        summary.failed.append(f_name)
+
+            # Re-calculate compliance score
             total_fields = len(fields_map)
             passed_count = len(summary.passed)
             compliance = round((passed_count / total_fields) * 100.0, 1) if total_fields > 0 else 0.0
 
             total_chunks = sum(len(p) for p in evidence_map.values())
-
-            # Enforce Section 8.1 invariant: no field may have empty sources unless null
-            for f_name, f_out in fields_map.items():
-                if f_out.value is None:
-                    f_out.sources = []
-                elif not f_out.sources:
-                    f_out.sources = [FieldSource(file="Solicitation Document", page=1)]
 
             package = BidExtractionResult(
                 bid_id=bid_id,

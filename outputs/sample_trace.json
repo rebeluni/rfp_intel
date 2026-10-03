@@ -1,0 +1,209 @@
+[
+  {
+    "step_id": 1,
+    "timestamp": "2026-10-03T16:26:52.263146Z",
+    "agent": "orchestrator_planner",
+    "input": {
+      "bid_id": "Bid3",
+      "total_fields": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "specialist_groups": {
+        "commercial_legal": 8,
+        "dates_logistics": 6,
+        "product_specs": 6
+      },
+      "status": "planned"
+    },
+    "tokens": 0,
+    "latency_ms": 0.25
+  },
+  {
+    "step_id": 2,
+    "timestamp": "2026-10-03T16:27:29.455065Z",
+    "agent": "retrieval",
+    "input": {
+      "bid_id": "Bid3",
+      "specialist_groups": [
+        "commercial_legal",
+        "dates_logistics",
+        "product_specs"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "hybrid_retriever.search_parallel",
+        "args": {
+          "specialists": [
+            "commercial_legal",
+            "dates_logistics",
+            "product_specs"
+          ],
+          "total_fields": 20
+        },
+        "output_summary": "Retrieved 100 chunks across 20 fields."
+      }
+    ],
+    "output": {
+      "retrieved_fields_count": 20,
+      "total_chunks": 100
+    },
+    "tokens": 0,
+    "latency_ms": 37190.1
+  },
+  {
+    "step_id": 3,
+    "timestamp": "2026-10-03T16:28:52.930838Z",
+    "agent": "extractor",
+    "input": {
+      "bid_id": "Bid3",
+      "fields_to_extract": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "extracted_fields_count": 20,
+      "found_fields_count": 14,
+      "cumulative_tokens": 53395
+    },
+    "tokens": 53395,
+    "latency_ms": 83472.98
+  },
+  {
+    "step_id": 4,
+    "timestamp": "2026-10-03T16:29:18.562827Z",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid3",
+      "retry_iteration": 0
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 13,
+      "failed": 1,
+      "not_found": 6,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "latency_ms": 25629.56
+  },
+  {
+    "step_id": 5,
+    "timestamp": "2026-10-03T16:29:22.965249Z",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid3",
+      "retry_count": 1,
+      "failed_fields": [
+        "Model_no"
+      ]
+    },
+    "tool_calls": [],
+    "output": {
+      "retried_fields": [
+        "Model_no"
+      ],
+      "new_retry_count": 1
+    },
+    "tokens": 0,
+    "latency_ms": 4401.7
+  },
+  {
+    "step_id": 6,
+    "timestamp": "2026-10-03T16:29:48.510140Z",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid3",
+      "retry_iteration": 1
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 13,
+      "failed": 2,
+      "not_found": 5,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "latency_ms": 25542.57
+  },
+  {
+    "step_id": 7,
+    "timestamp": "2026-10-03T16:29:57.687843Z",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid3",
+      "retry_count": 2,
+      "failed_fields": [
+        "Model_no",
+        "Bid Summary"
+      ]
+    },
+    "tool_calls": [],
+    "output": {
+      "retried_fields": [
+        "Model_no",
+        "Bid Summary"
+      ],
+      "new_retry_count": 2
+    },
+    "tokens": 0,
+    "latency_ms": 9177.45
+  },
+  {
+    "step_id": 8,
+    "timestamp": "2026-10-03T16:30:18.510111Z",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid3",
+      "retry_iteration": 2
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 14,
+      "failed": 1,
+      "not_found": 5,
+      "needs_retry": false
+    },
+    "tokens": 0,
+    "latency_ms": 20819.13
+  },
+  {
+    "step_id": 9,
+    "timestamp": "2026-10-03T16:30:18.512421Z",
+    "agent": "reconciliation",
+    "input": {
+      "bid_id": "Bid3",
+      "field_count": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "addendum_changes_count": 0,
+      "amended_fields": [],
+      "cumulative_tokens": 108326
+    },
+    "tokens": 108326,
+    "latency_ms": 0.66
+  },
+  {
+    "step_id": 10,
+    "timestamp": "2026-10-03T16:30:18.513139Z",
+    "agent": "qa_node",
+    "input": {
+      "bid_id": "Bid3"
+    },
+    "tool_calls": [],
+    "output": {
+      "qa_ready": true,
+      "metadata": {
+        "bid_id": "Bid3",
+        "title": null,
+        "issuing_agency": null,
+        "solicitation_number": null,
+        "fields_ready": 15,
+        "status": "ready"
+      }
+    },
+    "tokens": 0,
+    "latency_ms": 0.27
+  }
+]

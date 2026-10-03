@@ -68,6 +68,7 @@ class StepContext:
         self.tool_calls: List[ToolCallRecord] = []
         self.tokens: int = 0
         self.start_time: float = 0.0
+        self._completed: bool = False
 
     def record_tool_call(self, tool_name: str, args: Dict[str, Any], output_summary: Optional[str] = None) -> None:
         self.tool_calls.append(ToolCallRecord(
@@ -84,6 +85,8 @@ class StepContext:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        if self._completed and not exc_type:
+            return
         latency = (time.perf_counter() - self.start_time) * 1000.0
         step = TraceStep(
             step_id=self.step_id,
@@ -112,3 +115,4 @@ class StepContext:
             latency_ms=round(latency, 2),
         )
         self.tracer.add_step(step)
+        self._completed = True

@@ -22,23 +22,17 @@ class Settings(BaseModel):
     OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
 
     # LLM Configuration
-    LLM_PROVIDER: Literal["openai", "gemini", "groq", "anthropic", "ollama", "mock"] = Field(
+    LLM_PROVIDER: Literal["gemini"] = Field(
         default_factory=lambda: os.getenv("LLM_PROVIDER", "gemini").lower()
     )
-    LLM_MODEL: str = Field(default_factory=lambda: os.getenv("LLM_MODEL", "gemini-1.5-flash"))
+    LLM_MODEL: str = Field(default_factory=lambda: os.getenv("LLM_MODEL", "gemini-flash-lite-latest"))
     LLM_TEMPERATURE: float = Field(
         default_factory=lambda: float(os.getenv("LLM_TEMPERATURE", "0.0"))
     )
     LLM_MAX_TOKENS: int = Field(default_factory=lambda: int(os.getenv("LLM_MAX_TOKENS", "2048")))
 
     # API Keys
-    OPENAI_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("OPENAI_API_KEY"))
     GEMINI_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("GEMINI_API_KEY"))
-    GROQ_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("GROQ_API_KEY"))
-    ANTHROPIC_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("ANTHROPIC_API_KEY"))
-    OLLAMA_BASE_URL: str = Field(
-        default_factory=lambda: os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    )
 
     # Embedding & Retrieval Settings (Phase 2 Search Engine)
     EMBEDDING_MODEL_NAME: str = Field(

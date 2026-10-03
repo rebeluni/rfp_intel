@@ -33,7 +33,7 @@ class FieldOutput(BaseModel):
     sources: List[FieldSource] = Field(default_factory=list, description="Verbatim citations with file and page")
     confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="Confidence computed from retrieval + validation")
     notes: Optional[str] = Field(default=None, description="Context, addendum annotations, or absence explanation")
-    status: Optional[str] = Field(default=None, description="'FOUND' or 'NOT_FOUND'")
+    status: Optional[str] = Field(default=None, description="'FOUND', 'NOT_FOUND', or 'ERROR'")
     specialist: Optional[str] = Field(default=None, description="Assigned specialist category")
 
 
@@ -50,11 +50,21 @@ class AddendumChange(BaseModel):
     reason: Optional[str] = Field(default=None, description="Explanation of amendment")
 
 
+class AddendumSummary(BaseModel):
+    """Comprehensive summary of all changes in a specific addendum."""
+    bid_id: str
+    addendum_number: Optional[int] = None
+    file_name: str
+    overview: str
+    all_changes: List[str] = Field(default_factory=list)
+
+
 class ValidationSummary(BaseModel):
-    """Validation breakdown matching Section 8.1."""
+    """Validation breakdown matching Section 8.1 with error tracking."""
     passed: List[str] = Field(default_factory=list, description="Fields passing deterministic grounding & checks")
     failed: List[str] = Field(default_factory=list, description="Fields failing validation or contiguous quote check")
     not_found: List[str] = Field(default_factory=list, description="Fields confirmed absent in documents")
+    errors: List[str] = Field(default_factory=list, description="Fields that failed due to API / provider errors")
 
 
 class FieldValidation(BaseModel):

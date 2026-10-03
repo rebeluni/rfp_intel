@@ -1,0 +1,303 @@
+{
+  "bid_id": "Bid3",
+  "fields": {
+    "Due Date": {
+      "value": "12/18/2025 at 4:00 PM CST",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 1,
+          "quote": "PROPOSAL DUE DATE and TIME: 12/18/2025 at 4:00 PM CST",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p1_c0_63fb46dc"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The proposal due date and time is explicitly stated in the solicitation document.",
+      "status": "FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Bid Submission Type": {
+      "value": "electronically through the Austin ISD Procurement Portal",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 1,
+          "quote": "Purchase Order Request for Proposal (PORFP) responses will only be accepted electronically through the Austin\nISD Procurement Portal.",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p1_c0_63fb46dc"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The bid submission type is explicitly stated in the bidding instructions.",
+      "status": "FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Term of Bid": {
+      "value": null,
+      "sources": [],
+      "confidence": 0.0,
+      "notes": "Not found in documents",
+      "status": "NOT_FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Pre Bid Meeting": {
+      "value": null,
+      "sources": [],
+      "confidence": 0.0,
+      "notes": "Not found in documents",
+      "status": "NOT_FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Installation": {
+      "value": null,
+      "sources": [],
+      "confidence": 0.0,
+      "notes": "Not found in documents",
+      "status": "NOT_FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Delivery Date": {
+      "value": "Delivery within 30 days of Award.",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 2,
+          "quote": "Delivery within 30 days of Award.",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p2_c0_4cd69728"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The required delivery time frame is explicitly stated as delivery within 30 days of award.",
+      "status": "FOUND",
+      "specialist": "dates_logistics"
+    },
+    "Title": {
+      "value": "High-Performance Student & Staff Laptops Procurement",
+      "sources": [
+        {
+          "file": "Austin_ISD_Laptop_Procurement.html",
+          "page": 1,
+          "quote": "Title**: High-Performance Student & Staff Laptops Procurement",
+          "chunk_id": "Bid3_Austin_ISD_Laptop_Procurement_p1_c0_0e4fdbfb"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The full official title of the solicitation is explicitly stated in the Portal Bid Details & Schedule section.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Model_no": {
+      "value": "21L30001US and 40AY0090US",
+      "sources": [
+        {
+          "file": "Austin_Laptop_Specs.pdf",
+          "page": 1,
+          "quote": "Part Number / Model: 21L30001US\n...\nModel: 40AY0090US",
+          "chunk_id": "Bid3_Austin_Laptop_Specs_p1_c0_bbb4fae1"
+        }
+      ],
+      "confidence": 0.29,
+      "notes": "Model numbers for the requested items (Lenovo ThinkPad L15 Gen 5 and Lenovo USB-C Universal Dock) are explicitly provided in the text.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Part_no": {
+      "value": "21L30001US, 40AY0090US",
+      "sources": [
+        {
+          "file": "Austin_Laptop_Specs.pdf",
+          "page": 1,
+          "quote": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop\nPart Number / Model: 21L30001US\n...\nItem 2: Lenovo USB-C Universal Dock\nModel: 40AY0090US",
+          "chunk_id": "Bid3_Austin_Laptop_Specs_p1_c0_bbb4fae1"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The part numbers/model numbers for the requested products are explicitly stated in the specifications.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Product": {
+      "value": "Lenovo ThinkPad L15 Gen 5 (Qty: 1,200) and Lenovo USB-C Universal Dock (Qty: 1,200)",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 3,
+          "quote": "Product Name: 1.\n\nLenovo ThinkPad L15 Gen 5\nProduct Description: Intel Core Ultra 7 155U, 16GB RAM, 512GB SSD, Windows 11 Pro\nModel #: 21L30001US\nQty: 1,200 Due Date: 12/18/2025\nProduct Name: 2.\n\nLenovo USB-C Universal Dock\nProduct Description: 90W Power Delivery, Dual DisplayPort / HDMI\nModel #: 40AY0090US\nQty: 1,200 Due Date: 12/18/2025",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p3_c0_17bbf7fe"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The requested equipment and quantities are explicitly listed in the Scope of Work.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Bid Summary": {
+      "value": "Austin ISD requires a refresh of student and administrative laptops for high school campuses across the district. The procurement scope includes 1,200 units of Lenovo ThinkPad L15 Gen 5 laptops and 1,200 units of Lenovo USB-C Universal Docks with associated 3-year extended warranties. Objectives are to provide high-performance hardware meeting specific technical and environmental standards. Deliverables consist of the specified laptop units, universal docks, and a warranty certificate or affidavit upon award.",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 3,
+          "quote": "Austin ISD requires a refresh of student and administrative laptops for high school campuses across the district.",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p3_c0_17bbf7fe"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "Successfully extracted a 4-sentence summary outlining procurement scope, objectives, requirements, and deliverables based on the provided text.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Product Specification": {
+      "value": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop\nPart Number / Model: 21L30001US\nQuantity: 1,200 Units\nTechnical Specifications:\n- Processor: Intel Core Ultra 7 155U processor (12 MB cache, 12 cores, 14 threads, up to 4.80 GHz)\n- Operating System: Windows 11 Pro 64-bit English\n- Memory: 16 GB DDR5 5600MHz RAM (1 x 16GB, upgradeable to 64GB)\n- Solid State Drive: 512 GB SSD M.2 2280 PCIe Gen4 Performance TLC Opal\n- Display: 15.6 inch FHD (1920 x 1080) IPS, Anti-Glare, Non-Touch, 45% NTSC, 300 nits, 60Hz\n- Graphic Card: Integrated Intel Graphics\n- Camera: 1080P FHD RGB with Microphone and Privacy Shutter\n- Wireless: Intel Wi-Fi 6E AX211 2x2 AX & Bluetooth 5.3\n- Primary Battery: 3 Cell Li-Polymer 57Wh with 65W AC Adapter USB-C\n- Keyboard: Traditional Keyboard with Numeric Keypad, US English\n- Security: Discrete TPM 2.0 Enabled, Kensington Nano Security Slot\n- Environmental: ENERGY STAR 8.0 certified, EPEAT Gold registered, RoHS compliant\n- Warranty: 3-Year Premier Support with Onsite Next Business Day (NBD)\nItem 2: Lenovo USB-C Universal Dock\nModel: 40AY0090US Quantity: 1,200 Units\n- Dual 4K display support, 90W Power Delivery to notebook",
+      "sources": [
+        {
+          "file": "Austin_Laptop_Specs.pdf",
+          "page": 1,
+          "quote": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop\nPart Number / Model: 21L30001US\nQuantity: 1,200 Units\nTechnical Specifications:\n- Processor: Intel Core Ultra 7 155U processor (12 MB cache, 12 cores, 14 threads, up to 4.80 GHz)\n- Operating System: Windows 11 Pro 64-bit English\n- Memory: 16 GB DDR5 5600MHz RAM (1 x 16GB, upgradeable to 64GB)\n- Solid State Drive: 512 GB SSD M.2 2280 PCIe Gen4 Performance TLC Opal\n- Display: 15.6 inch FHD (1920 x 1080) IPS, Anti-Glare, Non-Touch, 45% NTSC, 300 nits, 60Hz\n- Graphic Card: Integrated Intel Graphics\n- Camera: 1080P FHD RGB with Microphone and Privacy Shutter\n- Wireless: Intel Wi-Fi 6E AX211 2x2 AX & Bluetooth 5.3\n- Primary Battery: 3 Cell Li-Polymer 57Wh with 65W AC Adapter USB-C\n- Keyboard: Traditional Keyboard with Numeric Keypad, US English\n- Security: Discrete TPM 2.0 Enabled, Kensington Nano Security Slot\n- Environmental: ENERGY STAR 8.0 certified, EPEAT Gold registered, RoHS compliant\n- Warranty: 3-Year Premier Support with Onsite Next Business Day (NBD)\nItem 2: Lenovo USB-C Universal Dock\nModel: 40AY0090US Quantity: 1,200 Units\n- Dual 4K display support, 90W Power Delivery to notebook",
+          "chunk_id": "Bid3_Austin_Laptop_Specs_p1_c0_bbb4fae1"
+        }
+      ],
+      "confidence": 0.98,
+      "notes": "The key technical hardware and software specifications for the laptops and docks are explicitly detailed in the document.",
+      "status": "FOUND",
+      "specialist": "product_specs"
+    },
+    "Bid Number": {
+      "value": "AISD-2025-9988",
+      "sources": [
+        {
+          "file": "Austin_ISD_Laptop_Procurement.html",
+          "page": 1,
+          "quote": "- **Solicitation Number**: AISD-2025-9988",
+          "chunk_id": "Bid3_Austin_ISD_Laptop_Procurement_p1_c0_0e4fdbfb"
+        }
+      ],
+      "confidence": 0.98,
+      "notes": "The solicitation number is explicitly stated in the portal details and schedule.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    },
+    "Bid Bond Requirement": {
+      "value": null,
+      "sources": [],
+      "confidence": 0.0,
+      "notes": "Not found in documents",
+      "status": "NOT_FOUND",
+      "specialist": "commercial_legal"
+    },
+    "Payment Terms": {
+      "value": null,
+      "sources": [],
+      "confidence": 0.0,
+      "notes": "Not found in documents",
+      "status": "NOT_FOUND",
+      "specialist": "commercial_legal"
+    },
+    "Any Additional Documentation Required": {
+      "value": "The District reserves the right to request a Letter of Authorization (LOA) from the Manufacturer. The Contractor must provide a Mercury Affidavit. Warranty certificate or Affidavit to be presented upon award.",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 2,
+          "quote": "The District reserves the right to request a Letter of\nAuthorization (LOA) from the Manufacturer.\n5.\nPurchase new and unused equipment.\n6.\nThe Contractor shall not impose a restocking fee if an item is returned due to damage or incorrect product\nshipped.\n7.\nENERGY STAR certified product.\n8.\nThe Contractor must provide a Mercury Affidavit.",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p2_c0_4cd69728"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The documents mention required documentation including a Letter of Authorization (LOA), a Mercury Affidavit, and a Warranty certificate or Affidavit.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    },
+    "MFG for Registration": {
+      "value": "Lenovo",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 2,
+          "quote": "The Contractor must be an authorized reseller for Lenovo.",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p2_c0_4cd69728"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The document specifies that the contractor must be an authorized reseller for Lenovo.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    },
+    "Contract or Cooperative to use": {
+      "value": "Educational Technology Master Contract, AISD-TECH-2024",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 1,
+          "quote": "Only authorized contract partners awarded under the Educational Technology Master Contract, AISD-TECH-2024,\nare eligible to submit a bid in response to this secondary competition Purchase Order Request for Proposal\n(PORFP).",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p1_c0_63fb46dc"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The text explicitly references the purchasing contract/vehicle required for submitting a bid.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    },
+    "contact_info": {
+      "value": "Rachel Adams | 512-414-1700 | rachel.adams@austinisd.org",
+      "sources": [
+        {
+          "file": "PORFP_-_Austin_Laptop_Final.pdf",
+          "page": 2,
+          "quote": "Agency POC Name: Rachel Adams\nAgency POC Phone Number: 512-414-1700\nAgency POC Email Address: rachel.adams@austinisd.org",
+          "chunk_id": "Bid3_PORFP_Austin_Laptop_Final_p2_c0_4cd69728"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The procurement officer contact details (name, phone number, and email address) are explicitly stated in the PORFP document under Section 2 Agency Point of Contact (POC) Information.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    },
+    "company_name": {
+      "value": "Austin Independent School District",
+      "sources": [
+        {
+          "file": "Contract_Affidavit.pdf",
+          "page": 1,
+          "quote": "AUSTIN INDEPENDENT SCHOOL DISTRICT",
+          "chunk_id": "Bid3_Contract_Affidavit_p1_c0_0bd2f6dd"
+        }
+      ],
+      "confidence": 0.85,
+      "notes": "The organization issuing the solicitation is Austin Independent School District as stated in the document header and text.",
+      "status": "FOUND",
+      "specialist": "commercial_legal"
+    }
+  },
+  "addendum_changes": [],
+  "validation": {
+    "passed": [
+      "Due Date",
+      "Bid Submission Type",
+      "Delivery Date",
+      "Title",
+      "Part_no",
+      "Product",
+      "Bid Summary",
+      "Product Specification",
+      "Bid Number",
+      "Any Additional Documentation Required",
+      "MFG for Registration",
+      "Contract or Cooperative to use",
+      "contact_info",
+      "company_name"
+    ],
+    "failed": [
+      "Model_no"
+    ],
+    "not_found": [
+      "Term of Bid",
+      "Pre Bid Meeting",
+      "Installation",
+      "Bid Bond Requirement",
+      "Payment Terms"
+    ],
+    "errors": []
+  },
+  "overall_compliance_score": 70.0,
+  "summary": "Extraction completed for Bid3. Compliance: 70.0%. Passed: 14/20.",
+  "raw_evidence_count": 106
+}

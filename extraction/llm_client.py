@@ -6,18 +6,48 @@ Strictly adheres to:
   3. Temperature 0, JSON output with Pydantic validation and one repair retry.
   4. Every FOUND field must have a verbatim quote + file + page, or be set to null
      with reason 'Not found in documents'.
+  5. API errors are treated as errors (status='ERROR'), not disguised as absence.
+  6. API key is transmitted via x-goog-api-key HTTP header (not URL query string).
+  7. Thread-safe rate limiter shared across parallel specialist extraction threads.
+  8. Tracks real tokens from response usageMetadata.
 """
 
 import json
 import time
+import threading
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import httpx
 from pydantic import BaseModel, Field, ValidationError
 from config.settings import settings
 from extraction.models import FieldOutput, FieldSource
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Thread-Safe Shared Rate Limiter
+# ---------------------------------------------------------------------------
+class ThreadSafeRateLimiter:
+    """Thread-safe rate limiter pacing API requests across parallel worker threads."""
+
+    def __init__(self, requests_per_minute: float = 14.0):
+        self.min_interval = 60.0 / requests_per_minute
+        self.lock = threading.Lock()
+        self.last_call = 0.0
+
+    def acquire(self) -> None:
+        """Block until the minimum interval between requests has elapsed."""
+        with self.lock:
+            now = time.time()
+            elapsed = now - self.last_call
+            if elapsed < self.min_interval:
+                time.sleep(self.min_interval - elapsed)
+            self.last_call = time.time()
+
+
+# Global shared rate limiter for all threads
+shared_rate_limiter = ThreadSafeRateLimiter(requests_per_minute=14.0)
 
 
 # ---------------------------------------------------------------------------
@@ -82,20 +112,45 @@ class BaseLLMClient:
 
 
 class GeminiClient(BaseLLMClient):
-    """Google Gemini LLM client via REST API with temperature 0 and JSON mode."""
+    """Google Gemini LLM client via REST API with temperature 0, JSON mode, and header authentication."""
 
-    def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash", temperature: float = 0.0):
+    def __init__(
+        self,
+        api_key: str,
+        model_name: Optional[str] = None,
+        temperature: float = 0.0,
+        rate_limiter: Optional[ThreadSafeRateLimiter] = None
+    ):
         if not api_key:
             raise ValueError(
                 "No API key configured for Gemini. Please set GEMINI_API_KEY in your environment or .env file."
             )
         self.api_key = api_key
-        self.model_name = model_name
+        self.model_name = model_name or settings.LLM_MODEL or "gemini-flash-lite-latest"
         self.temperature = temperature
+        self.rate_limiter = rate_limiter or shared_rate_limiter
         self.base_url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model_name}:generateContent"
 
-    def _call_api(self, prompt: str, system_instruction: str = SYSTEM_EXTRACTION_PROMPT) -> str:
-        """Call Gemini REST endpoint with temperature 0 and response_mime_type: application/json."""
+        # Thread-safe token tracking
+        self._tokens_lock = threading.Lock()
+        self.total_tokens_used = 0
+        self.last_tokens_used = 0
+
+    def get_tokens(self) -> int:
+        """Return total tokens consumed across calls."""
+        with self._tokens_lock:
+            return self.total_tokens_used
+
+    def get_last_tokens(self) -> int:
+        """Return tokens consumed by the most recent API call."""
+        with self._tokens_lock:
+            return self.last_tokens_used
+
+    def _call_api(self, prompt: str, system_instruction: str = SYSTEM_EXTRACTION_PROMPT) -> Tuple[str, int]:
+        """
+        Call Gemini REST endpoint with temperature 0, JSON mode, and x-goog-api-key header.
+        Never puts API key in URL. Returns (response_text, token_count).
+        """
         payload = {
             "contents": [
                 {"role": "user", "parts": [{"text": prompt}]}
@@ -108,36 +163,59 @@ class GeminiClient(BaseLLMClient):
                 "responseMimeType": "application/json",
             }
         }
-        url = f"{self.base_url}?key={self.api_key}"
-
-        # Pace requests to comply with Gemini Free Tier rate limits (15 RPM)
-        time.sleep(2.5)
+        headers = {
+            "x-goog-api-key": self.api_key,
+            "Content-Type": "application/json"
+        }
 
         max_attempts = 4
+        last_error = None
         for attempt in range(1, max_attempts + 1):
+            # Enforce thread-safe rate limiting
+            self.rate_limiter.acquire()
             try:
                 with httpx.Client(timeout=60.0) as client:
-                    resp = client.post(url, json=payload)
+                    resp = client.post(self.base_url, headers=headers, json=payload)
                     if resp.status_code == 429:
                         wait_sec = 8.0 * attempt
-                        logger.warning(f"Rate limited (429). Backing off for {wait_sec}s (attempt {attempt}/{max_attempts})...")
+                        logger.warning(
+                            f"Gemini API rate limited (429). Backing off for {wait_sec}s "
+                            f"(attempt {attempt}/{max_attempts})..."
+                        )
                         time.sleep(wait_sec)
                         continue
+
                     if resp.status_code != 200:
-                        raise RuntimeError(f"Gemini API request failed ({resp.status_code}): {resp.text}")
+                        last_error = f"Gemini API request failed ({resp.status_code}): {resp.text}"
+                        if resp.status_code in (500, 502, 503, 504) and attempt < max_attempts:
+                            time.sleep(3.0 * attempt)
+                            continue
+                        raise RuntimeError(last_error)
 
                     data = resp.json()
                     candidates = data.get("candidates", [])
                     if not candidates:
                         raise RuntimeError(f"No candidates returned by Gemini: {data}")
 
-                    return candidates[0]["content"]["parts"][0]["text"]
+                    usage = data.get("usageMetadata", {})
+                    tokens = usage.get("totalTokenCount", 0)
+                    with self._tokens_lock:
+                        self.total_tokens_used += tokens
+                        self.last_tokens_used = tokens
+
+                    text = candidates[0]["content"]["parts"][0]["text"]
+                    return text, tokens
             except (httpx.TimeoutException, httpx.NetworkError) as e:
-                logger.warning(f"Gemini API request timeout/network error (attempt {attempt}/{max_attempts}): {e}")
+                last_error = str(e)
+                logger.warning(
+                    f"Gemini API timeout/network error (attempt {attempt}/{max_attempts}): {e}"
+                )
                 if attempt < max_attempts:
                     time.sleep(3.0 * attempt)
                 else:
                     raise RuntimeError(f"Gemini API call timed out after {max_attempts} attempts: {e}")
+
+        raise RuntimeError(last_error or "Gemini API call failed after retries")
 
     def extract_field(
         self,
@@ -145,12 +223,16 @@ class GeminiClient(BaseLLMClient):
         field_def: Dict[str, Any],
         evidence_passages: List[Dict[str, Any]]
     ) -> FieldOutput:
-        """Extract field with Pydantic validation and one repair retry."""
+        """
+        Extract field with Pydantic validation and one repair retry.
+        If API fails, returns status='ERROR' and notes with error details (never disguises as absence).
+        """
         if not evidence_passages:
             return FieldOutput(
                 value=None,
                 sources=[],
                 confidence=0.0,
+                status="NOT_FOUND",
                 notes="Not found in documents"
             )
 
@@ -158,7 +240,7 @@ class GeminiClient(BaseLLMClient):
 
         try:
             # Attempt 1
-            raw_text = self._call_api(prompt)
+            raw_text, _ = self._call_api(prompt)
             parsed = self._try_parse_pydantic(raw_text)
 
             # One Repair Retry if validation failed
@@ -171,23 +253,25 @@ class GeminiClient(BaseLLMClient):
                     f"{json.dumps(LLMFieldExtraction.model_json_schema(), indent=2)}\n"
                     f"Original Request:\n{prompt}"
                 )
-                raw_text_repaired = self._call_api(repair_prompt)
+                raw_text_repaired, _ = self._call_api(repair_prompt)
                 parsed = self._try_parse_pydantic(raw_text_repaired)
         except Exception as e:
-            logger.warning(f"API call error during extraction of '{field_name}': {e}")
+            logger.error(f"API call error during extraction of '{field_name}': {e}")
             return FieldOutput(
                 value=None,
                 sources=[],
                 confidence=0.0,
-                notes="Not found in documents"
+                status="ERROR",
+                notes=f"API Error: {str(e)}"
             )
 
-        # Fallback to null if repair also failed
+        # Handle parsed result
         if parsed is None or parsed.status != "FOUND" or not parsed.value or not parsed.quote or not parsed.file_name:
             return FieldOutput(
                 value=None,
                 sources=[],
                 confidence=0.0,
+                status="NOT_FOUND",
                 notes=parsed.reason if parsed and parsed.reason else "Not found in documents"
             )
 
@@ -202,51 +286,9 @@ class GeminiClient(BaseLLMClient):
             value=parsed.value,
             sources=[source],
             confidence=0.90,  # Will be adjusted by deterministic validator
+            status="FOUND",
             notes=parsed.reason
         )
-
-    def reconcile_addendum_for_field(
-        self,
-        field_name: str,
-        base_value: Optional[str],
-        addendum_chunks: List[Dict[str, Any]]
-    ) -> Optional[LLMAddendumComparison]:
-        """Compare base field value against addenda passages to detect explicit amendments."""
-        if not addendum_chunks or not base_value:
-            return None
-
-        passages_text = "\n".join([
-            f"[Addendum: {c.get('file_name')} | Page: {c.get('page_number')} | Chunk: {c.get('chunk_id')}]\n{c.get('text')}\n"
-            for c in addendum_chunks
-        ])
-
-        prompt = f"""Field: "{field_name}"
-Current Base Value from Solicitation: "{base_value}"
-
-ADDENDUM EVIDENCE PASSAGES:
-{passages_text}
-
-Does any of these addenda explicitly modify, extend, or amend the value of "{field_name}"?
-Return JSON strictly matching this schema:
-{{
-  "is_modified": true or false,
-  "new_value": "exact amended value with timezone/details preserved, or null",
-  "quote": "verbatim sentence from the addendum proving the modification, or null",
-  "file_name": "exact addendum file name, or null",
-  "page_number": integer page number or null,
-  "reason": "explanation of what was changed, or null"
-}}"""
-
-        try:
-            raw = self._call_api(prompt)
-            data = json.loads(raw)
-            parsed = LLMAddendumComparison.model_validate(data)
-            if parsed.is_modified and parsed.new_value and parsed.quote and parsed.file_name:
-                return parsed
-            return None
-        except Exception as e:
-            logger.warning(f"Addendum reconciliation error for '{field_name}': {e}")
-            return None
 
     def reconcile_all_addenda(
         self,
@@ -292,7 +334,7 @@ Return JSON array of changes:
 If no fields were modified by the addenda, return an empty array: []"""
 
         try:
-            raw = self._call_api(prompt)
+            raw, _ = self._call_api(prompt)
             data = json.loads(raw)
             if isinstance(data, list):
                 return data
@@ -302,6 +344,49 @@ If no fields were modified by the addenda, return an empty array: []"""
         except Exception as e:
             logger.warning(f"Error in batch addendum reconciliation: {e}")
             return []
+
+    def summarize_addendum(
+        self,
+        addendum_number: Optional[int],
+        addendum_chunks: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Produce a comprehensive summary of ALL changes in Addendum N."""
+        if not addendum_chunks:
+            return {"overview": "No addendum passages available.", "all_changes": []}
+
+        passages_text = "\n".join([
+            f"[Source: {c.get('file_name')} | Page: {c.get('page_number')}]\n{c.get('text')}\n"
+            for c in addendum_chunks
+        ])
+
+        target_title = f"Addendum {addendum_number}" if addendum_number else "the solicitation addenda"
+        prompt = f"""You are a Senior Procurement Analyst. Summarize ALL modifications, extensions, Q&A clarifications, and scope updates announced in {target_title}.
+
+EVIDENCE PASSAGES:
+{passages_text}
+
+TASK:
+Provide:
+1. A concise overview paragraph.
+2. A comprehensive bulleted list of ALL changes (due date extensions, Q&A responses, specifications, required forms, terms, delivery).
+
+Return JSON:
+{{
+  "overview": "Concise summary paragraph of what this addendum changed",
+  "all_changes": [
+    "Specific change 1 with details",
+    "Specific change 2 with details"
+  ]
+}}"""
+        try:
+            raw_text, _ = self._call_api(prompt)
+            return json.loads(raw_text)
+        except Exception as e:
+            logger.error(f"Error summarizing addendum: {e}")
+            return {
+                "overview": f"Addendum changes could not be summarized: {e}",
+                "all_changes": []
+            }
 
     def answer_question(self, question: str, evidence_passages: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Synthesize answer with citations for /ask endpoint."""
@@ -327,12 +412,12 @@ Return JSON:
 {{
   "answer": "synthesized factual answer or 'Not found in documents.'",
   "citations": [
-    {{"file": "file name", "page": integer, "quote": "verbatim supporting sentence"}}
+    {{"file": "file name", "page": 1, "quote": "verbatim supporting sentence"}}
   ]
 }}"""
 
         try:
-            raw = self._call_api(prompt)
+            raw, _ = self._call_api(prompt)
             data = json.loads(raw)
             return {
                 "answer": data.get("answer", "Not found in documents."),
@@ -340,7 +425,7 @@ Return JSON:
             }
         except Exception as e:
             logger.warning(f"Error answering question: {e}")
-            return {"answer": "Not found in documents.", "citations": []}
+            return {"answer": f"API error occurred while synthesizing answer: {e}", "citations": [], "status": "error"}
 
     def _build_extraction_prompt(
         self,
@@ -370,7 +455,7 @@ Extract the field value according to the rules and return JSON:
   "reason": "explanation of finding or 'Not found in documents'",
   "quote": "verbatim contiguous quote from cited chunk or null",
   "file_name": "exact file name cited or null",
-  "page_number": integer page number or null,
+  "page_number": 1,
   "chunk_id": "exact chunk ID cited or null"
 }}"""
 

@@ -57,6 +57,19 @@ class ValidatorAgent:
         val_issues: List[str] = []
 
         # -------------------------------------------------------------------
+        # 0. Handle API ERROR Fields (Item 4)
+        # -------------------------------------------------------------------
+        if field.status == "ERROR":
+            validation = FieldValidation(
+                field_name=field_name,
+                is_valid=False,
+                is_grounded=False,
+                issue_type="api_error",
+                feedback=field.notes or "API call error during extraction"
+            )
+            return field, validation
+
+        # -------------------------------------------------------------------
         # 1. Handle NOT_FOUND / Null Fields (Item 4b)
         # -------------------------------------------------------------------
         if field.value is None or field.status == "NOT_FOUND":
@@ -237,8 +250,11 @@ class ValidatorAgent:
             validated_fields[f_name] = val_field
             validations[f_name] = val_detail
 
-            # Partition into passed, failed, not_found
-            if val_field.value is None or val_field.status == "NOT_FOUND":
+            # Partition into passed, failed, not_found, errors
+            if val_field.status == "ERROR":
+                summary.errors.append(f_name)
+                summary.failed.append(f_name)
+            elif val_field.value is None or val_field.status == "NOT_FOUND":
                 summary.not_found.append(f_name)
             elif val_detail.is_valid:
                 summary.passed.append(f_name)

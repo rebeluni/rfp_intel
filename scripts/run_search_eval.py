@@ -10,7 +10,7 @@ from search.eval import RetrievalEvaluator
 
 def main():
     evaluator = RetrievalEvaluator()
-    results = evaluator.run_benchmark(modes=["dense_only", "bm25_only", "hybrid_norerank", "hybrid"])
+    results = evaluator.run_benchmark(modes=["dense_only", "bm25_only", "hybrid_norerank", "hybrid_rerank"])
 
     output_dir = Path("outputs")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -28,7 +28,7 @@ def main():
         "dense_only": "Dense (BGE-Small)",
         "bm25_only": "BM25 Only",
         "hybrid_norerank": "Hybrid (RRF k=60)",
-        "hybrid": "Hybrid + CrossEncoder"
+        "hybrid_rerank": "Hybrid + CrossEncoder"
     }
 
     for mode, m in results["metrics"].items():

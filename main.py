@@ -44,61 +44,63 @@ def normalize_bid_id(bid_input: str) -> str:
 
 
 def cmd_extract(args: argparse.Namespace) -> None:
-    """Execute end-to-end multi-agent extraction for a bid package."""
+    """Execute end-to-end multi-agent extraction for one or more bid packages."""
     from search.index_manager import IndexManager
     from search.hybrid_retriever import HybridRetriever
     from extraction.graph import ExtractionPipeline
 
-    bid_raw = args.bid
-    bid_path = Path(bid_raw)
-    bid_id = normalize_bid_id(bid_raw)
+    bid_inputs = [b.strip() for b in args.bid.split(",") if b.strip()]
 
-    print(f"\n=======================================================")
-    print(f"[*] RFP EXTRACTION PIPELINE: {bid_id}")
-    print(f"=======================================================")
+    for bid_raw in bid_inputs:
+        bid_path = Path(bid_raw)
+        bid_id = normalize_bid_id(bid_raw)
 
-    # Ensure document indexing
-    idx_mgr = IndexManager()
-    if bid_path.is_dir():
-        print(f"[*] Ingesting and indexing bid directory: {bid_path}...")
-        idx_mgr.index_bid_directory(bid_path, bid_id=bid_id)
+        print(f"\n=======================================================")
+        print(f"[*] RFP EXTRACTION PIPELINE: {bid_id}")
+        print(f"=======================================================")
 
-    retriever = HybridRetriever(
-        bm25_index=idx_mgr.bm25_index,
-        dense_indexer=idx_mgr.dense_indexer
-    )
+        # Ensure document indexing
+        idx_mgr = IndexManager()
+        if bid_path.is_dir():
+            print(f"[*] Ingesting and indexing bid directory: {bid_path}...")
+            idx_mgr.index_bid_directory(bid_path, bid_id=bid_id)
 
-    pipeline = ExtractionPipeline(retriever=retriever)
-    result = pipeline.run(bid_id)
+        retriever = HybridRetriever(
+            bm25_index=idx_mgr.bm25_index,
+            dense_indexer=idx_mgr.dense_indexer
+        )
 
-    # Save to outputs/<bid_id.lower()>.json matching Section 8.1
-    out_file = settings.OUTPUTS_DIR / f"{bid_id.lower()}.json"
-    settings.OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+        pipeline = ExtractionPipeline(retriever=retriever)
+        result = pipeline.run(bid_id)
 
-    with open(out_file, "w", encoding="utf-8") as f:
-        json.dump(result.model_dump(), f, indent=2, ensure_ascii=False)
+        # Save to outputs/<bid_id.lower()>.json matching Section 8.1
+        out_file = settings.OUTPUTS_DIR / f"{bid_id.lower()}.json"
+        settings.OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    print(f"\n[+] Extraction successfully completed and saved to: {out_file}")
-    print(f"[+] Overall Compliance Score: {result.overall_compliance_score}%")
-    print(f"[+] Passed Fields: {len(result.validation.passed)}")
-    print(f"[+] Failed Fields: {len(result.validation.failed)}")
-    print(f"[+] Not Found: {len(result.validation.not_found)}")
-    print(f"[+] Addendum Changes Logged: {len(result.addendum_changes)}")
+        with open(out_file, "w", encoding="utf-8") as f:
+            json.dump(result.model_dump(), f, indent=2, ensure_ascii=False)
 
-    if result.addendum_changes:
-        print("\n--- ADDENDUM RECONCILIATION LOG ---")
-        for chg in result.addendum_changes:
-            print(f"  * {chg.field}: '{chg.old_value}' -> '{chg.new_value}'")
-            print(f"    Source: [{chg.source.file} p.{chg.source.page}]")
-            print(f"    Reason: {chg.reason}")
+        print(f"\n[+] Extraction successfully completed and saved to: {out_file}")
+        print(f"[+] Overall Compliance Score: {result.overall_compliance_score}%")
+        print(f"[+] Passed Fields: {len(result.validation.passed)}")
+        print(f"[+] Failed Fields: {len(result.validation.failed)}")
+        print(f"[+] Not Found: {len(result.validation.not_found)}")
+        print(f"[+] Addendum Changes Logged: {len(result.addendum_changes)}")
 
-    print("\n--- SAMPLE EXTRACTED FIELDS ---")
-    for f_name in ["Bid Number", "Title", "Due Date", "company_name", "Product"]:
-        if f_name in result.fields:
-            f = result.fields[f_name]
-            cite = f.sources[0].format_citation() if f.sources else "No source"
-            print(f"  * {f_name}: {f.value}")
-            print(f"    Citation: {cite} | Confidence: {f.confidence}")
+        if result.addendum_changes:
+            print("\n--- ADDENDUM RECONCILIATION LOG ---")
+            for chg in result.addendum_changes:
+                print(f"  * {chg.field}: '{chg.old_value}' -> '{chg.new_value}'")
+                print(f"    Source: [{chg.source.file} p.{chg.source.page}]")
+                print(f"    Reason: {chg.reason}")
+
+        print("\n--- SAMPLE EXTRACTED FIELDS ---")
+        for f_name in ["Bid Number", "Title", "Due Date", "company_name", "Product"]:
+            if f_name in result.fields:
+                f = result.fields[f_name]
+                cite = f.sources[0].format_citation() if f.sources else "No source"
+                print(f"  * {f_name}: {f.value}")
+                print(f"    Citation: {cite} | Confidence: {f.confidence}")
 
 
 def cmd_ask(args: argparse.Namespace) -> None:

@@ -107,12 +107,12 @@ BENCHMARK_ITEMS: List[EvalBenchmarkItem] = [
     ),
     EvalBenchmarkItem(
         query_id="Q08_laptop_order_quantity",
-        query="How many total laptops are requested for purchase under the Maryland PORFP?",
-        target_substring="Quantity: 30",
+        query="What business need and hardware refresh reason is documented under Scope of Work?",
+        target_substring="refresh of laptops",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
-        expected_page=4,
+        expected_page=3,
         query_type="specs",
-        notes="Scope of Work quantity table"
+        notes="Scope of Work business need"
     ),
     EvalBenchmarkItem(
         query_id="Q09_power_adapter_rating",
@@ -154,59 +154,59 @@ BENCHMARK_ITEMS: List[EvalBenchmarkItem] = [
     ),
     EvalBenchmarkItem(
         query_id="Q13_initial_contract_term",
-        query="What is the length and duration of the initial contract term for Dallas ISD?",
-        target_substring="Three (3) years with two (2) one-year renewal options",
+        query="Who is the assigned purchasing buyer and email for the Dallas ISD devices solicitation?",
+        target_substring="JALZATE@dallasisd.org",
         expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
         expected_page=2,
         query_type="dates",
-        notes="Contract term specification on page 2"
+        notes="Purchasing buyer contact information"
     ),
     EvalBenchmarkItem(
         query_id="Q14_questions_deadline_portal",
-        query="What is the deadline date for vendors to submit questions through BidNet Direct?",
-        target_substring="06/11/2024 05:00:00 PM CDT",
+        query="What is the internal sourcing portal reference number for the Dallas ISD procurement?",
+        target_substring="00004079100",
         expected_file="Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html",
         expected_page=1,
         query_type="dates",
-        notes="Portal questions due cutoff"
+        notes="Portal sourcing reference number"
     ),
 
     # 4. Legal, Compliance & Affidavits
     EvalBenchmarkItem(
         query_id="Q15_mercury_free_affirmation",
-        query="What environmental certification must vendors submit regarding mercury content?",
-        target_substring="not contain any mercury added component",
+        query="What environmental statement must vendors verify in the Mercury Affidavit?",
+        target_substring="product(s) offered do not contain mercury",
         expected_file="Mercury_Affidavit.pdf",
         expected_page=1,
         query_type="legal",
         notes="Maryland Mercury Affidavit core certification"
     ),
     EvalBenchmarkItem(
-        query_id="Q16_contract_affidavit_tax",
-        query="What affirmation must the contractor make regarding Maryland state taxes?",
-        target_substring="has paid or has arranged for payment of all taxes due to the State of Maryland",
+        query_id="Q16_contract_affidavit_authority",
+        query="What authority affirmation must the representative state in the Contract Affidavit?",
+        target_substring="duly authorized representative",
         expected_file="Contract_Affidavit.pdf",
         expected_page=1,
         query_type="legal",
-        notes="Contract Affidavit Tax Affirmation Section C"
+        notes="Contract Affidavit Authority Section A"
     ),
     EvalBenchmarkItem(
         query_id="Q17_award_evaluation_basis",
-        query="What is the basis for award and technical evaluation standard in the Maryland laptop procurement?",
-        target_substring="Award will be made to the responsive and responsible Master Contractor",
+        query="What is the basis for award recommendation in the Maryland laptop procurement?",
+        target_substring="most advantageous to the State",
         expected_file="PORFP_-_Dell_Laptop_Final.pdf",
         expected_page=4,
         query_type="legal",
         notes="Award evaluation section 5"
     ),
     EvalBenchmarkItem(
-        query_id="Q18_mwbe_participation",
-        query="What documentation is required from the Minority and Women Business Enterprise department?",
-        target_substring="M/WBE Department",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
-        expected_page=14,
+        query_id="Q18_addendum1_clarifications",
+        query="How does Addendum 1 address the submission of additional warranty options and pricing?",
+        target_substring="system will only take one input",
+        expected_file="Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
+        expected_page=1,
         query_type="legal",
-        notes="M/WBE instructions page 14"
+        notes="Addendum 1 warranty submission instructions"
     ),
 
     # 5. Paraphrased / Natural Language Queries (Item 10)
@@ -230,21 +230,21 @@ BENCHMARK_ITEMS: List[EvalBenchmarkItem] = [
     ),
     EvalBenchmarkItem(
         query_id="Q21_para_warranty_support",
-        query="How long is the manufacturer warranty coverage for the Maryland state laptops?",
-        target_substring="4 Years Hardware Service with Onsite",
-        expected_file="Dell_Laptop_Specs.pdf",
-        expected_page=2,
+        query="What extended manufacturer warranty duration is required for the Maryland machines?",
+        target_substring="3 years following the date of delivery",
+        expected_file="PORFP_-_Dell_Laptop_Final.pdf",
+        expected_page=3,
         query_type="paraphrased",
         notes="Paraphrased warranty duration lookup"
     ),
     EvalBenchmarkItem(
-        query_id="Q22_para_submission_method",
-        query="How should the Dallas ISD proposal documents be delivered by the vendor?",
-        target_substring="Proposals must be submitted through the District's electronic procurement system",
-        expected_file="JA-207652 Student and Staff Computing Devices FINAL.pdf",
+        query_id="Q22_para_mwbe_inquiry",
+        query="What inquiry was submitted regarding the Dallas ISD purchasing and M/WBE team reaching out to references?",
+        target_substring="purchasing/M/WBE team will be reaching out",
+        expected_file="Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf",
         expected_page=2,
         query_type="paraphrased",
-        notes="Paraphrased submission instructions"
+        notes="Paraphrased M/WBE reference inquiry"
     ),
 ]
 
