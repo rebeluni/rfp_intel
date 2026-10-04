@@ -368,16 +368,19 @@ EVIDENCE PASSAGES:
 TASK:
 Provide:
 1. A concise overview paragraph.
-2. A comprehensive bulleted list of ALL changes (due date extensions, Q&A responses, specifications, required forms, terms, delivery).
+2. A comprehensive list of ALL changes (due date extensions, Q&A responses, specifications, required forms, terms, delivery).
 
 Return JSON:
-{{
+{
   "overview": "Concise summary paragraph of what this addendum changed",
   "all_changes": [
-    "Specific change 1 with details",
-    "Specific change 2 with details"
+    {
+      "category": "Schedule / Q&A / Specifications / Terms / Forms",
+      "description": "Detailed description of the change or clarification",
+      "quote": "verbatim quote from addendum"
+    }
   ]
-}}"""
+}"""
         try:
             raw_text, _ = self._call_api(prompt)
             return json.loads(raw_text)

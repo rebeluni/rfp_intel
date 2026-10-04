@@ -187,8 +187,16 @@ class QAAgent:
             for phrase in ["what changed", "changes in", "changed in", "summary of addendum", "modifications in"]
         )
 
-        if is_addendum_summary_q and target_bid and target_bid != "COMPARISON":
+        if is_addendum_summary_q:
             add_num = int(add_match.group(1))
+            if not target_bid or target_bid == "COMPARISON":
+                for b in ["Bid1", "Bid2", "Bid3"]:
+                    if any(c.get("addendum_number") == add_num for c in self.reconciler.get_addendum_chunks(b)):
+                        target_bid = b
+                        break
+            if not target_bid:
+                target_bid = "Bid1"
+
             logger.info(f"[QAAgent] Routing to explicit addendum summary path for {target_bid} Addendum {add_num}...")
             summary_obj = self.reconciler.get_addendum_summary(bid_id=target_bid, addendum_number=add_num)
             
@@ -201,9 +209,14 @@ class QAAgent:
             citations = []
             if summary_obj.all_changes:
                 for idx, chg in enumerate(summary_obj.all_changes, 1):
-                    sec = chg.get("section", "General")
-                    desc = chg.get("description", "")
-                    qt = chg.get("quote", "")
+                    if isinstance(chg, dict):
+                        sec = chg.get("category") or chg.get("section", "General")
+                        desc = chg.get("description", "")
+                        qt = chg.get("quote", "")
+                    else:
+                        sec = "General"
+                        desc = str(chg)
+                        qt = ""
                     lines.append(f"{idx}. **[{sec}]** {desc}")
                     if qt:
                         lines.append(f"   - *Contiguous Quote:* \"{qt}\"")
