@@ -268,6 +268,30 @@ python scripts/check_against_gold.py
 # 7. Regenerate this report and update README tables
 python scripts/generate_final_report.py
 ```
+
+---
+
+## Section 8: Task Completion & Verification Summary (Tasks 1–5)
+
+1. **Task 1: Bid2 Payment Terms Extraction & Citation Grounding**
+   - **Problem:** Bid2 Payment Terms was extracted as null despite invoicing instructions existing on PORFP page 2.
+   - **Solution:** Broadened generic description and retrieval query hints in `config/fields.yaml` to include invoicing instructions, invoice submission timelines, and remittance requirements. Added generic chunk scanning in `extraction/extractor_agent.py` for payment terms.
+   - **Verification:** Successfully extracted full invoicing terms from `PORFP_-_Dell_Laptop_Final.pdf` p.2 (*"Email invoices to: STOaccountspayable@treasurer.state.md.us. Invoice(s) shall be submitted within 10 days of delivering the equipment..."*). Unit test suite passed 60/60.
+2. **Task 2: Gold Values Benchmark & Audit Alignment**
+   - **Problem:** `tests/gold_values.json` previously expected null for Bid2 Payment Terms.
+   - **Solution:** Updated `tests/gold_values.json` to expect the invoicing clause (`within 10 days of delivering the equipment`). Re-ran strict gold audit generating `outputs/gold_audit_results.json`.
+   - **Verification:** Strict gold audit achieved **100.0% accuracy (60/60 correct: 49 strict matches, 11 expected document absences, 0 mismatches, 0 missing)**. Added benchmark disclaimer to `README.md`.
+3. **Task 3: Dynamic Index Bid Discovery in Q&A Agent**
+   - **Problem:** `search/qa_agent.py` contained hardcoded `["Bid1", "Bid2", "Bid3"]` fallback lists for cross-bid query synthesis.
+   - **Solution:** Implemented `_get_indexed_bids(self)` to dynamically discover active bid IDs from the BM25/dense index chunk metadata and workspace directory structure.
+   - **Verification:** Unit test suite passed 60/60 with dynamic multi-bid routing.
+4. **Task 4: Interactive Streamlit UI Verification & Documentation**
+   - **Problem:** Streamlit UI tabs and visual validation needed headless browser verification and visual artifacts.
+   - **Solution:** Automated browser testing via Playwright in `scripts/verify_ui_and_screenshot.py`. Tested Search tab (`JA-207652`), Ask tab (3 benchmark questions with citation validation and out-of-domain handling), and Extract tab (change log tracking).
+   - **Verification:** Captured and committed `docs/screenshots/search.png` and `docs/screenshots/extract.png`. Embedded screenshots and run instructions (`python main.py ui --port 8501`) into `README.md`.
+5. **Task 5: End-to-End Pipeline Verification & Final Report Generation**
+   - **Verification Suite:** Executed `pytest` (60 passed), `scripts/run_search_eval.py` (22 IR queries), `scripts/check_against_gold.py` (60/60 gold audit), `scripts/generate_qa_log.py` (23 Q&A queries logged to `outputs/qa_log.md`), and `scripts/generate_final_report.py`.
+   - **Security Check:** Verified `.env` is properly git-ignored and no API keys or credentials exist in any tracked file.
 """
 
     report_path = PROJECT_ROOT / "docs" / "final_report.md"

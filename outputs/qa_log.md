@@ -1,5 +1,5 @@
 # QA Log — RFP Intelligence Platform
-_Generated: 2026-10-04 13:29:36 UTC_
+_Generated: 2026-10-04 17:17:43 UTC_
 _Total questions: 23_
 
 ---
@@ -31,7 +31,7 @@ The proposal due date for Bid2 (Dell laptops) is 06/10/2024 (with a closing time
 1. `PORFP_-_Dell_Laptop_Final.pdf` (p.1): "PROPOSAL DUE
 DATE and TIME:
 06/10/2024"
-2. `Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html` (p.1): "- **closing_date**: 06/10/2024 02:00 PM EDT"
+2. `Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html` (p.1): "closing_date**: 06/10/2024 02:00 PM EDT"
 
 ---
 
@@ -41,7 +41,7 @@ DATE and TIME:
 
 **Answer:**
 
-According to the Agency POC Information section in the PORFP document, the agency/division name for the Austin ISD bid is the Austin Independent School District / Department of Technology.
+Austin Independent School District / Department of Technology
 
 **Citations:**
 
@@ -55,7 +55,7 @@ According to the Agency POC Information section in the PORFP document, the agenc
 
 **Answer:**
 
-The Dallas ISD solicitation requests the following product tiers and target quantities for evaluation purposes: Tier 1 Small Student Chromebook Laptop (Touch) - 50,000; Tier 2 Large Student Chromebook Laptop (Non-Touch) - 50,000; Tier 3 Student Windows Laptop - 5,000; Student Tablet - 50,000; Tier 1 Staff Laptop - 10,000; Tier 2 Staff Laptop - 10,000; Tier 1 Staff Basic Desktop - 5,000; Tier 2 Staff Professional Desktop - 5,000; Display Monitor - Touch - 5,000; and Display Monitor - Non-Touch - 5,000.
+The product tiers and target quantities requested in the Dallas ISD solicitation for evaluation purposes are: Tier 1 Small Student Chromebook Laptop (Touch) with 50,000 Each; Tier 2 Large Student Chromebook Laptop (Non-Touch) with 50,000 Each; Tier 3 Student Windows Laptop with 5,000 Each; Student Tablet with 50,000 Each; Tier 1 Staff Laptop with 10,000 Each; Tier 2 Staff Laptop with 10,000 Each; Tier 1 Staff Basic Desktop with 5,000 Each; Tier 2 Staff Professional Desktop with 5,000 Each; Display Monitor - Touch with 5,000 Each; and Display Monitor - Non-Touch with 5,000 Each.
 
 **Citations:**
 
@@ -105,27 +105,27 @@ category) 20.01 Display Monitor
 
 **Answer:**
 
-The Maryland State Treasurer's Office requires the following products and quantities: 30 units of the SI# CC7802 Dell Latitude 5550 (Microsoft Copilot ready) and 30 units of the Dell Thunderbolt 4 Dock – WD22TB4.
+The Maryland State Treasurer's Office requires the following products and quantities: 30 units of the Dell Latitude 5550 (SI# CC7802, with the requirement to be Microsoft Copilot ready) and 30 units of the Dell Thunderbolt 4 Dock (WD22TB4). Additionally, they require a 3-year Dell Limited Hardware Warranty extended for all machines purchased.
 
 **Citations:**
 
 1. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "1. SI# CC7802 Dell
 Latitude 5550
-
 SI# CC7802 Dell Latitude
 5550 *Laptops must be
 Microsoft Copilot ready*
 SI# CC7802
-
 30 06/10/2024 2. Dell Thunderbolt 4
 Dock – WD22TB4
-
 Dell Thunderbolt 4 Dock –
 WD22TB4
-
 WD22TB4
-
 30 06/10/2024"
+2. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "1. Dell Limited Hardware Warranty
+Extended for all machines
+purchased - 3 Years
+Warranty certificate or Affidavit to be
+presented upon award Date of Delivery 3 years following the date of delivery"
 
 ---
 
@@ -151,13 +151,14 @@ Quantity: 1,200 Units"
 
 **Answer:**
 
-A comparison of the warranty terms across all three bids shows the following:
+A comparison of the warranty terms across the three bids reveals the following details:
 
-- **Bid1 (Dallas ISD - Computing Devices):** Requires a minimum one-year warranty for student Chromebooks and three years for student and staff Windows laptops. All warranties must be official manufacturer (OEM) warranties effective on the date equipment is placed into service. The district expects warranty service, repairs, or replacements to be performed by awarded vendors at no cost within five business days, with temporary replacement devices provided if the timeline cannot be met.
-- **Bid2 (State of Maryland Treasurer's Office - Dell Laptops):** Specifies a 3-year Dell Limited Hardware Warranty extended for all machines purchased, running for 3 years following the date of delivery, with a warranty certificate or affidavit presented upon award.
-- **Bid3 (Austin ISD - Lenovo Laptops):** Specifies a 3-Year Lenovo Premier Support with Onsite Next Business Day (NBD) Warranty for all machines purchased, running for 3 years following the date of delivery, with a warranty certificate or affidavit to be presented upon award.
+- **Bid1 (Dallas ISD - JA-207652):** Requires warranties to become effective on the date equipment is placed into service as agreed upon by Dallas ISD and the awarded vendor, and they must be equal to or exceed those offered to the general public. As a minimum requirement, Dallas ISD asks for a "one-year warranty for student Chromebooks and three years for student and staff Windows laptops." Additionally, the district expects warranty service, repairs, or replacements to be performed at no cost within five (5) business days of reporting, with temporary replacement devices provided if this timeframe cannot be achieved. All warranties must be made by the OEM.
+- **Bid2 (Dell / State of Maryland Treasurer's Office - PORFP #E20P4600040):** Specifies a "Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years," running for "3 years following the date of delivery" starting from the Date of Delivery, with a warranty certificate or Affidavit to be presented upon award.
+- **Bid3 (Lenovo / Austin ISD - PORFP #AISD-P8820):** Specifies a "Lenovo 3-Year Premier Support with Onsite NBD Warranty for all machines purchased - 3 Years," starting on the Date of Delivery and ending 3 years following the date of delivery, with a warranty certificate or Affidavit presented upon award.
 
-**Comparative Summary:** While Bid1 establishes baseline minimums (1 year for Chromebooks, 3 years for Windows laptops) with specific 5-day repair turnaround expectations, both Bid2 and Bid3 explicitly contract for fixed 3-year manufacturer warranties starting on the date of delivery, with Bid3 specifically providing a premium tier (Lenovo Premier Support with Onsite Next Business Day service).
+**Comparative Summary:** 
+While Bid1 specifies tiered base requirements (1-year minimum for student Chromebooks and 3 years for Windows laptops) with strict 5-day repair or temporary replacement mandates, Bid2 (Dell) and Bid3 (Lenovo) both explicitly mandate a uniform 3-year manufacturer's extended warranty/support package from the date of delivery. Furthermore, Bid3 specifically includes an onsite Next Business Day (NBD) Premier Support tier, whereas Bid2 specifies a standard Dell Limited Hardware Warranty extension.
 
 **Citations:**
 
@@ -174,16 +175,17 @@ A comparison of the warranty terms across all three bids shows the following:
 
 **Answer:**
 
-Comparing each bid, Bid2 has the earliest submission deadline on June 10, 2024. 
-- Bid1 originally had a solicitation due date of June 27, 2024 at 14:00, which was superseded and extended by Addendum No. 2 to July 9, 2024 at 2:00 PM CST.
-- Bid2 has a proposal due date and time of June 10, 2024 (and 06/10/2024 at 02:00 PM EDT).
-- Bid3 has a proposal due date and time of 12/18/2025 at 4:00 PM CST.
+Comparing each bid's submission deadline:
+- Bid1 has a revised proposal due date of July 9, 2024 at 2:00 PM CST, as extended by Addendum No. 2 (superseding the original June 27, 2024 deadline).
+- Bid2 has a proposal due date of June 10, 2024.
+- Bid3 has a proposal due date of December 18, 2025 at 4:00 PM CST.
+
+Comparative Summary: Bid2 has the earliest submission deadline (June 10, 2024), followed by Bid1 (July 9, 2024), with Bid3 having the latest deadline (December 18, 2025).
 
 **Citations:**
 
 1. `Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.1): "The new due date for this RFP will be July 9, 2024 at 2:00 PM CST."
-2. `PORFP_-_Dell_Laptop_Final.pdf` (p.1): "PROPOSAL DUE
-DATE and TIME:
+2. `PORFP_-_Dell_Laptop_Final.pdf` (p.1): "PROPOSAL DUE DATE and TIME:
 06/10/2024"
 3. `PORFP_-_Austin_Laptop_Final.pdf` (p.1): "PROPOSAL DUE DATE and TIME: 12/18/2025 at 4:00 PM CST"
 
@@ -195,13 +197,10 @@ DATE and TIME:
 
 **Answer:**
 
-A comparison of the procurement scale (total units) across the three bids shows distinct differences in volume and categorization:
-
-- **Bid1 (Dallas ISD - JA-207652):** Features a large-scale, multi-category procurement across multiple tiers over a five-year contract period. The evaluation pricing lines outline extensive unit counts: 50,000 units for Tier 1 Small Student Chromebook Laptops (Touch); 50,000 units for Tier 2 Large Student Chromebook Laptops (Non-Touch); 5,000 units for Tier 3 Student Windows Laptops; 50,000 units for Student Tablets; 10,000 units for Tier 1 Staff Laptops; 10,000 units for Tier 2 Staff Laptops; 5,000 units for Tier 1 Staff Basic Desktops; 5,000 units for Tier 2 Staff Professional Desktops; 5,000 units for Touch Display Monitors; and 5,000 units for Non-Touch Display Monitors (totaling 240,000 evaluation units).
-- **Bid2 (State Treasurer's Office - BPM044557):** Specifies a much smaller scale of 30 units for Dell Latitude 5550 Laptops and 30 units for Dell Thunderbolt 4 Docks (WD22TB4), totaling 60 hardware units.
-- **Bid3 (Austin ISD - AISD-2025-9988):** Specifies a procurement scale of 1,200 units of Lenovo ThinkPad L15 Gen 5 Laptops and 1,200 units of Lenovo USB-C Universal Docks, totaling 2,400 units.
-
-Summary: Bid1 represents the largest scale with hundreds of thousands of estimated units across diverse device categories over five years; Bid3 is a moderate single-campus/district refresh totaling 2,400 units; and Bid2 is the smallest scale with only 60 total units.
+The procurement scale (total units) varies across the bids as follows:
+- Bid1 (Dallas ISD, JA-207652): Features multiple device evaluation tiers and large estimated 5-year quantities, including 50,000 units for Tier 1 Small Student Chromebook Laptops (Touch), 50,000 units for Tier 2 Large Student Chromebook Laptops (Non-Touch), 5,000 units for Tier 3 Student Windows Laptops, 50,000 units for Student Tablets, 10,000 units for Tier 1 Staff Laptops, 10,000 units for Tier 2 Staff Laptops, 5,000 units for Tier 1 Staff Basic Desktops, 5,000 units for Tier 2 Staff Professional Desktops, 5,000 units for Touch Display Monitors, and 5,000 units for Non-Touch Display Monitors.
+- Bid2 (State Treasurer's Office, BPM044557): Specifies a smaller scale consisting of 30 units of Dell Latitude 5550 Laptops and 30 units of Dell Thunderbolt 4 Docks.
+- Bid3 (Austin ISD, AISD-2025-9988): Specifies a procurement scale of 1,200 units of Lenovo ThinkPad L15 Gen 5 Laptops and 1,200 units of Lenovo USB-C Universal Docks.
 
 **Citations:**
 
@@ -258,11 +257,12 @@ Model: 40AY0090US Quantity: 1,200 Units"
 
 **Answer:**
 
-Bid1 explicitly mentions a pre-proposal meeting scheduled for June 10, 2024, at 2:00 PM CST via TEAMS video conference, noting that participation is highly encouraged. In contrast, neither Bid2 nor Bid3 mentions a pre-bid meeting or pre-proposal conference in their provided documents.
+Bid1 mentions a pre-proposal meeting scheduled for June 10, 2024, at 2:00 PM CST via TEAMS video conference, noting that potential proposers are highly encouraged to participate. Bid2 and Bid3 do not mention any pre-bid meeting or pre-proposal conference.
 
 **Citations:**
 
-1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.2): "Pre-Proposal A pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10, 2024."
+1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.2): "Pre-Proposal A pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10,
+2024."
 
 ---
 
@@ -272,7 +272,7 @@ Bid1 explicitly mentions a pre-proposal meeting scheduled for June 10, 2024, at 
 
 **Answer:**
 
-Yes, Addendum No. 2 changed the due date for the RFP. The new due date is July 9, 2024 at 2:00 PM CST.
+Yes, Addendum No. 2 extended the due date for the RFP to July 9, 2024 at 2:00 PM CST.
 
 **Citations:**
 
@@ -286,7 +286,7 @@ Yes, Addendum No. 2 changed the due date for the RFP. The new due date is July 9
 
 **Answer:**
 
-The solicitation states that insurance and/or bond requirements are enumerated elsewhere in the contract documents. Offerors must comply with any insurance, bid bond, or liability requirements of the District as noted elsewhere in the solicitation document. Additionally, the insurance form must be received within ten (10) days of award, and the offeror must notify the District in writing within ten (10) days after knowing of any changes that materially affect the insurance/bond coverage. Specific details can be found on Dallas ISD's terms and conditions page at https://www.dallasisd.org/Page/81178.
+The solicitation notes that insurance and/or bond requirements are enumerated elsewhere in Contract documents, and that the Offeror must comply with any insurance, bid bond, or liability requirements of the District as noted elsewhere in the solicitation document. Additionally, the insurance form must be received within ten (10) days of award, and the offeror must notify the District in writing within ten (10) days of any changes that materially affect the insurance/bond coverage. Further information can be found at Dallas ISD's terms and conditions page.
 
 **Citations:**
 
@@ -294,9 +294,7 @@ The solicitation states that insurance and/or bond requirements are enumerated e
 insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document."
 2. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.17): "Insurance and/or bond requirements are enumerated elsewhere in Contract documents."
 3. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.17): "The insurance form must be received
-within ten (10) days of award. 
-For more information please visit the Dallas ISD's terms and conditions page
-at https://www.dallasisd.org/Page/81178."
+within ten (10) days of award."
 
 ---
 
@@ -306,16 +304,13 @@ at https://www.dallasisd.org/Page/81178."
 
 **Answer:**
 
-The evaluation criteria for the Austin ISD laptop procurement are: 1. Accuracy of Bid (Meets All Technical and Hardware Requirements), and 2. Price and Cost-Effectiveness. Additionally, the award will be made based on proposals that conform to the solicitation and provide the best value to the district, considering technical qualifications and total proposed pricing.
+The evaluation criteria used for the Austin ISD laptop procurement are: 1. Accuracy of Bid (Meets All Technical and Hardware Requirements), and 2. Price and Cost-Effectiveness.
 
 **Citations:**
 
 1. `PORFP_-_Austin_Laptop_Final.pdf` (p.4): "Evaluation Criteria:
 1. Accuracy of Bid (Meets All Technical and Hardware Requirements)
-2. Price and Cost-Effectiveness
-Basis for Award Recommendation:
-Award will be made to the responsible offeror whose proposal conforms to the solicitation and provides the best
-value to Austin Independent School District, considering technical qualifications and total proposed pricing."
+2. Price and Cost-Effectiveness"
 
 ---
 
@@ -325,7 +320,7 @@ value to Austin Independent School District, considering technical qualification
 
 **Answer:**
 
-For Bid1, the issuing organization is the Dallas Independent School District, and contracts resulting from the RFP are directly between the members, participants, or combinations of the parties and vendors, while the EPCNT itself does not have the authority to make purchases directly with vendors or contractually bind its members to third-party agreements. For Bid2, the issuing organization is the State of Maryland Treasurer's Office, with contact through agency point of contact Tamaira Hawkins. A comparative summary shows that Bid1 is issued by a Texas public school district and involves collaborative multi-governmental entity structures via EPCNT, whereas Bid2 is issued by a specific state agency (State of Maryland Treasurer's Office) for its internal office refresh.
+For Bid1, the issuing organization is the Dallas Independent School District, and contracts are directly between the members, participants, or combinations of parties and vendors, while EPCNT does not have the authority to make purchases directly with vendors or contractually bind members to third-party agreements. For Bid2, the issuing organization is the State of Maryland Treasurer's Office. In comparative summary, Bid1 is issued by the Dallas Independent School District with purchasing authority structured through district and interlocal EPCNT cooperative guidelines, whereas Bid2 is issued by the State of Maryland Treasurer's Office.
 
 **Citations:**
 
@@ -341,16 +336,13 @@ For Bid1, the issuing organization is the Dallas Independent School District, an
 
 **Answer:**
 
-Bid1 is an informal Request for Proposal (Solicitation Number JA-207652) issued by the Dallas Independent School District for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors. Vendors may submit proposals for one, several, or all categories over a five-year contract estimated period. Warranties are not explicitly specified for Bid1 in the provided text. Bid2 is an informal RFP (PORFP Number #E20P4600040, eMMA Project Number BPM044557) issued by the State of Maryland Treasurer's Office for Dell laptops and docks, specifically requesting 30 units of the Dell Latitude 5550 and 30 units of the Dell Thunderbolt 4 Dock (WD22TB4) with a due date of 06/10/2024. Bid2 specifies a warranty term of 3 years under the 'Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years'. Bid3 is an informal RFP (Solicitation Number AISD-2025-9988) issued for the High-Performance Student & Staff Laptops Procurement by Austin Independent School District, requesting 1,200 units of the Lenovo ThinkPad L15 Gen 5 and 1,200 units of the Lenovo USB-C Universal Dock (Model 40AY0090US) with a closing/due date of 12/18/2025. Bid3 specifies a warranty term of 'Lenovo 3-Year Premier Support with Onsite NBD Warranty for all machines purchased - 3 Years'. Comparative summary: Bid1 is a broad 5-year district-wide computing device framework with unstated quantities and unspecified warranty terms; Bid2 is a small-scale state procurement for 30 Dell units featuring a 3-year limited hardware warranty; and Bid3 is a large-scale school district procurement for 1,200 Lenovo units featuring a 3-year Premier Support with Onsite Next Business Day (NBD) warranty.
+Bid1 (Dallas Independent School District, Solicitation JA-207652) is an informal RFP for student and staff computing devices including laptops, desktops, tablet devices, and display monitors, with an estimated five-year quantity and closing date of 07/09/2024. Bid2 (State of Maryland Treasurer's Office, Solicitation BPM044557) is a fixed-price PORFP for 30 Dell Latitude 5550 laptops and 30 Dell Thunderbolt 4 Docks with a 3-year Dell Limited Hardware Warranty and a closing date of 06/10/2024. Bid3 (Austin Independent School District, Solicitation AISD-2025-9988) is a procurement for 1,200 Lenovo ThinkPad L15 Gen 5 laptops and 1,200 Lenovo USB-C Universal Docks featuring a 3-Year Premier Support with Onsite NBD Warranty and a closing date of 12/18/2025. In comparative terms, Bid1 covers a broad, multi-category estimated volume over five years without specified product models in the portal summary, whereas Bid2 and Bid3 are targeted hardware refreshes for specific quantities of branded laptops and docks (Dell and Lenovo respectively) with exact model numbers and explicitly defined 3-year extended warranties.
 
 **Citations:**
 
 1. `Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html` (p.1): "This Request for Proposal (RFP) will be for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors."
 2. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "1. SI# CC7802 Dell Latitude 5550 SI# CC7802 Dell Latitude 5550 *Laptops must be Microsoft Copilot ready* SI# CC7802 30 06/10/2024"
-3. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "1. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years Warranty certificate or Affidavit to be presented upon award Date of Delivery 3 years following the date of delivery"
-4. `Austin_ISD_Laptop_Procurement.html` (p.1): "closing_date: 12/18/2025 02:00 PM EDT"
-5. `PORFP_-_Austin_Laptop_Final.pdf` (p.3): "Product Name: 1. Lenovo ThinkPad L15 Gen 5 Product Description: Intel Core Ultra 7 155U, 16GB RAM, 512GB SSD, Windows 11 Pro Model #: 21L30001US Qty: 1,200 Due Date: 12/18/2025"
-6. `PORFP_-_Austin_Laptop_Final.pdf` (p.3): "Warranty Requirements: Lenovo 3-Year Premier Support with Onsite NBD Warranty for all machines purchased - 3 Years."
+3. `PORFP_-_Austin_Laptop_Final.pdf` (p.3): "Product Name: 1. Lenovo ThinkPad L15 Gen 5 Product Description: Intel Core Ultra 7 155U, 16GB RAM, 512GB SSD, Windows 11 Pro Model #: 21L30001US Qty: 1,200 Due Date: 12/18/2025"
 
 ---
 
@@ -374,7 +366,7 @@ The submission deadline for Bid1 (RFP JA-207652) after all addendums is July 9, 
 
 **Answer:**
 
-The Master Contractor must provide a Mercury Affidavit. Additionally, a warranty certificate or Affidavit is to be presented upon award for the Dell Limited Hardware Warranty Extended.
+Based on the provided documents, the Master Contractor must provide a Mercury Affidavit. Additionally, a warranty certificate or Affidavit is to be presented upon award for the Dell Limited Hardware Warranty Extended.
 
 **Citations:**
 
@@ -392,11 +384,12 @@ presented upon award Date of Delivery 3 years following the date of delivery"
 
 **Answer:**
 
-The provided documents state that the Offeror must comply with any bid bond requirements of the District as noted elsewhere in the solicitation document, but the specific amount for a bid bond is not stated in the text.
+The provided documents state that the Offeror must comply with any insurance, bid bond, or liability requirements of the District as noted elsewhere in the solicitation document, but the exact amount for the bid bond is not specified in the text.
 
 **Citations:**
 
-1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.9): "The Offeror must comply with any insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document."
+1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.9): "The Offeror must comply with any
+insurance, bid bond, or liability requirements of the District as noted elsewhere in this solicitation document."
 
 ---
 
@@ -408,7 +401,9 @@ The provided documents state that the Offeror must comply with any bid bond requ
 
 Not found in documents.
 
-_No citations returned._
+**Citations:**
+
+1. `None` (p.None)
 
 ---
 
@@ -434,18 +429,15 @@ Not found in documents.
 
 ### Addendum 2 Summary for Bid1 (Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf)
 
-**Overview:** Addendum No. 2 for RFP JA-207652 Student and Staff Computing Devices extends the RFP due date to July 9, 2024 at 2:00 PM CST and requires bidders to acknowledge and submit a signed copy of the addendum with their proposal.
+**Overview:** Addendum No. 2 for RFP JA-207652 Student and Staff Computing Devices extends the proposal due date to July 9, 2024 at 2:00 PM CST, while keeping all other provisions and terms and conditions unchanged.
 
 **Modifications and Clarifications:**
-1. **[Schedule]** The due date for the RFP has been extended to July 9, 2024 at 2:00 PM CST.
+1. **[Schedule]** The due date of the RFP has been extended to July 9, 2024 at 2:00 PM CST.
    - *Contiguous Quote:* "The new due date for this RFP will be July 9, 2024 at 2:00 PM CST."
-2. **[Forms]** Bidders are required to acknowledge and return/submit a signed copy of the addendum along with their proposal copies.
-   - *Contiguous Quote:* "Please sign this addendum and submit along with your copies of the proposal. ALL OTHER PROVISIONS AND OTHER TERMS AND CONDITIONS REMAIN UNCHANGED. BIDDERS ARE REQUIRED TO ACKNOWLEDGE AND RETURN/SUBMIT A COPY OF THIS ADDENDUM WITH THEIR PROPOSAL."
 
 **Citations:**
 
 1. `Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.1): "The new due date for this RFP will be July 9, 2024 at 2:00 PM CST."
-2. `Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.1): "Please sign this addendum and submit along with your copies of the proposal. ALL OTHER PROVISIONS AND OTHER TERMS AND CONDITIONS REMAIN UNCHANGED. BIDDERS ARE REQUIRED TO ACKNOWLEDGE AND RETURN/SUBMIT A COPY OF THIS ADDENDUM WITH THEIR PROPOSAL."
 
 ---
 
@@ -455,21 +447,18 @@ Not found in documents.
 
 **Answer:**
 
-Bid1 (Dallas ISD Student and Staff Computing Devices) specifies that all warranties become effective on the date the equipment is placed into service as agreed upon by Dallas ISD and the awarded vendor. Warranties must equal or exceed those offered to the general public and must be official manufacturer (OEM) warranties. The minimum warranty requirement is 1 year for student Chromebooks and 3 years for student and staff Windows laptops. Dallas ISD expects all warranty service, repairs, or replacements to be performed at no cost within five (5) business days of reporting, or a temporary replacement device must be provided. 
+Bid1 (Dallas ISD Student and Staff Computing Devices) specifies that all warranties become effective on the date the equipment is placed into service as agreed upon by Dallas ISD and the awarded vendor. Warranties must equal or exceed those offered to the general public and must be official manufacturer (OEM) warranties. The minimum warranty requirement is 1 year for student Chromebooks and 3 years for student and staff Windows laptops. Dallas ISD expects all warranty service, repairs, or replacements to be performed by awarded vendors at no cost within 5 business days of reporting, with temporary replacement devices provided if this timeframe cannot be achieved. Additional warranty information and pricing can be submitted via attachments. 
 
-Bid2 (State of Maryland Treasurer's Office Dell Laptops PORFP) specifies a "Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years" with a start date on the date of delivery and an end date 3 years following the date of delivery, requiring a warranty certificate or affidavit upon award.
+Bid2 (State of Maryland Treasurer's Office PORFP for Dell Laptops) specifies a "Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years." The deliverables include a warranty certificate or affidavit presented upon award, starting on the date of delivery and lasting for 3 years following the date of delivery.
 
-Comparison: Bid1 sets a tier-based minimum warranty structure (1 year for Chromebooks, 3 years for Windows laptops) with explicit 5-day repair/replacement turnaround expectations or temporary device provisions, whereas Bid2 specifies a fixed 3-year Dell Limited Hardware Extended Warranty starting from the date of delivery for all procured laptops.
+Comparative Summary: While Bid1 outlines a tiered minimum warranty requirement (1 year for student Chromebooks and 3 years for Windows laptops) with specific service turnaround expectations (5 business days or temporary replacements) and OEM requirements, Bid2 specifies a flat 3-year Dell Limited Hardware Extended Warranty starting from the delivery date with a required warranty certificate or affidavit.
 
 **Citations:**
 
-1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.4): "All warranties shall become effective on the date the equipment is placed into service, as agreed-upon by
-Dallas ISD and the awarded vendor."
-2. `Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.1): "As a minimum requirement, Dallas ISD is asking for a one-year warranty for
-student Chromebooks and three years for student and staff Windows laptops."
-3. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "Dell Limited Hardware Warranty
-Extended for all machines
-purchased - 3 Years"
+1. `JA-207652 Student and Staff Computing Devices FINAL.pdf` (p.4): "All warranties shall become effective on the date the equipment is placed into service, as agreed-upon by Dallas ISD and the awarded vendor. Warranties shall be equal to or exceed those offered to the general public."
+2. `Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.1): "As a minimum requirement, Dallas ISD is asking for a one-year warranty for student Chromebooks and three years for student and staff Windows laptops."
+3. `Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf` (p.3): "Yes."
+4. `PORFP_-_Dell_Laptop_Final.pdf` (p.3): "1. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years Warranty certificate or Affidavit to be presented upon award Date of Delivery 3 years following the date of delivery"
 
 ---
 
