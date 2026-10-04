@@ -3,8 +3,15 @@ Benchmark runner script for Search Engine Phase 2.
 Executes RetrievalEvaluator across all 4 modes, logs metrics, and prints markdown table.
 """
 
+import sys
 import json
 from pathlib import Path
+
+# Ensure repo root is on sys.path
+repo_root = Path(__file__).resolve().parent.parent
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
 from search.eval import RetrievalEvaluator
 
 

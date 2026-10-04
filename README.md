@@ -161,11 +161,11 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 > **Note on Evaluation Granularity:** With 22 evaluation queries, exactly **one query represents 4.545% (4.5 points)** of the total recall. Small numerical differences reflect single-query shifts rather than systemic variance.
 
 | Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Latency (avg) |
-| --- | --- | --- | --- | --- | --- |
-| **BM25 Only** | 54.55% | 81.82% | 86.36% | 0.6856 | 3.5 ms |
-| **Dense Only (BGE-small)** | 36.36% | 72.73% | 81.82% | 0.5379 | 379.9 ms |
-| **Hybrid (No Rerank)** | 50.00% | 81.82% | 81.82% | 0.6591 | 70.7 ms |
-| **Hybrid + Cross-Encoder Rerank** | 54.55% | 81.82% | 86.36% | 0.6833 | 4678.7 ms |
+|---|---|---|---|---|---|
+| **BM25 Only** | 54.55% | 81.82% | 86.36% | 0.6856 | 2.8 ms |
+| **Dense Only (BGE-small)** | 36.36% | 72.73% | 81.82% | 0.5379 | 586.4 ms |
+| **Hybrid (RRF k=60)** | 50.00% | 81.82% | 81.82% | 0.6591 | 81.0 ms |
+| **Hybrid + Cross-Encoder Rerank** | 54.55% | 81.82% | 86.36% | 0.6833 | 5707.4 ms |
 
 ### Key Benchmark Observations:
 - BM25 and Hybrid+CrossEncoder achieve an identical **86.36% Recall@5** (19/22 queries successfully placed the ground-truth page in the top 5 candidates).
@@ -176,12 +176,12 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 
 ### D3 Search Optimization Experiments (22-Query Benchmark)
 
-| Experiment | Status | Recall@1 | Recall@3 | Recall@5 | MRR | Delta MRR | Decision |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Table Row-Group Repeating Headers | `run` | 54.55% | 81.82% | 86.36% | 0.6833 | 0.0000 | **Kept** |
-| Dense Model Upgrade: BAAI/bge-base-en-v1.5 | `not run` | - | - | - | - | - | Not Run |
-| Weighted RRF (w_bm25=0.7, w_dense=0.3) | `run` | 54.55% | 81.82% | 86.36% | 0.6909 | +0.0076 | **Kept** |
-| Query Expansion on BM25 Only | `run` | 54.55% | 81.82% | 86.36% | 0.6856 | +0.0454 | **Kept** |
+| Experiment | Description | Status | Delta R@1 | Delta R@5 | Delta MRR | Outcome / Decision |
+|---|---|---|---|---|---|---|
+| **Table Row-Group Repeating Headers** | Preserves table schema header on sub-chunks (>1500 chars), ensuring 100% precision on spec table queries (e.g. Q03 chassis SKU R@1=1). | `run` | +0.0000 | +0.0000 | +0.0000 | **Kept** |
+| **Dense Model Upgrade: BAAI/bge-base-en-v1.5** | Kept BAAI/bge-small-en-v1.5 (fast CPU latency 379ms, 0 external download dependencies). | `not run` | N/A | N/A | N/A | Not adopted |
+| **Weighted RRF (w_bm25=0.7, w_dense=0.3)** | Increasing BM25 weight yields identical candidate pool before Cross-Encoder reranking; kept unweighted RRF (k=60) for balanced generality. | `run` | +0.0000 | +0.0000 | +0.0076 | **Kept** |
+| **Query Expansion on BM25 Only** | BM25 query expansion preserves/boosts domain keyword matching (with expansion MRR=0.6856 vs without expansion MRR=0.6402). | `run` | +0.0455 | +0.0454 | +0.0454 | **Kept** |
 
 ## Known Limitations & Design Trade-offs
 

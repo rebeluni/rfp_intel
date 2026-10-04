@@ -16,12 +16,13 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from search.eval import RetrievalEvaluator, BENCHMARK_ITEMS
 from search.hybrid_retriever import HybridRetriever, SearchResult
 from search.index_manager import IndexManager
-
-logger = logging.getLogger(__name__)
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 def evaluate_custom_retriever(retriever: HybridRetriever, mode: str = "hybrid") -> Dict[str, Any]:
