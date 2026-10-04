@@ -188,3 +188,68 @@ python scripts/generate_final_report.py
 5. **Task 5: End-to-End Pipeline Verification & Final Report Generation**
    - **Verification Suite:** Executed `pytest` (60 passed), `scripts/run_search_eval.py` (22 IR queries), `scripts/check_against_gold.py` (60/60 gold audit), `scripts/generate_qa_log.py` (23 Q&A queries logged to `outputs/qa_log.md`), and `scripts/generate_final_report.py`.
    - **Security Check:** Verified `.env` is properly git-ignored and no API keys or credentials exist in any tracked file.
+
+---
+
+## Final Housekeeping
+
+Before final submission, a comprehensive repository hygiene and documentation verification pass was performed. All tasks were executed strictly without altering pipeline code, prompts, configuration files, test suites, or output extraction files.
+
+### Task-by-Task Status and Verification Evidence
+
+1. **TASK 1: README "Assumptions" Section**
+   - **Status:** **Done**
+   - **Evidence:** Added the "Assumptions" section to `README.md` (positioned adjacent to "Known Limitations & Design Trade-offs") documenting all 8 verified points:
+     - Each bid folder is ingested as one unit (`bid_id` is the folder name).
+     - Document types (`solicitation`, `addendum`, `pricing_sheet`, `attachment`, `affidavit`) are inferred via filename heuristics and content structure with an LLM fallback.
+     - Google Gemini (via `GEMINI_API_KEY`) is the supported LLM provider.
+     - Dates and times are extracted verbatim without timezone shifting.
+     - Strict null policy (`NOT_FOUND` / `null`) for absent fields without hallucination.
+     - `Bid3` is an automated synthetic consistency baseline perturbed from `Bid2`.
+     - Gold values in `tests/gold_values.json` were authored by the developer with AI assistance.
+     - The 22-query IR benchmark translates to ~4.545 percentage points per query.
+   - **Commit:** `98be305` (`task 1: add assumptions section to README`)
+
+2. **TASK 2: Retrieval Evaluation Report (`docs/eval_report.md`)**
+   - **Status:** **Done**
+   - **Evidence:** Implemented `scripts/make_eval_report.py` to programmatically extract the 22 benchmark query definitions from `search/eval.py` and read metrics from `outputs/search_eval_results.json` and `outputs/search_experiments.json`. Generated `docs/eval_report.md` containing:
+     - Full 22-query benchmark dataset table (ID, Query, Expected File, Expected Page, Required Substring).
+     - Overall metrics table (Recall@1, Recall@3, Recall@5, MRR, Latency) across 4 retrieval modes.
+     - Per-query hit/miss matrix across all 4 modes.
+     - Detailed miss analysis for `hybrid_rerank` with top candidate retrieval inspection.
+     - Summary and link to `outputs/search_experiments.json`.
+     - Added reference link in `README.md`.
+   - **Commit:** `9914cd8` (`task 2: generate search evaluation report and link in README`)
+
+3. **TASK 3: README Accuracy Pass**
+   - **Status:** **Done**
+   - **Evidence:** Conducted a comprehensive top-to-bottom accuracy pass on `README.md`. Verified all model names (`gemini-flash-lite-latest`, `BAAI/bge-small-en-v1.5`, `cross-encoder/ms-marco-MiniLM-L-6-v2`), confirmed test count (60 tests), validated benchmark numbers against `outputs/search_eval_results.json`, and organized the documentation in the exact required section hierarchy:
+     1. Overview
+     2. Architecture Diagram
+     3. Directory Structure
+     4. Setup & Installation
+     5. How to Run Each Mode (`extract`, `ask`, `serve`, `ui`, `tests`, `eval`)
+     6. Design Decisions (Chunking, Embedding Model, Hybrid RRF, Cross-Encoder Re-ranker, LangGraph Rationale, Prompts & Validation Approach)
+     7. Evaluation Results
+     8. Interactive Web UI & Screenshots
+     9. Assumptions
+     10. Known Limitations & Design Trade-offs
+   - **Commit:** `b171a06` (`task 3: polish and reorder README sections for accuracy`)
+
+4. **TASK 4: Repo Tidy-Up & Environment Verification**
+   - **Status:** **Done**
+   - **Evidence:**
+     - Grepped repository for candidate files. Actively referenced files (`outputs/phase1_review.md`, `outputs/phase1_parsed_sample.json`, `outputs/requested_chunks.txt`) were retained. Unreferenced files (`plan.md`, `outputs/bid1_extraction.json`, `outputs/bid2_extraction.json`) were safely moved to `docs/archive/`.
+     - Confirmed `.env` is listed on line 3 of `.gitignore`.
+     - Verified zero API keys or secrets exist in tracked files (grepped for `AIza` and `GEMINI_API_KEY=` with only documentation placeholders returned).
+     - Validated `requirements.txt` installs cleanly without dependency conflicts via `pip install -r requirements.txt --dry-run`.
+   - **Commit:** `13226e9` (`task 4: repository hygiene and file cleanup`)
+
+5. **TASK 5: Final Verification & Repository Integrity**
+   - **Status:** **Done**
+   - **Evidence:**
+     - Executed `pytest`: **60 passed, 0 failed** in 39.94s.
+     - Verified CLI commands: `python main.py --help` and `python main.py ui --help` execute and display usage documentation.
+     - Confirmed clean working tree and directory structure.
+     - Final report updated and submitted to remote git repository.
+
