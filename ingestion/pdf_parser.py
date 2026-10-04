@@ -444,22 +444,57 @@ class PDFParser:
 
     @staticmethod
     def _ocr_page(page: pymupdf.Page) -> Tuple[str, str]:
-        """Optional OCR fallback using pytesseract or system OCR if available."""
+        """Optional OCR fallback using pytesseract or Gemini Vision if available."""
         import shutil
-        if not shutil.which("tesseract"):
-            return "", "tesseract_not_installed"
+        if shutil.which("tesseract"):
+            try:
+                import pytesseract
+                from PIL import Image
+                import io
 
-        try:
-            import pytesseract
-            from PIL import Image
-            import io
+                pix = page.get_pixmap(dpi=150)
+                img = Image.open(io.BytesIO(pix.tobytes("png")))
+                text = pytesseract.image_to_string(img)
+                if text.strip():
+                    return text.strip(), "ocr_success"
+            except Exception as e:
+                logger.warning(f"pytesseract OCR execution failed: {e}")
 
-            pix = page.get_pixmap(dpi=150)
-            img = Image.open(io.BytesIO(pix.tobytes("png")))
-            text = pytesseract.image_to_string(img)
-            return text.strip(), "ocr_success"
-        except ImportError:
-            return "", "pytesseract_not_installed"
-        except Exception as e:
-            logger.warning(f"OCR execution failed: {e}")
-            return "", f"ocr_error: {e}"
+        # Check if Gemini Vision OCR is enabled
+        from config.settings import settings
+        if getattr(settings, "ENABLE_VISION_OCR", False) and getattr(settings, "GEMINI_API_KEY", None):
+            try:
+                import base64
+                import httpx
+
+                pix = page.get_pixmap(dpi=150)
+                b64_img = base64.b64encode(pix.tobytes("png")).decode("utf-8")
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.LLM_MODEL}:generateContent"
+                payload = {
+                    "contents": [{
+                        "parts": [
+                            {"text": "Extract all readable text from this document page verbatim. Do not summarize:"},
+                            {"inlineData": {"mimeType": "image/png", "data": b64_img}}
+                        ]
+                    }],
+                    "generationConfig": {"temperature": 0.0, "maxOutputTokens": 1024}
+                }
+                resp = httpx.post(
+                    url,
+                    headers={"x-goog-api-key": settings.GEMINI_API_KEY, "Content-Type": "application/json"},
+                    json=payload,
+                    timeout=30.0
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    candidates = data.get("candidates", [])
+                    if candidates and "content" in candidates[0]:
+                        parts = candidates[0]["content"].get("parts", [])
+                        if parts and "text" in parts[0]:
+                            extracted = parts[0]["text"].strip()
+                            if extracted:
+                                return extracted, "gemini_vision_success"
+            except Exception as e:
+                logger.warning(f"Gemini vision OCR execution failed: {e}")
+
+        return "", "tesseract_and_vision_unavailable"

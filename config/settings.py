@@ -33,6 +33,9 @@ class Settings(BaseModel):
     LLM_RATE_LIMIT_RPM: float = Field(
         default_factory=lambda: float(os.getenv("LLM_RATE_LIMIT_RPM", "15.0"))
     )
+    ENABLE_VISION_OCR: bool = Field(
+        default_factory=lambda: os.getenv("ENABLE_VISION_OCR", "false").lower() in ("true", "1", "yes")
+    )
 
     # API Keys
     GEMINI_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("GEMINI_API_KEY"))
