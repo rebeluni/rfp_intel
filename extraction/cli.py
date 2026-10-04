@@ -39,7 +39,7 @@ def run_extract(bid_id: str, output_file: Optional[Path] = None) -> BidExtractio
 
     for name, field in result.fields.items():
         val = field.value if field.value is not None else "[NOT FOUND]"
-        val_status = "VALID" if result.validations.get(name, {}).is_valid else "ISSUE"
+        val_status = "VALID" if name in result.validation.passed else "ISSUE"
         print(f"  • {name:<30}: {str(val):<40} [{val_status}]")
 
     return result

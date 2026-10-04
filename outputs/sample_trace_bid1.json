@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:16:20.096659+00:00",
+    "timestamp": "2026-10-04T12:48:44.724052+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid1",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.28
+    "latency_ms": 0.3
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:18:04.691779+00:00",
+    "timestamp": "2026-10-04T12:50:24.162236+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid1",
@@ -54,11 +54,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 104591.17
+    "latency_ms": 99433.03
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T12:19:22.928813+00:00",
+    "timestamp": "2026-10-04T12:51:42.355147+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid1",
@@ -67,20 +67,20 @@
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 14,
-      "step_tokens": 74260,
+      "found_fields_count": 15,
+      "step_tokens": 73502,
       "step_prompt_tokens": 69499,
-      "step_completion_tokens": 4761,
-      "cumulative_tokens": 74260
+      "step_completion_tokens": 4003,
+      "cumulative_tokens": 73502
     },
-    "tokens": 74260,
+    "tokens": 73502,
     "prompt_tokens": 69499,
-    "completion_tokens": 4761,
-    "latency_ms": 78234.37
+    "completion_tokens": 4003,
+    "latency_ms": 78153.87
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T12:20:10.054431+00:00",
+    "timestamp": "2026-10-04T12:52:19.412897+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid1",
@@ -96,57 +96,57 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 47121.0
+    "latency_ms": 37055.05
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T12:20:18.534962+00:00",
+    "timestamp": "2026-10-04T12:52:27.467808+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid1",
       "retry_count": 1,
       "failed_fields": [
-        "Due Date"
+        "Contract or Cooperative to use"
       ]
     },
     "tool_calls": [
       {
         "tool": "retry_extraction",
         "args": {
-          "field": "Due Date",
-          "query": "Due Date submission deadline closing date bid opening date",
+          "field": "Contract or Cooperative to use",
+          "query": "Contract or Cooperative to use cooperative purchasing piggyback contract purchasing vehicle",
           "attempt": 1
         },
-        "output_summary": "Result: 2024-06-27 14:00:00 (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT) (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
       "retried_fields": [
-        "Due Date"
+        "Contract or Cooperative to use"
       ],
       "retry_details": [
         {
-          "field": "Due Date",
-          "new_query": "Due Date submission deadline closing date bid opening date",
-          "new_value": "2024-06-27 14:00:00",
+          "field": "Contract or Cooperative to use",
+          "new_query": "Contract or Cooperative to use cooperative purchasing piggyback contract purchasing vehicle",
+          "new_value": "CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT)",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 1,
-      "step_tokens": 5656,
-      "step_prompt_tokens": 5490,
-      "step_completion_tokens": 166,
-      "cumulative_tokens": 100687
+      "step_tokens": 5066,
+      "step_prompt_tokens": 4861,
+      "step_completion_tokens": 205,
+      "cumulative_tokens": 95850
     },
-    "tokens": 5656,
-    "prompt_tokens": 5490,
-    "completion_tokens": 166,
-    "latency_ms": 8477.46
+    "tokens": 5066,
+    "prompt_tokens": 4861,
+    "completion_tokens": 205,
+    "latency_ms": 8053.2
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T12:20:58.884729+00:00",
+    "timestamp": "2026-10-04T12:53:03.383711+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid1",
@@ -162,11 +162,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 40348.32
+    "latency_ms": 35915.23
   },
   {
     "step_id": 7,
-    "timestamp": "2026-10-04T12:21:03.163099+00:00",
+    "timestamp": "2026-10-04T12:53:07.735112+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid1",
@@ -178,19 +178,19 @@
       "amended_fields": [
         "Due Date"
       ],
-      "step_tokens": 7047,
-      "step_prompt_tokens": 6866,
-      "step_completion_tokens": 181,
-      "cumulative_tokens": 124414
+      "step_tokens": 6481,
+      "step_prompt_tokens": 6247,
+      "step_completion_tokens": 234,
+      "cumulative_tokens": 119613
     },
-    "tokens": 7047,
-    "prompt_tokens": 6866,
-    "completion_tokens": 181,
-    "latency_ms": 4276.81
+    "tokens": 6481,
+    "prompt_tokens": 6247,
+    "completion_tokens": 234,
+    "latency_ms": 4348.53
   },
   {
     "step_id": 8,
-    "timestamp": "2026-10-04T12:21:03.165123+00:00",
+    "timestamp": "2026-10-04T12:53:07.735629+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid1"
@@ -200,7 +200,7 @@
       "qa_ready": true,
       "metadata": {
         "bid_id": "Bid1",
-        "title": "Student and Staff Computing Devices **SOURCING #168884**",
+        "title": "Student and Staff Computing Devices SOURCING #168884",
         "issuing_agency": "Dallas ISD",
         "solicitation_number": "JA-207652",
         "fields_ready": 15,
@@ -210,6 +210,6 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.3
+    "latency_ms": 0.25
   }
 ]

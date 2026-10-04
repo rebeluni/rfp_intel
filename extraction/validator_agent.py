@@ -49,9 +49,11 @@ class ValidatorAgent:
         retrieved_passages: List[Dict[str, Any]],
         field_def: Optional[Dict[str, Any]] = None,
         bid_id: Optional[str] = None,
+        secondary_field: Optional[FieldOutput] = None,
     ) -> Tuple[FieldOutput, FieldValidation]:
         """
-        Execute deterministic validation, dynamic confidence computation, and absence verification.
+        Execute deterministic validation, dynamic multi-factor confidence computation,
+        and absence verification.
         """
         field_def = field_def or {}
         val_issues: List[str] = []
@@ -152,6 +154,7 @@ class ValidatorAgent:
         is_contiguous_match = False
         retrieval_score = 0.50
         matched_chunk = None
+        matched_chunk_idx = 0
 
         def _clean_markdown(text: str) -> str:
             # Remove markdown syntax characters (*, _, #, >, `, |)
@@ -163,7 +166,7 @@ class ValidatorAgent:
             norm_quote = re.sub(r"\s+", " ", cited_quote.lower()).strip(' "\'“”‘’:,;')
             clean_quote = _clean_markdown(cited_quote)
 
-            for p in candidate_chunks:
+            for idx, p in enumerate(candidate_chunks):
                 chk_text = p.get("text", "")
                 norm_chunk_text = re.sub(r"\s+", " ", chk_text.lower())
                 clean_chunk_text = _clean_markdown(chk_text)
@@ -171,6 +174,7 @@ class ValidatorAgent:
                 if (norm_quote and norm_quote in norm_chunk_text) or (clean_quote and clean_quote in clean_chunk_text):
                     is_contiguous_match = True
                     matched_chunk = p
+                    matched_chunk_idx = idx
                     retrieval_score = float(p.get("score") or 0.50)
                     break
 
@@ -199,32 +203,115 @@ class ValidatorAgent:
                 val_issues.append("Contact info does not contain an email address")
 
         # -------------------------------------------------------------------
-        # 5. Dynamic Confidence Computation (Item 4c & B3)
+        # 5. Dynamic Multi-Factor Confidence Computation (Task 6)
         # -------------------------------------------------------------------
-        # Multi-factor confidence:
-        # - Retrieval score normalized (0.15 to 0.35)
-        # - Exact contiguous citation in cited chunk (+0.30)
-        # - Physical page verified (+0.05)
-        # - Format / syntax check passed (+0.15)
-        # - Quality of quote & cleanliness (+0.10)
-        norm_ret = retrieval_score if retrieval_score > 0.05 else (retrieval_score * 30.0)
-        norm_ret = min(max(norm_ret, 0.1), 1.0)
-        base_confidence = 0.15 + (norm_ret * 0.20)
+        # Factor 1: Retrieval score of cited chunk (weight: 0.25)
+        # Normalized from hybrid RRF, dense cosine, cross-encoder, or keyword score
+        if retrieval_score >= 1.0:
+            norm_ret = min(retrieval_score / 4.0, 1.0)
+        elif retrieval_score >= 0.05:
+            norm_ret = min(max(retrieval_score, 0.1), 1.0)
+        elif retrieval_score > 0.0:
+            # RRF scores typically range 0.010 - 0.033
+            norm_ret = min(max((retrieval_score - 0.008) / 0.024, 0.15), 1.0)
+        else:
+            norm_ret = 0.20
 
-        if is_contiguous_match:
-            base_confidence += 0.30
+        # Rank adjustment: top chunk gets 1.0, lower ranks receive minor discounting
+        rank_multiplier = max(1.0 - (matched_chunk_idx * 0.05), 0.75)
+        retrieval_factor = round(norm_ret * rank_multiplier, 3)
+
+        # Factor 2: Validation outcome (weight: 0.45)
+        # (contiguous citation, format check, physical page verification, quote length)
+        quote_score = 0.40 if is_contiguous_match else 0.0
+        
+        # Physical page verification:
         if cited_page is not None and cited_page > 0:
-            base_confidence += 0.05
-        if format_passed:
-            base_confidence += 0.15
-        if len(cited_quote) >= 15 and "..." not in str(field.value):
-            base_confidence += 0.10
+            if matched_chunk and matched_chunk.get("page_number") == cited_page:
+                page_score = 0.20
+            else:
+                page_score = 0.14
+        else:
+            page_score = 0.05
+
+        # Format / syntax verification:
+        format_score = 0.25 if format_passed else 0.0
+
+        # Grounding cleanliness & quote length:
+        q_len = len(cited_quote)
+        if q_len >= 30 and "..." not in str(field.value):
+            clean_score = 0.15
+        elif q_len >= 15:
+            clean_score = 0.10
+        else:
+            clean_score = 0.05
+
+        validation_factor = round(quote_score + page_score + format_score + clean_score, 3)
+
+        # Factor 3: Dual-run & Syntax Agreement (weight: 0.30)
+        # (re-extract agreement or multi-passage corroboration + syntax alignment)
+        if secondary_field and secondary_field.value is not None:
+            s_val = str(secondary_field.value).strip().lower()
+            p_val = str(field.value).strip().lower()
+            if s_val == p_val:
+                agreement_factor = 0.98
+            elif s_val in p_val or p_val in s_val:
+                agreement_factor = 0.85
+            else:
+                s_toks = set(s_val.split())
+                p_toks = set(p_val.split())
+                jaccard = len(s_toks & p_toks) / max(len(s_toks | p_toks), 1)
+                agreement_factor = round(max(0.30, min(0.95, 0.40 + jaccard * 0.55)), 3)
+        else:
+            # Standalone agreement: Value-to-Quote grounding + multi-passage corroboration + syntax match
+            val_norm = str(field.value).strip().lower()
+            quote_norm = cited_quote.lower()
+            
+            # Grounding agreement (0.0 to 0.45)
+            if val_norm and val_norm in quote_norm:
+                grounding_agr = 0.45
+            else:
+                val_toks = set(re.findall(r"\w+", val_norm))
+                quote_toks = set(re.findall(r"\w+", quote_norm))
+                if val_toks and val_toks.issubset(quote_toks):
+                    grounding_agr = 0.40
+                elif val_toks:
+                    ov = len(val_toks & quote_toks) / max(len(val_toks), 1)
+                    grounding_agr = round(0.15 + ov * 0.25, 3)
+                else:
+                    grounding_agr = 0.15
+
+            # Multi-passage corroboration (0.0 to 0.35)
+            corrob_count = 0
+            val_lead = val_norm[:20] if len(val_norm) >= 5 else val_norm
+            for p in retrieved_passages:
+                ptxt = p.get("text", "").lower()
+                if val_lead and val_lead in ptxt:
+                    corrob_count += 1
+            if corrob_count >= 3:
+                corrob_agr = 0.35
+            elif corrob_count == 2:
+                corrob_agr = 0.25
+            else:
+                corrob_agr = 0.15
+
+            # Schema / Type agreement (0.0 to 0.20)
+            schema_agr = 0.20 if format_passed else 0.05
+
+            agreement_factor = round(grounding_agr + corrob_agr + schema_agr, 3)
+
+        # Multi-factor weighted confidence calculation (weights: 0.25, 0.45, 0.30)
+        raw_confidence = (
+            0.25 * retrieval_factor +
+            0.45 * validation_factor +
+            0.30 * agreement_factor
+        )
 
         if val_issues:
-            calculated_confidence = min(round(base_confidence * 0.45, 2), 0.40)
+            calculated_confidence = min(round(raw_confidence * 0.40, 2), 0.39)
             is_valid = False
         else:
-            calculated_confidence = min(round(base_confidence, 2), 0.98)
+            calculated_confidence = max(min(round(raw_confidence, 2), 0.98), 0.45)
             is_valid = True
 
         field.confidence = calculated_confidence
@@ -246,6 +333,7 @@ class ValidatorAgent:
         fields_map: Dict[str, FieldOutput],
         retrieved_evidence_map: Dict[str, List[Dict[str, Any]]],
         field_defs: Dict[str, Any],
+        secondary_fields_map: Optional[Dict[str, FieldOutput]] = None,
     ) -> Tuple[Dict[str, FieldOutput], ValidationSummary, Dict[str, FieldValidation]]:
         """
         Validate all fields in a package, returning updated fields and Section 8.1 ValidationSummary.
@@ -258,13 +346,15 @@ class ValidatorAgent:
         for f_name, field in fields_map.items():
             passages = retrieved_evidence_map.get(f_name, [])
             f_def = field_defs.get(f_name, {})
+            sec_field = secondary_fields_map.get(f_name) if secondary_fields_map else None
 
             val_field, val_detail = self.validate_field(
                 field_name=f_name,
                 field=field,
                 retrieved_passages=passages,
                 field_def=f_def,
-                bid_id=bid_id
+                bid_id=bid_id,
+                secondary_field=sec_field,
             )
             validated_fields[f_name] = val_field
             validations[f_name] = val_detail

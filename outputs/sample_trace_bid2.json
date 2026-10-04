@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:10:57.036858+00:00",
+    "timestamp": "2026-10-04T12:54:18.801925+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid2",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.3
+    "latency_ms": 0.29
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:12:27.307648+00:00",
+    "timestamp": "2026-10-04T12:55:42.314698+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid2",
@@ -54,11 +54,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 90268.34
+    "latency_ms": 83508.93
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T12:13:48.565075+00:00",
+    "timestamp": "2026-10-04T12:57:00.429359+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid2",
@@ -68,19 +68,19 @@
     "output": {
       "extracted_fields_count": 20,
       "found_fields_count": 17,
-      "step_tokens": 78150,
+      "step_tokens": 78278,
       "step_prompt_tokens": 74945,
-      "step_completion_tokens": 3205,
-      "cumulative_tokens": 78150
+      "step_completion_tokens": 3333,
+      "cumulative_tokens": 78278
     },
-    "tokens": 78150,
+    "tokens": 78278,
     "prompt_tokens": 74945,
-    "completion_tokens": 3205,
-    "latency_ms": 81253.29
+    "completion_tokens": 3333,
+    "latency_ms": 78113.17
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T12:14:09.985297+00:00",
+    "timestamp": "2026-10-04T12:57:20.182883+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
@@ -96,127 +96,61 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 21412.68
+    "latency_ms": 19718.5
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T12:14:16.734015+00:00",
+    "timestamp": "2026-10-04T12:57:26.463685+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid2",
       "retry_count": 1,
       "failed_fields": [
-        "Product Specification"
+        "Due Date"
       ]
     },
     "tool_calls": [
       {
         "tool": "retry_extraction",
         "args": {
-          "field": "Product Specification",
-          "query": "Product Specification hardware specifications minimum requirements processor ram storage",
+          "field": "Due Date",
+          "query": "Due Date submission deadline closing date bid opening date",
           "attempt": 1
         },
-        "output_summary": "Result: Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM, 256 GB M.2 NVMe SSD, 15.6\" FHD 1920x1080 display, English US backlit AI hotkey keyboard, Intel Wi-Fi 6E and Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter, and 3-year Dell Limited Hardware Warranty. (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: 06/10/2024 02:00 PM EDT (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
       "retried_fields": [
-        "Product Specification"
+        "Due Date"
       ],
       "retry_details": [
         {
-          "field": "Product Specification",
-          "new_query": "Product Specification hardware specifications minimum requirements processor ram storage",
-          "new_value": "Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM, 256 GB M.2 NVMe SSD, 15.6\" FHD 1920x1080 display, English US backlit AI hotkey keyboard, Intel Wi-Fi 6E and Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter, and 3-year Dell Limited Hardware Warranty.",
+          "field": "Due Date",
+          "new_query": "Due Date submission deadline closing date bid opening date",
+          "new_value": "06/10/2024 02:00 PM EDT",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 1,
-      "step_tokens": 5718,
-      "step_prompt_tokens": 5315,
-      "step_completion_tokens": 403,
-      "cumulative_tokens": 95625
+      "step_tokens": 5367,
+      "step_prompt_tokens": 5214,
+      "step_completion_tokens": 153,
+      "cumulative_tokens": 95402
     },
-    "tokens": 5718,
-    "prompt_tokens": 5315,
-    "completion_tokens": 403,
-    "latency_ms": 6742.1
+    "tokens": 5367,
+    "prompt_tokens": 5214,
+    "completion_tokens": 153,
+    "latency_ms": 6278.75
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T12:14:35.376731+00:00",
+    "timestamp": "2026-10-04T12:57:45.953541+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
       "retry_iteration": 1
-    },
-    "tool_calls": [],
-    "output": {
-      "passed": 16,
-      "failed": 1,
-      "not_found": 3,
-      "needs_retry": true
-    },
-    "tokens": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 18641.26
-  },
-  {
-    "step_id": 7,
-    "timestamp": "2026-10-04T12:14:43.061977+00:00",
-    "agent": "retry_refinement",
-    "input": {
-      "bid_id": "Bid2",
-      "retry_count": 2,
-      "failed_fields": [
-        "Product Specification"
-      ]
-    },
-    "tool_calls": [
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Product Specification",
-          "query": "Product Specification hardware specifications minimum requirements processor ram storage",
-          "attempt": 2
-        },
-        "output_summary": "Result: Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit display, English US backlit AI hotkey keyboard with numeric keypad, Intel Wi-Fi 6E AX211 and Bluetooth 5.3 wireless card, 3-cell 54 Wh battery, 65W USB Type-C AC adapter, and 3-year Dell Limited Hardware Warranty. (status: FOUND, confidence: 0.9)"
-      }
-    ],
-    "output": {
-      "retried_fields": [
-        "Product Specification"
-      ],
-      "retry_details": [
-        {
-          "field": "Product Specification",
-          "new_query": "Product Specification hardware specifications minimum requirements processor ram storage",
-          "new_value": "Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit display, English US backlit AI hotkey keyboard with numeric keypad, Intel Wi-Fi 6E AX211 and Bluetooth 5.3 wireless card, 3-cell 54 Wh battery, 65W USB Type-C AC adapter, and 3-year Dell Limited Hardware Warranty.",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        }
-      ],
-      "new_retry_count": 2,
-      "step_tokens": 5601,
-      "step_prompt_tokens": 5315,
-      "step_completion_tokens": 286,
-      "cumulative_tokens": 112983
-    },
-    "tokens": 5601,
-    "prompt_tokens": 5315,
-    "completion_tokens": 286,
-    "latency_ms": 7683.15
-  },
-  {
-    "step_id": 8,
-    "timestamp": "2026-10-04T12:15:03.627431+00:00",
-    "agent": "validator",
-    "input": {
-      "bid_id": "Bid2",
-      "retry_iteration": 2
     },
     "tool_calls": [],
     "output": {
@@ -228,11 +162,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 20562.55
+    "latency_ms": 19488.35
   },
   {
-    "step_id": 9,
-    "timestamp": "2026-10-04T12:15:03.630424+00:00",
+    "step_id": 7,
+    "timestamp": "2026-10-04T12:57:45.955034+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid2",
@@ -245,16 +179,16 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 124740
+      "cumulative_tokens": 107159
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 1.39
+    "latency_ms": 0.62
   },
   {
-    "step_id": 10,
-    "timestamp": "2026-10-04T12:15:03.632445+00:00",
+    "step_id": 8,
+    "timestamp": "2026-10-04T12:57:45.956789+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid2"
@@ -274,6 +208,6 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.35
+    "latency_ms": 0.14
   }
 ]

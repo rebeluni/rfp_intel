@@ -248,6 +248,11 @@ class ExtractionPipeline:
                 field_defs=field_defs
             )
 
+            conf_scores = [f.confidence for f in validated_fields.values() if f.status == "FOUND"]
+            unique_confs = sorted(set(conf_scores))
+            logger.info(f"[Validator] Confidence distribution for '{bid_id}' (n={len(conf_scores)}): min={min(conf_scores) if conf_scores else 0}, max={max(conf_scores) if conf_scores else 0}, unique={unique_confs}")
+            print(f"[*] [{bid_id}] Confidence distribution across {len(conf_scores)} found fields: min={min(conf_scores) if conf_scores else 0:.2f}, max={max(conf_scores) if conf_scores else 0:.2f}, distinct={len(unique_confs)} values: {unique_confs}", flush=True)
+
             needs_retry = (len(summary.failed) > 0) and (retry_count < state.get("max_retries", settings.MAX_VALIDATION_RETRIES))
 
             ctx.complete({

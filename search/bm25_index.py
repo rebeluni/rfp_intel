@@ -97,7 +97,7 @@ class BM25Index:
             chk = self.chunks[idx]
             meta = chk.metadata
 
-            if bid_id and meta.bid_id != bid_id:
+            if bid_id and meta.bid_id.lower() != bid_id.lower():
                 continue
             if doc_type and meta.doc_type.value != doc_type:
                 continue

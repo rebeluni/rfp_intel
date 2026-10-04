@@ -11,15 +11,15 @@
           "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950"
         }
       ],
-      "confidence": 0.77,
-      "notes": "Extracted closing date and time from portal bid details schedule.",
+      "confidence": 0.74,
+      "notes": null,
       "status": "FOUND",
       "specialist": "dates_logistics",
       "needs_review": false,
       "review_reason": null
     },
     "Bid Submission Type": {
-      "value": "State's eMaryland Marketplace Advantage (eMMA) e-Procurement system",
+      "value": "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system.",
       "sources": [
         {
           "file": "PORFP_-_Dell_Laptop_Final.pdf",
@@ -28,7 +28,7 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.74,
       "notes": null,
       "status": "FOUND",
       "specialist": "dates_logistics",
@@ -55,7 +55,7 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.65,
       "notes": "No pre-bid meeting mentioned in solicitation",
       "status": "FOUND",
       "specialist": "dates_logistics",
@@ -72,7 +72,7 @@
           "chunk_id": "Bid2_Dell_Laptop_Specs_p2_tbl_0_8cba564b"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.66,
       "notes": null,
       "status": "FOUND",
       "specialist": "dates_logistics",
@@ -89,7 +89,7 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p2_c0_060ad1b3"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.74,
       "notes": "The delivery window is explicitly stated as within 45 days of award.",
       "status": "FOUND",
       "specialist": "dates_logistics",
@@ -106,8 +106,8 @@
           "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950"
         }
       ],
-      "confidence": 0.77,
-      "notes": "Extracted from the portal bid details title field.",
+      "confidence": 0.74,
+      "notes": "Extracted the official bid solicitation title from the portal summary document.",
       "status": "FOUND",
       "specialist": "product_specs",
       "needs_review": false,
@@ -123,41 +123,41 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23"
         }
       ],
-      "confidence": 0.77,
-      "notes": null,
+      "confidence": 0.75,
+      "notes": "Extracted the laptop model number from the product specifications in the procurement scope.",
       "status": "FOUND",
       "specialist": "product_specs",
       "needs_review": false,
       "review_reason": null
     },
     "Part_no": {
-      "value": "210-BLYZ, WD22TB4",
+      "value": "210-BLYZ, 379-BFNZ, 619-ARSB, 658-BCSB, 338-CNRG, 338-CNRK, 321-BKTQ, 409-BCXY, 631-BBSQ, 370-BBTL, 400-BRFT, 391-BJHB, 583-BLNH, 555-BKQC, 555-BKLQ, 451-BDGX, 492-BDMN, 346-BKLV, 537-BBDO, 340-DMNY, 340-AGIK, 387-BBPC, 817-BBBB, 658-BFQB, 340-DMMK, 389-FGSN, 319-BBKK, 634-BRWG, 379-BDZB, 362-7806, 364-1846, 364-4107, 365-0257, 366-0135, 366-0141, 371-0941, 375-3088, 383-0464, WD22TB4",
       "sources": [
         {
           "file": "Dell_Laptop_Specs.pdf",
           "page": 1,
-          "quote": "210-BLYZ | Dell Latitude 5550 XCTO Base |",
+          "quote": "210-BLYZ",
           "chunk_id": "Bid2_Dell_Laptop_Specs_p1_merged_7d4edb54"
         }
       ],
-      "confidence": 0.95,
-      "notes": "Extracted the base system SKU and dock part number from the specification and scope sections.",
+      "confidence": 0.74,
+      "notes": null,
       "status": "FOUND",
       "specialist": "product_specs",
       "needs_review": false,
       "review_reason": null
     },
     "Product": {
-      "value": "1. SI# CC7802 Dell Latitude 5550, Quantity: 30; 2. Dell Thunderbolt 4 Dock – WD22TB4, Quantity: 30",
+      "value": "1. SI# CC7802 Dell Latitude 5550 (Qty: 30), Laptops must be Microsoft Copilot ready; 2. Dell Thunderbolt 4 Dock – WD22TB4 (Qty: 30); 3. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years",
       "sources": [
         {
           "file": "PORFP_-_Dell_Laptop_Final.pdf",
           "page": 3,
-          "quote": "1. SI# CC7802 Dell Latitude 5550\nSI# CC7802 Dell Latitude\n5550 *Laptops must be\nMicrosoft Copilot ready*\nSI# CC7802\n30 06/10/2024 2. Dell Thunderbolt 4\nDock – WD22TB4\nDell Thunderbolt 4 Dock –\nWD22TB4\nWD22TB4\n30 06/10/2024",
+          "quote": "1. SI# CC7802 Dell\nLatitude 5550\nSI# CC7802 Dell Latitude\n5550 *Laptops must be\nMicrosoft Copilot ready*\nSI# CC7802\n30 06/10/2024 2. Dell Thunderbolt 4\nDock – WD22TB4\nDell Thunderbolt 4 Dock –\nWD22TB4\nWD22TB4\n30 06/10/2024",
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.7,
       "notes": null,
       "status": "FOUND",
       "specialist": "product_specs",
@@ -165,7 +165,7 @@
       "review_reason": null
     },
     "Bid Summary": {
-      "value": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to acquire enough units to accommodate MD529 employees who have been included in the staff as of June 1, 2023. The procurement scope includes a quantity of thirty Microsoft Copilot ready Dell Latitude 5550 laptops (SI# CC7802) and thirty Dell Thunderbolt 4 Docks (WD22TB4). Deliverables require a Dell Limited Hardware Warranty extended for 3 years on all purchased machines, with a warranty certificate or affidavit to be presented upon award. All items have a due date of June 10, 2024.",
+      "value": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to accommodate MD529 employees who have been included in the staff. The procurement objective is to acquire 30 units of Dell Latitude 5550 laptops that are Microsoft Copilot ready along with 30 units of Dell Thunderbolt 4 Docks (Model WD22TB4). Deliverables include the hardware items accompanied by a 3-year Dell Limited Hardware Warranty extended for all machines purchased, with a warranty certificate or affidavit to be presented upon award. All items are due by June 10, 2024.",
       "sources": [
         {
           "file": "PORFP_-_Dell_Laptop_Final.pdf",
@@ -174,24 +174,24 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23"
         }
       ],
-      "confidence": 0.95,
-      "notes": "Synthesized summary based on the solicitation scope, objectives, and equipment specifications.",
+      "confidence": 0.87,
+      "notes": "Synthesized a concise 3-sentence summary from the scope and description sections outlining the procurement objectives, equipment quantities, and warranty deliverables.",
       "status": "FOUND",
       "specialist": "product_specs",
       "needs_review": false,
       "review_reason": null
     },
     "Product Specification": {
-      "value": "Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit display, English US backlit AI hotkey keyboard with numeric keypad, Intel Wi-Fi 6E AX211 and Bluetooth 5.3 wireless card, 3-cell 54 Wh battery, 65W USB Type-C AC adapter, and 3-year Dell Limited Hardware Warranty.",
+      "value": "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, Integrated Intel graphics for Intel Core Ultra 5 125U processor, 16 GB (2 x 8 GB, DDR5, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit 45% NTSC FHD Cam, English US backlit AI hotkey keyboard with numeric keypad (99-key), Intel Wi-Fi 6E AX211 Bluetooth 5.3 wireless card, 3-cell 54 Wh ExpressCharge Capable battery, 65W USB Type-C AC adapter, ENERGY STAR Qualified, EPEAT 2018 Registered (Gold)",
       "sources": [
         {
           "file": "Dell_Laptop_Specs.pdf",
           "page": 1,
-          "quote": "Dell Latitude 5550 XCTO Base",
+          "quote": "Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo)",
           "chunk_id": "Bid2_Dell_Laptop_Specs_p1_merged_7d4edb54"
         }
       ],
-      "confidence": 0.77,
+      "confidence": 0.66,
       "notes": null,
       "status": "FOUND",
       "specialist": "product_specs",
@@ -208,8 +208,8 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f"
         }
       ],
-      "confidence": 0.95,
-      "notes": "Extracted official PORFP Number and noted the associated eMMA project number.",
+      "confidence": 0.84,
+      "notes": null,
       "status": "FOUND",
       "specialist": "commercial_legal",
       "needs_review": false,
@@ -239,14 +239,14 @@
       "value": "Contract Affidavit and Mercury Affidavit",
       "sources": [
         {
-          "file": "Contract_Affidavit.pdf",
+          "file": "Mercury_Affidavit.pdf",
           "page": 1,
-          "quote": "CONTRACT AFFIDAVIT",
-          "chunk_id": "Bid2_Contract_Affidavit_p1_c0_4593abdf"
+          "quote": "MERCURY AFFIDAVIT",
+          "chunk_id": "Bid2_Mercury_Affidavit_p1_c0_520e4b81"
         }
       ],
-      "confidence": 0.95,
-      "notes": "The documents require submission of a Contract Affidavit and a Mercury Affidavit.",
+      "confidence": 0.68,
+      "notes": "The documents require a Contract Affidavit and a Mercury Affidavit to be submitted.",
       "status": "FOUND",
       "specialist": "commercial_legal",
       "needs_review": false,
@@ -258,12 +258,12 @@
         {
           "file": "PORFP_-_Dell_Laptop_Final.pdf",
           "page": 1,
-          "quote": "Manufacturer Name\nDell",
+          "quote": "Manufacturer Name\n\nDell",
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f"
         }
       ],
-      "confidence": 0.77,
-      "notes": "Manufacturer Name is explicitly specified as Dell in the solicitation.",
+      "confidence": 0.75,
+      "notes": "Manufacturer name for the registration/products is specified as Dell in the PORFP general information section.",
       "status": "FOUND",
       "specialist": "commercial_legal",
       "needs_review": false,
@@ -279,8 +279,8 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p1_c0_9897401f"
         }
       ],
-      "confidence": 0.77,
-      "notes": "The referenced master contract vehicle for the solicitation is identified as the Desktop, Laptop and Tablet 2015 Master Contract, 060B5400007.",
+      "confidence": 0.74,
+      "notes": "The Master Contract vehicle is explicitly referenced for the secondary competition PORFP.",
       "status": "FOUND",
       "specialist": "commercial_legal",
       "needs_review": false,
@@ -296,7 +296,7 @@
           "chunk_id": "Bid2_Dell_Laptops_w_Extended_Warranty_Bid_Information_3_BidNet_Direct_p1_c0_5f92e950"
         }
       ],
-      "confidence": 0.95,
+      "confidence": 0.81,
       "notes": null,
       "status": "FOUND",
       "specialist": "commercial_legal",
@@ -313,8 +313,8 @@
           "chunk_id": "Bid2_PORFP_Dell_Laptop_Final_p3_c0_c95fef23"
         }
       ],
-      "confidence": 0.77,
-      "notes": "Extracted from the agency mailing address and contact details representing the buying organization.",
+      "confidence": 0.74,
+      "notes": null,
       "status": "FOUND",
       "specialist": "commercial_legal",
       "needs_review": false,

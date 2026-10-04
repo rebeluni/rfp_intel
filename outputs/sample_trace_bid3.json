@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:21:56.378016+00:00",
+    "timestamp": "2026-10-04T12:58:38.648742+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid3",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.26
+    "latency_ms": 0.28
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:22:39.618806+00:00",
+    "timestamp": "2026-10-04T12:59:23.675462+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid3",
@@ -54,11 +54,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 43236.47
+    "latency_ms": 45023.26
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T12:23:57.596666+00:00",
+    "timestamp": "2026-10-04T13:00:41.533144+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid3",
@@ -68,89 +68,23 @@
     "output": {
       "extracted_fields_count": 20,
       "found_fields_count": 17,
-      "step_tokens": 63674,
+      "step_tokens": 63354,
       "step_prompt_tokens": 60049,
-      "step_completion_tokens": 3625,
-      "cumulative_tokens": 63674
+      "step_completion_tokens": 3305,
+      "cumulative_tokens": 63354
     },
-    "tokens": 63674,
+    "tokens": 63354,
     "prompt_tokens": 60049,
-    "completion_tokens": 3625,
-    "latency_ms": 77975.9
+    "completion_tokens": 3305,
+    "latency_ms": 77856.3
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T12:24:10.426189+00:00",
+    "timestamp": "2026-10-04T13:00:54.287202+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid3",
       "retry_iteration": 0
-    },
-    "tool_calls": [],
-    "output": {
-      "passed": 17,
-      "failed": 1,
-      "not_found": 2,
-      "needs_retry": true
-    },
-    "tokens": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 12827.13
-  },
-  {
-    "step_id": 5,
-    "timestamp": "2026-10-04T12:24:15.054585+00:00",
-    "agent": "retry_refinement",
-    "input": {
-      "bid_id": "Bid3",
-      "retry_count": 1,
-      "failed_fields": [
-        "Any Additional Documentation Required"
-      ]
-    },
-    "tool_calls": [
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Any Additional Documentation Required",
-          "query": "Any Additional Documentation Required mandatory forms form 1295 conflict of interest CIQ",
-          "attempt": 1
-        },
-        "output_summary": "Result: Contract Affidavit and Non-Collusion Certification, Mercury Content Affidavit, and Warranty certificate or Affidavit to be presented upon award (status: FOUND, confidence: 0.9)"
-      }
-    ],
-    "output": {
-      "retried_fields": [
-        "Any Additional Documentation Required"
-      ],
-      "retry_details": [
-        {
-          "field": "Any Additional Documentation Required",
-          "new_query": "Any Additional Documentation Required mandatory forms form 1295 conflict of interest CIQ",
-          "new_value": "Contract Affidavit and Non-Collusion Certification, Mercury Content Affidavit, and Warranty certificate or Affidavit to be presented upon award",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        }
-      ],
-      "new_retry_count": 1,
-      "step_tokens": 4231,
-      "step_prompt_tokens": 4112,
-      "step_completion_tokens": 119,
-      "cumulative_tokens": 77829
-    },
-    "tokens": 4231,
-    "prompt_tokens": 4112,
-    "completion_tokens": 119,
-    "latency_ms": 4626.52
-  },
-  {
-    "step_id": 6,
-    "timestamp": "2026-10-04T12:24:23.260134+00:00",
-    "agent": "validator",
-    "input": {
-      "bid_id": "Bid3",
-      "retry_iteration": 1
     },
     "tool_calls": [],
     "output": {
@@ -162,11 +96,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 8205.55
+    "latency_ms": 12750.63
   },
   {
-    "step_id": 7,
-    "timestamp": "2026-10-04T12:24:23.263911+00:00",
+    "step_id": 5,
+    "timestamp": "2026-10-04T13:00:54.289697+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid3",
@@ -179,16 +113,16 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 84148
+      "cumulative_tokens": 73236
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.55
+    "latency_ms": 0.64
   },
   {
-    "step_id": 8,
-    "timestamp": "2026-10-04T12:24:23.265288+00:00",
+    "step_id": 6,
+    "timestamp": "2026-10-04T13:00:54.291724+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid3"
@@ -208,6 +142,6 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.33
+    "latency_ms": 0.34
   }
 ]

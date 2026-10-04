@@ -173,12 +173,21 @@ class ReconciliationAgent:
             # Requirement 2 / Task A2: Re-validate amended field before accepting
             # -------------------------------------------------------------
             if self.validator is not None:
-                val_field, val_detail = self.validator.validate_field(
-                    field_name=field_name,
-                    field=candidate_field,
-                    retrieved_passages=[matching_chunk],
-                    bid_id=bid_id
-                )
+                try:
+                    val_field, val_detail = self.validator.validate_field(
+                        field_name=field_name,
+                        field=candidate_field,
+                        retrieved_passages=[matching_chunk],
+                        bid_id=bid_id,
+                        secondary_field=updated_fields.get(field_name),
+                    )
+                except TypeError:
+                    val_field, val_detail = self.validator.validate_field(
+                        field_name=field_name,
+                        field=candidate_field,
+                        retrieved_passages=[matching_chunk],
+                        bid_id=bid_id,
+                    )
                 if not val_detail.is_valid:
                     logger.warning(
                         f"[Reconciliation] Amended field '{field_name}' failed re-validation "

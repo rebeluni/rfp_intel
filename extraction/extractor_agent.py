@@ -58,7 +58,7 @@ class ExtractorAgent:
             contact_chunks = []
             for chk in self.retriever.bm25_index.chunks:
                 meta = chk.metadata
-                if meta.bid_id != bid_id:
+                if meta.bid_id.lower() != bid_id.lower():
                     continue
                 if exclude_doc_type:
                     dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
@@ -98,7 +98,7 @@ class ExtractorAgent:
             doc_chunks = []
             for chk in self.retriever.bm25_index.chunks:
                 meta = chk.metadata
-                if meta.bid_id != bid_id:
+                if meta.bid_id.lower() != bid_id.lower():
                     continue
                 if exclude_doc_type:
                     dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
@@ -138,7 +138,7 @@ class ExtractorAgent:
             part_chunks = []
             for chk in self.retriever.bm25_index.chunks:
                 meta = chk.metadata
-                if meta.bid_id != bid_id:
+                if meta.bid_id.lower() != bid_id.lower():
                     continue
                 if exclude_doc_type:
                     dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
@@ -174,7 +174,7 @@ class ExtractorAgent:
             summary_chunks = []
             for chk in self.retriever.bm25_index.chunks:
                 meta = chk.metadata
-                if meta.bid_id != bid_id:
+                if meta.bid_id.lower() != bid_id.lower():
                     continue
                 if exclude_doc_type:
                     dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
