@@ -47,8 +47,17 @@ class DocumentChunker:
 
         # Merge chunks under ~40 tokens into their neighbours on the same page
         merged_chunks = self._merge_small_chunks(raw_chunks, doc)
-        doc.chunks = merged_chunks
-        return merged_chunks
+
+        # Filter out blank form widget chunks (Task E1)
+        valid_chunks = []
+        for chk in merged_chunks:
+            unfilled_count = len(re.findall(r"\[unfilled/blank\]", chk.text, re.IGNORECASE))
+            if unfilled_count >= 5:
+                continue
+            valid_chunks.append(chk)
+
+        doc.chunks = valid_chunks
+        return valid_chunks
 
     def _chunk_page(
         self,
