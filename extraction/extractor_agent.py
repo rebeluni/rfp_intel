@@ -48,8 +48,45 @@ class ExtractorAgent:
         field_def: Dict[str, Any],
         bid_id: str,
         top_k: int = 5,
+        exclude_doc_type: Optional[str] = "addendum",
     ) -> List[Dict[str, Any]]:
         """Retrieve top candidate chunks for a specific field filtered by bid_id."""
+        import re
+
+        # Task A7: contact_info searches across all chunks of the bid for name, email, and phone
+        if field_name == "contact_info" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            contact_chunks = []
+            for chk in self.retriever.bm25_index.chunks:
+                meta = chk.metadata
+                if meta.bid_id != bid_id:
+                    continue
+                if exclude_doc_type:
+                    dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                    if dt_val.lower() == exclude_doc_type.lower():
+                        continue
+                t = chk.text
+                has_email = "@" in t
+                has_phone = bool(re.search(r"\b(?:\d{3}[-.\s]??\d{3}[-.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-.\s]??\d{4})\b", t))
+                has_contact_kw = any(k in t.lower() for k in ["poc", "buyer", "contact", "procurement officer", "phone", "email"])
+                if has_email or has_phone or (has_contact_kw and ("name" in t.lower() or "address" in t.lower())):
+                    score = 2.0 if (has_email and has_phone) else (1.5 if (has_email or has_phone) else 1.0)
+                    contact_chunks.append((chk, score))
+
+            if contact_chunks:
+                contact_chunks.sort(key=lambda x: x[1], reverse=True)
+                passages = []
+                for chk, score in contact_chunks[:top_k]:
+                    passages.append({
+                        "chunk_id": chk.chunk_id,
+                        "file_name": chk.metadata.file_name,
+                        "page_number": chk.metadata.page_number,
+                        "text": chk.text,
+                        "score": score,
+                        "section": chk.metadata.section,
+                        "doc_type": chk.metadata.doc_type.value if hasattr(chk.metadata.doc_type, "value") else str(chk.metadata.doc_type),
+                    })
+                return passages
+
         hints = field_def.get("query_expansion_hints", [field_name])
         # Formulate query from field name and top 2 hints
         query = f"{field_name} {' '.join(hints[:2])}"
@@ -58,6 +95,7 @@ class ExtractorAgent:
             query=query,
             bid_id=bid_id,
             top_k=top_k,
+            exclude_doc_type=exclude_doc_type,
             mode="hybrid",
         )
 

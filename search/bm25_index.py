@@ -72,6 +72,7 @@ class BM25Index:
         top_k: int = 20,
         bid_id: Optional[str] = None,
         doc_type: Optional[str] = None,
+        exclude_doc_type: Optional[str] = None,
         addendum_number: Optional[int] = None,
         is_table: Optional[bool] = None,
     ) -> List[Tuple[DocumentChunk, float]]:
@@ -100,6 +101,10 @@ class BM25Index:
                 continue
             if doc_type and meta.doc_type.value != doc_type:
                 continue
+            if exclude_doc_type:
+                dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                if dt_val.lower() == exclude_doc_type.lower():
+                    continue
             if addendum_number is not None and meta.addendum_number != addendum_number:
                 continue
             if is_table is not None and meta.is_table != is_table:

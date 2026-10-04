@@ -27,10 +27,12 @@ class ReconciliationAgent:
     def __init__(
         self,
         retriever: Optional[HybridRetriever] = None,
-        llm_client: Optional[GeminiClient] = None
+        llm_client: Optional[GeminiClient] = None,
+        validator: Optional[Any] = None
     ):
         self.retriever = retriever or HybridRetriever()
         self.llm_client = llm_client or get_llm_client()
+        self.validator = validator
 
     def get_addendum_chunks(self, bid_id: str) -> List[Dict[str, Any]]:
         """
@@ -138,14 +140,13 @@ class ReconciliationAgent:
                 continue
 
             # -------------------------------------------------------------
-            # Requirement 2: Compute dynamic confidence (not flat 0.95)
+            # Requirement 2 / Task A2: Compute dynamic confidence (not flat 0.95)
             # -------------------------------------------------------------
-            dyn_confidence = 0.85
-            if len(norm_quote.split()) >= 4:
-                dyn_confidence += 0.05
-            if re.search(r"\d{4}", new_val):  # Date/numeric pattern grounded
-                dyn_confidence += 0.05
-            dyn_confidence = min(round(dyn_confidence, 2), 0.98)
+            chunk_score = float(matching_chunk.get("score", 1.0))
+            quote_words = len(norm_quote.split())
+            quote_bonus = min(0.10, quote_words * 0.008)
+            grounding_bonus = 0.05 if (re.search(r"\d{4}", str(new_val)) or any(c.isdigit() for c in str(new_val))) else 0.02
+            dyn_confidence = round(min(0.80 + quote_bonus + grounding_bonus + min(0.05, chunk_score * 0.03), 0.98), 2)
 
             logger.info(
                 f"[Reconciliation] Field '{field_name}' amended by addendum: "
@@ -158,16 +159,8 @@ class ReconciliationAgent:
                 quote=quote,
                 chunk_id=matching_chunk.get("chunk_id")
             )
-            change = AddendumChange(
-                field=field_name,
-                old_value=str(updated_fields[field_name].value) if updated_fields[field_name].value is not None else None,
-                new_value=new_val,
-                source=source,
-                reason=reason
-            )
-            change_log.append(change)
 
-            updated_fields[field_name] = FieldOutput(
+            candidate_field = FieldOutput(
                 value=new_val,
                 sources=[source] + [s for s in updated_fields[field_name].sources if s.file != source.file],
                 confidence=dyn_confidence,
@@ -176,7 +169,43 @@ class ReconciliationAgent:
                 specialist=updated_fields[field_name].specialist
             )
 
-            # Re-validate: update validation summary
+            # -------------------------------------------------------------
+            # Requirement 2 / Task A2: Re-validate amended field before accepting
+            # -------------------------------------------------------------
+            if self.validator is not None:
+                val_field, val_detail = self.validator.validate_field(
+                    field_name=field_name,
+                    field=candidate_field,
+                    retrieved_passages=[matching_chunk],
+                    bid_id=bid_id
+                )
+                if not val_detail.is_valid:
+                    logger.warning(
+                        f"[Reconciliation] Amended field '{field_name}' failed re-validation "
+                        f"({val_detail.issue_type}: {val_detail.feedback}). Rejecting amendment."
+                    )
+                    continue
+                candidate_field = val_field
+
+            logger.info(
+                f"[Reconciliation] Field '{field_name}' amendment accepted: "
+                f"'{updated_fields[field_name].value}' -> '{new_val}' (conf: {candidate_field.confidence})"
+            )
+
+            change = AddendumChange(
+                field=field_name,
+                old_value=str(updated_fields[field_name].value) if updated_fields[field_name].value is not None else None,
+                new_value=new_val,
+                source=source,
+                quote=quote,
+                file=file_name,
+                page=int(page_no) if str(page_no).isdigit() else 1,
+                reason=reason
+            )
+            change_log.append(change)
+            updated_fields[field_name] = candidate_field
+
+            # Re-validate: update validation summary only on successful validation
             if summary is not None:
                 if field_name not in summary.passed:
                     summary.passed.append(field_name)

@@ -71,6 +71,7 @@ class HybridRetriever:
         top_k: Optional[int] = None,
         bid_id: Optional[str] = None,
         doc_type: Optional[str] = None,
+        exclude_doc_type: Optional[str] = None,
         addendum_number: Optional[int] = None,
         is_table: Optional[bool] = None,
         mode: str = "hybrid",  # "hybrid", "dense_only", "bm25_only", "hybrid_norerank"
@@ -94,6 +95,7 @@ class HybridRetriever:
                 top_k=top_k,
                 bid_id=bid_id,
                 doc_type=doc_type,
+                exclude_doc_type=exclude_doc_type,
                 addendum_number=addendum_number,
                 is_table=is_table,
             )
@@ -109,6 +111,7 @@ class HybridRetriever:
                 top_k=top_k,
                 bid_id=bid_id,
                 doc_type=doc_type,
+                exclude_doc_type=exclude_doc_type,
                 addendum_number=addendum_number,
                 is_table=is_table,
             )
@@ -126,6 +129,7 @@ class HybridRetriever:
             top_k=pool_size,
             bid_id=bid_id,
             doc_type=doc_type,
+            exclude_doc_type=exclude_doc_type,
             addendum_number=addendum_number,
             is_table=is_table,
         )
@@ -135,6 +139,7 @@ class HybridRetriever:
             top_k=pool_size,
             bid_id=bid_id,
             doc_type=doc_type,
+            exclude_doc_type=exclude_doc_type,
             addendum_number=addendum_number,
             is_table=is_table,
         )

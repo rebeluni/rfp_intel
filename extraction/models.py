@@ -46,7 +46,10 @@ class AddendumChange(BaseModel):
     field: str = Field(description="Name of the amended field")
     old_value: Optional[str] = Field(default=None, description="Base value before addendum")
     new_value: str = Field(description="Amended value from addendum, preserving exact timezone and details")
-    source: FieldSource = Field(description="Citation in the addendum document")
+    source: Optional[FieldSource] = Field(default=None, description="Citation in the addendum document")
+    quote: Optional[str] = Field(default=None, description="Exact contiguous verbatim quote from the cited chunk")
+    file: Optional[str] = Field(default=None, description="Source file name containing the evidence")
+    page: Optional[int] = Field(default=None, description="Physical page number in the source document")
     reason: Optional[str] = Field(default=None, description="Explanation of amendment")
 
 

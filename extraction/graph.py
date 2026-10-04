@@ -64,7 +64,7 @@ class ExtractionPipeline:
         self.llm_client = get_llm_client()
         self.extractor = ExtractorAgent(retriever=self.retriever, llm_client=self.llm_client)
         self.validator = ValidatorAgent(retriever=self.retriever, llm_client=self.llm_client)
-        self.reconciler = ReconciliationAgent(retriever=self.retriever, llm_client=self.llm_client)
+        self.reconciler = ReconciliationAgent(retriever=self.retriever, llm_client=self.llm_client, validator=self.validator)
         self.tracer = tracer or StructuredTracer()
         self.graph = self._build_graph()
 
