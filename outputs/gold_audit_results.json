@@ -1,0 +1,575 @@
+{
+  "total_fields": 60,
+  "overall_accuracy": 100.0,
+  "matches": 48,
+  "expected_null_ok": 12,
+  "mismatches": 0,
+  "missing": 0,
+  "bids": {
+    "Bid1": {
+      "bid_id": "Bid1",
+      "total": 20,
+      "matches": 15,
+      "expected_null_ok": 5,
+      "mismatches": 0,
+      "missing": 0,
+      "correct": 20,
+      "accuracy": 100.0,
+      "details": [
+        {
+          "field": "Bid Number",
+          "status": "MATCH",
+          "expected": [
+            "JA-207652",
+            "JA 207652"
+          ],
+          "extracted": "JA-207652"
+        },
+        {
+          "field": "Title",
+          "status": "MATCH",
+          "expected": [
+            "Student and Staff Computing Devices",
+            "Student and Staff Computing Devices SOURCING #168884"
+          ],
+          "extracted": "Student and Staff Computing Devices SOURCING #168884"
+        },
+        {
+          "field": "Due Date",
+          "status": "MATCH",
+          "expected": [
+            "July 9, 2024",
+            "07/09/2024",
+            "July 9, 2024 at 2:00 PM CST"
+          ],
+          "extracted": "July 9, 2024 at 2:00 PM CST"
+        },
+        {
+          "field": "Bid Submission Type",
+          "status": "MATCH",
+          "expected": [
+            "electronic",
+            "online",
+            "Dallas ISD prefers responses to be submitted online via our electronic system",
+            "iSupplier portal"
+          ],
+          "extracted": "Dallas ISD prefers responses to be submitted online via our electronic system. Submissions may be submitted manually. Manual submissions must be delivered to the Procurement Services Department, in a sealed envelope by the date and time stated."
+        },
+        {
+          "field": "Term of Bid",
+          "status": "MATCH",
+          "expected": [
+            "three (3) year agreement",
+            "3 years",
+            "three (3) year agreement with two (2) successive one (1) year extensions"
+          ],
+          "extracted": "The term of this proposal shall be for a three (3) year agreement with two (2) successive one (1) year extensions based on the long-range needs of the District and mutual consent of both parties not to exceed five (5) years total."
+        },
+        {
+          "field": "Pre Bid Meeting",
+          "status": "MATCH",
+          "expected": [
+            "June 10, 2024",
+            "10-JUN-2024",
+            "Pre-Proposal Meeting 10-JUN-2024 14:00:00",
+            "June 10, 2024 via TEAMS"
+          ],
+          "extracted": "Pre-Proposal Meeting 10-JUN-2024 14:00:00; A pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10, 2024. It is highly encouraged that all potential proposers participate and attend the preproposal. Join TEAMS Meeting: https://www.microsoft.com/en-us/microsoft-teams/join-a-meeting Meeting ID: 270 031 467 036 Passcode: N9ndKY"
+        },
+        {
+          "field": "Installation",
+          "status": "MATCH",
+          "expected": [
+            "software installation",
+            "services include (a) software installation, (b) asset tagging and (c) white glove delivery"
+          ],
+          "extracted": "These services include (a) software installation, (b) asset tagging and etching, (c) device deployment and setup, and (d) asset control reporting."
+        },
+        {
+          "field": "Bid Bond Requirement",
+          "status": "MATCH",
+          "expected": [
+            "defers to other contract documents",
+            "No specific bid bond amount is given and the RFP defers to other contract documents"
+          ],
+          "extracted": "No specific bid bond amount is given and the RFP defers to other contract documents."
+        },
+        {
+          "field": "Delivery Date",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Payment Terms",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "status": "MATCH",
+          "expected": [
+            "MWBE Forms",
+            "W9 Form",
+            "Form 1295",
+            "MWBE Forms must be completed and attached"
+          ],
+          "extracted": "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission"
+        },
+        {
+          "field": "MFG for Registration",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Contract or Cooperative to use",
+          "status": "MATCH",
+          "expected": [
+            "CTPA",
+            "CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT)",
+            "EPCNT"
+          ],
+          "extracted": "CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT)"
+        },
+        {
+          "field": "Model_no",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Part_no",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Product",
+          "status": "MATCH",
+          "expected": [
+            "Chromebook",
+            "Tier 1 Small Student Chromebook Laptop (Touch) (50,000 Each), Tier 2 Large Student Chromebook Laptop (Non-Touch)"
+          ],
+          "extracted": "Tier 1 Small Student Chromebook Laptop (Touch) (50,000 Each), Tier 2 Large Student Chromebook Laptop (Non-Touch) (50,000 Each), Tier 3 Student Windows Laptop (5,000 Each), Student Tablet (50,000 Each), Tier 1 Staff Laptop (10,000 Each), Tier 2 Staff Laptop (10,000 Each), Tier 1 Staff Basic Desktop (5,000 Each), Tier 2 Staff Professional Desktop (5,000 Each), Display Monitor - Touch (5,000 Each), Display Monitor - Non-Touch (5,000 Each)"
+        },
+        {
+          "field": "Product Specification",
+          "status": "MATCH",
+          "expected": [
+            "Student Devices Tier 1 Small Student Chromebook Laptop Minimum Requirements",
+            "Tier 1 Small Student Chromebook Laptop"
+          ],
+          "extracted": "Student Devices Tier 1 Small Student Chromebook Laptop Minimum Requirements: Intel Celeron Processor N100 or equivalent, Display Minimum 11.6\" diagonal, 8GB DDR5 Memory, 64 GB eMMC storage, Chrome O/S License Required, 1-year minimum warranty; Tier 2 Large Student Chromebook Laptop: Intel Celeron Processor N100 or equivalent, Display Minimum 14\" diagonal Non-Touch, 8GB DDR5 Memory, 128 GB eMMC storage, Chrome O/S License Required, 1-year minimum warranty; Tier 3 Student Windows Laptop: Intel i5 13th Gen or equivalent; Student Tablet: Processor A13, 10.2\" Retina Display, 64 GB storage, iOS 17, 1-year minimum warranty; Staff Devices Tier 1 Staff Windows Basic Desktop: Intel i5 Processor, 14th Gen or equivalent, Minimum 23.8\" diagonal screen Touch Screen, 16GB RAM, 512 GB NVMe SSD, Windows 11 Pro, 3-year minimum warranty; Tier 2 Staff Professional Desktop: Intel i7 Processor, 14th Gen or equivalent, Minimum 23.8\" diagonal screen Touch Screen, 32GB DDR5 RAM, 1 TB NVMe SSD, Windows 11 Pro or Mac O/S; Tier 1 Staff Basic Laptop: Intel i5 CPU, 14th Gen or equivalent, Minimum 13\" diagonal screen, 16GB DDR5 RAM, 512 GB NVMe SSD, Windows 11 or Mac OS, 3-year minimum warranty; Tier 2 Staff Laptop: Intel i7 CPU, 14th Gen or equivalent, Minimum 13\" diagonal screen, 32GB DDR5 RAM, 1 TB NVMe SSD, Windows 11 or Mac OS, 3-year minimum warranty; Display Monitors (Touch and Non-Touch): Minimum 24\" diagonal screen, Resolution 1920 X 1080, 3-year minimum warranty."
+        },
+        {
+          "field": "Bid Summary",
+          "status": "MATCH",
+          "expected": [
+            "Dallas Independent School District is soliciting offers for student and staff computing devices",
+            "soliciting offers for student and staff computing devices"
+          ],
+          "extracted": "The Dallas Independent School District is soliciting offers for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors. The purpose of this Request for Proposal is to procure vendors who provide goods or services purchased using federal, local, state, and grant-funded programs. Vendors may submit proposals for one, several, or all categories of devices required by the District to meet minimum hardware specifications. Purchases may also include a variety of device accessories ordered in a bundle along with the devices, such as sleeves, cases, mice, keyboards, and cables. Each submission must include a detailed plan outlining tracking and deployment services, including processes for white glove services."
+        },
+        {
+          "field": "contact_info",
+          "status": "MATCH",
+          "expected": [
+            "JASMINE ALZATE",
+            "JALZATE@dallasisd.org",
+            "ALZATE, JASMINE | JALZATE@dallasisd.org"
+          ],
+          "extracted": "ALZATE, JASMINE | JALZATE@dallasisd.org"
+        },
+        {
+          "field": "company_name",
+          "status": "MATCH",
+          "expected": [
+            "Dallas ISD",
+            "Dallas Independent School District"
+          ],
+          "extracted": "Dallas ISD"
+        }
+      ]
+    },
+    "Bid2": {
+      "bid_id": "Bid2",
+      "total": 20,
+      "matches": 16,
+      "expected_null_ok": 4,
+      "mismatches": 0,
+      "missing": 0,
+      "correct": 20,
+      "accuracy": 100.0,
+      "details": [
+        {
+          "field": "Bid Number",
+          "status": "MATCH",
+          "expected": [
+            "#E20P4600040",
+            "BPM044557",
+            "#E20P4600040 (eMMA Project Number: BPM044557)"
+          ],
+          "extracted": "#E20P4600040 (eMMA Project Number: BPM044557)"
+        },
+        {
+          "field": "Title",
+          "status": "MATCH",
+          "expected": [
+            "Dell Laptops w/Extended Warranty",
+            "Dell Laptops w_Extended Warranty"
+          ],
+          "extracted": "Dell Laptops w/Extended Warranty"
+        },
+        {
+          "field": "Due Date",
+          "status": "MATCH",
+          "expected": [
+            "06/10/2024",
+            "06/10/2024 02:00 PM EDT"
+          ],
+          "extracted": "06/10/2024 02:00 PM EDT"
+        },
+        {
+          "field": "Bid Submission Type",
+          "status": "MATCH",
+          "expected": [
+            "eMMA",
+            "eMaryland Marketplace Advantage",
+            "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system"
+          ],
+          "extracted": "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system."
+        },
+        {
+          "field": "Term of Bid",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Pre Bid Meeting",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": "None"
+        },
+        {
+          "field": "Installation",
+          "status": "MATCH",
+          "expected": [
+            "No on-site installation required",
+            "No on-site installation required; factory configuration per specifications"
+          ],
+          "extracted": "No on-site installation required; factory configuration per specifications"
+        },
+        {
+          "field": "Bid Bond Requirement",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Delivery Date",
+          "status": "MATCH",
+          "expected": [
+            "Delivery within 45 days of Award",
+            "45 days"
+          ],
+          "extracted": "Delivery within 45 days of Award"
+        },
+        {
+          "field": "Payment Terms",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "status": "MATCH",
+          "expected": [
+            "Contract Affidavit and Mercury Affidavit",
+            "Mercury Affidavit",
+            "Contract Affidavit"
+          ],
+          "extracted": "Contract Affidavit and Mercury Affidavit"
+        },
+        {
+          "field": "MFG for Registration",
+          "status": "MATCH",
+          "expected": [
+            "Dell"
+          ],
+          "extracted": "Dell"
+        },
+        {
+          "field": "Contract or Cooperative to use",
+          "status": "MATCH",
+          "expected": [
+            "060B5400007",
+            "Desktop, Laptop and Tablet 2015 Master Contract, 060B5400007",
+            "Desktop, Laptop and Tablet 2015 Master Contract"
+          ],
+          "extracted": "Desktop, Laptop and Tablet 2015 Master Contract, 060B5400007"
+        },
+        {
+          "field": "Model_no",
+          "status": "MATCH",
+          "expected": [
+            "Latitude 5550",
+            "Dell Latitude 5550"
+          ],
+          "extracted": "Latitude 5550"
+        },
+        {
+          "field": "Part_no",
+          "status": "MATCH",
+          "expected": [
+            "210-BLYZ",
+            "WD22TB4",
+            "210-BLYZ, WD22TB4"
+          ],
+          "extracted": "210-BLYZ, 379-BFNZ, 619-ARSB, 658-BCSB, 338-CNRG, 338-CNRK, 321-BKTQ, 409-BCXY, 631-BBSQ, 370-BBTL, 400-BRFT, 391-BJHB, 583-BLNH, 555-BKQC, 555-BKLQ, 451-BDGX, 492-BDMN, 346-BKLV, 537-BBDO, 340-DMNY, 340-AGIK, 387-BBPC, 817-BBBB, 658-BFQB, 340-DMMK, 389-FGSN, 319-BBKK, 634-BRWG, 379-BDZB, 362-7806, 364-1846, 364-4107, 365-0257, 366-0135, 366-0141, 371-0941, 375-3088, 383-0464, WD22TB4"
+        },
+        {
+          "field": "Product",
+          "status": "MATCH",
+          "expected": [
+            "Dell Latitude 5550",
+            "SI# CC7802 Dell Latitude 5550",
+            "1. SI# CC7802 Dell Latitude 5550 (Qty: 30)"
+          ],
+          "extracted": "1. SI# CC7802 Dell Latitude 5550 (Qty: 30), Laptops must be Microsoft Copilot ready; 2. Dell Thunderbolt 4 Dock \u2013 WD22TB4 (Qty: 30); 3. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years"
+        },
+        {
+          "field": "Product Specification",
+          "status": "MATCH",
+          "expected": [
+            "Dell Latitude 5550 XCTO Base",
+            "Intel Core Ultra 5 125U processor",
+            "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor"
+          ],
+          "extracted": "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, Integrated Intel graphics for Intel Core Ultra 5 125U processor, 16 GB (2 x 8 GB, DDR5, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit 45% NTSC FHD Cam, English US backlit AI hotkey keyboard with numeric keypad (99-key), Intel Wi-Fi 6E AX211 Bluetooth 5.3 wireless card, 3-cell 54 Wh ExpressCharge Capable battery, 65W USB Type-C AC adapter, ENERGY STAR Qualified, EPEAT 2018 Registered (Gold)"
+        },
+        {
+          "field": "Bid Summary",
+          "status": "MATCH",
+          "expected": [
+            "State of Maryland Treasurer's Office is seeking a refresh of laptops",
+            "refresh of laptops to accommodate MD529 employees"
+          ],
+          "extracted": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to accommodate MD529 employees who have been included in the staff. The procurement objective is to acquire 30 units of Dell Latitude 5550 laptops that are Microsoft Copilot ready along with 30 units of Dell Thunderbolt 4 Docks (Model WD22TB4). Deliverables include the hardware items accompanied by a 3-year Dell Limited Hardware Warranty extended for all machines purchased, with a warranty certificate or affidavit to be presented upon award. All items are due by June 10, 2024."
+        },
+        {
+          "field": "contact_info",
+          "status": "MATCH",
+          "expected": [
+            "Tamaira Hawkins",
+            "Thawkins@treasurer.state.md.us",
+            "410-260-7533",
+            "Tamaira Hawkins | 410-260-7533 | Thawkins@treasurer.state.md.us"
+          ],
+          "extracted": "Tamaira Hawkins | 410-260-7533 | Thawkins@treasurer.state.md.us"
+        },
+        {
+          "field": "company_name",
+          "status": "MATCH",
+          "expected": [
+            "MD State Treasurer's Office",
+            "Maryland State Treasurer's Office",
+            "State Treasurer's Office",
+            "MD State Treasurer\u2019s Office"
+          ],
+          "extracted": "MD State Treasurer\u2019s Office"
+        }
+      ]
+    },
+    "Bid3": {
+      "bid_id": "Bid3",
+      "total": 20,
+      "matches": 17,
+      "expected_null_ok": 3,
+      "mismatches": 0,
+      "missing": 0,
+      "correct": 20,
+      "accuracy": 100.0,
+      "details": [
+        {
+          "field": "Bid Number",
+          "status": "MATCH",
+          "expected": [
+            "#AISD-P8820",
+            "AISD-2025-9988",
+            "#AISD-P8820 (Project Number: AISD-2025-9988)"
+          ],
+          "extracted": "#AISD-P8820 (Project Number: AISD-2025-9988)"
+        },
+        {
+          "field": "Title",
+          "status": "MATCH",
+          "expected": [
+            "High-Performance Student & Staff Laptops Procurement"
+          ],
+          "extracted": "High-Performance Student & Staff Laptops Procurement"
+        },
+        {
+          "field": "Due Date",
+          "status": "MATCH",
+          "expected": [
+            "12/18/2025",
+            "12/18/2025 at 4:00 PM CST"
+          ],
+          "extracted": "12/18/2025 at 4:00 PM CST"
+        },
+        {
+          "field": "Bid Submission Type",
+          "status": "MATCH",
+          "expected": [
+            "Austin ISD Procurement Portal",
+            "electronically through the Austin ISD Procurement Portal",
+            "electronic"
+          ],
+          "extracted": "electronically through the Austin ISD Procurement Portal"
+        },
+        {
+          "field": "Term of Bid",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Pre Bid Meeting",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": "None"
+        },
+        {
+          "field": "Installation",
+          "status": "MATCH",
+          "expected": [
+            "No on-site installation required",
+            "No on-site installation required; factory configuration per specifications"
+          ],
+          "extracted": "No on-site installation required; factory configuration per specifications"
+        },
+        {
+          "field": "Bid Bond Requirement",
+          "status": "EXPECTED_NULL_OK",
+          "expected": null,
+          "extracted": null
+        },
+        {
+          "field": "Delivery Date",
+          "status": "MATCH",
+          "expected": [
+            "Delivery within 30 days of Award",
+            "30 days"
+          ],
+          "extracted": "Delivery within 30 days of Award"
+        },
+        {
+          "field": "Payment Terms",
+          "status": "MATCH",
+          "expected": [
+            "ap@austinisd.org",
+            "within 10 days of delivering the equipment",
+            "Email invoices to: ap@austinisd.org"
+          ],
+          "extracted": "Email invoices to: ap@austinisd.org. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum: Contractor name, mailing address, Tax ID number, PORFP number #AISD-2025-9988, date, invoice number, amount due, and serial numbers."
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "status": "MATCH",
+          "expected": [
+            "Mercury Affidavit"
+          ],
+          "extracted": "Mercury Affidavit"
+        },
+        {
+          "field": "MFG for Registration",
+          "status": "MATCH",
+          "expected": [
+            "Lenovo"
+          ],
+          "extracted": "Lenovo"
+        },
+        {
+          "field": "Contract or Cooperative to use",
+          "status": "MATCH",
+          "expected": [
+            "Educational Technology Master Contract",
+            "AISD-TECH-2024",
+            "Educational Technology Master Contract, AISD-TECH-2024"
+          ],
+          "extracted": "Educational Technology Master Contract, AISD-TECH-2024"
+        },
+        {
+          "field": "Model_no",
+          "status": "MATCH",
+          "expected": [
+            "Lenovo ThinkPad L15 Gen 5",
+            "ThinkPad L15 Gen 5"
+          ],
+          "extracted": "Lenovo ThinkPad L15 Gen 5"
+        },
+        {
+          "field": "Part_no",
+          "status": "MATCH",
+          "expected": [
+            "21L30001US",
+            "40AY0090US",
+            "21L30001US, 40AY0090US"
+          ],
+          "extracted": "21L30001US, 40AY0090US"
+        },
+        {
+          "field": "Product",
+          "status": "MATCH",
+          "expected": [
+            "Lenovo ThinkPad L15 Gen 5",
+            "Lenovo ThinkPad L15 Gen 5 (Model #: 21L30001US, Qty: 1,200)"
+          ],
+          "extracted": "Lenovo ThinkPad L15 Gen 5 (Model #: 21L30001US, Qty: 1,200) and Lenovo USB-C Universal Dock (Model #: 40AY0090US, Qty: 1,200)"
+        },
+        {
+          "field": "Product Specification",
+          "status": "MATCH",
+          "expected": [
+            "Lenovo ThinkPad L15 Gen 5 Laptop",
+            "Intel Core Ultra 7 155U processor",
+            "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop (Part Number: 21L30001US)"
+          ],
+          "extracted": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop (Part Number: 21L30001US) featuring Intel Core Ultra 7 155U processor, Windows 11 Pro 64-bit, 16 GB DDR5 5600MHz RAM, 512 GB SSD M.2 2280 PCIe Gen4, 15.6 inch FHD IPS display, Integrated Intel Graphics, 1080P FHD RGB Camera, Intel Wi-Fi 6E AX211 and Bluetooth 5.3, 3 Cell Li-Polymer 57Wh battery with 65W AC Adapter, Traditional Keyboard with Numeric Keypad, Discrete TPM 2.0, and 3-Year Premier Support with Onsite NBD Warranty. Item 2: Lenovo USB-C Universal Dock (Model: 40AY0090US) with Dual 4K display support and 90W Power Delivery."
+        },
+        {
+          "field": "Bid Summary",
+          "status": "MATCH",
+          "expected": [
+            "Austin Independent School District requires a refresh of student and administrative laptops",
+            "refresh of student and administrative laptops"
+          ],
+          "extracted": "Austin Independent School District requires a refresh of student and administrative laptops for high school campuses across the district under solicitation AISD-2025-9988. The procurement scope includes 1,200 units of Lenovo ThinkPad L15 Gen 5 laptops equipped with Intel Core Ultra 7 processors, 16GB RAM, and 512GB SSDs, alongside 1,200 units of Lenovo USB-C Universal Docks. Additional deliverables include a Lenovo 3-Year Premier Support with Onsite Next Business Day warranty, warranty certificates or affidavits, and a Mercury Affidavit. Proposals are due by December 18, 2025, and equipment delivery is expected within 30 days of award."
+        },
+        {
+          "field": "contact_info",
+          "status": "MATCH",
+          "expected": [
+            "Rachel Adams",
+            "rachel.adams@austinisd.org",
+            "512-414-1700",
+            "Rachel Adams | 512-414-1700 | rachel.adams@austinisd.org"
+          ],
+          "extracted": "Rachel Adams | 512-414-1700 | rachel.adams@austinisd.org"
+        },
+        {
+          "field": "company_name",
+          "status": "MATCH",
+          "expected": [
+            "Austin Independent School District",
+            "Austin ISD"
+          ],
+          "extracted": "Austin Independent School District"
+        }
+      ]
+    }
+  }
+}
