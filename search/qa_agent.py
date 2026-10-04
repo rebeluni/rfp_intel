@@ -10,7 +10,9 @@ Strictly implements Requirements 2 & 3:
 """
 
 import re
+import json
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 from config.settings import settings
 from search.hybrid_retriever import HybridRetriever
@@ -51,7 +53,7 @@ class QAAgent:
 
         for chk in self.retriever.bm25_index.chunks:
             bid = chk.metadata.bid_id
-            if not bid:
+            if not bid or (not bid.lower().startswith("bid") and not (Path(settings.PROJECT_ROOT) / bid).is_dir()):
                 continue
             if bid not in catalog:
                 catalog[bid] = {
@@ -91,11 +93,8 @@ class QAAgent:
                 for om in org_matches:
                     catalog[bid]["agencies"].add(om.strip().lower())
 
-        # Also load from outputs/*.json if already extracted
-        import json
-        from pathlib import Path
         for b in list(catalog.keys()):
-            out_p = settings.OUTPUTS_DIR / f"{b.lower()}.json"
+            out_p = Path(settings.OUTPUTS_DIR) / f"{b.lower()}.json"
             if out_p.exists():
                 try:
                     with open(out_p, "r", encoding="utf-8") as f:
@@ -206,26 +205,26 @@ class QAAgent:
     def _get_indexed_bids(self) -> List[str]:
         """Dynamically return list of unique bid IDs present in the search index or project folders."""
         catalog = self._get_bid_catalog()
-        if catalog:
-            return sorted(list(catalog.keys()))
         bids = set()
+        if catalog:
+            bids.update(catalog.keys())
         if hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
             for chk in self.retriever.bm25_index.chunks:
                 b = chk.metadata.bid_id
-                if b:
+                if b and (b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()):
                     bids.add(b)
         if not bids and hasattr(self.retriever, "dense_indexer") and self.retriever.dense_indexer.chunks:
             for chk in self.retriever.dense_indexer.chunks:
                 b = chk.metadata.bid_id
-                if b:
+                if b and (b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()):
                     bids.add(b)
         if not bids:
-            from pathlib import Path
             root = Path(settings.PROJECT_ROOT)
             for d in root.iterdir():
                 if d.is_dir() and d.name.lower().startswith("bid"):
                     bids.add(d.name)
-        return sorted(list(bids))
+        valid_bids = [b for b in bids if b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()]
+        return sorted(valid_bids, key=lambda x: (0 if x == "Bid1" else 1 if x == "Bid2" else 2 if x == "Bid3" else 3, x))
 
     def ask(self, question: str, bid_id: Optional[str] = None, top_k: int = 5) -> Dict[str, Any]:
         """
