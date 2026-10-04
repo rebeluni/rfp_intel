@@ -147,10 +147,37 @@ python main.py serve --port 8000
 python -m scripts.run_search_eval
 ```
 
-### 7. Run Test Suite
+### 7. Interactive Streamlit UI
+```bash
+python main.py ui --port 8501
+```
+
+### 8. Run Test Suite
 ```bash
 pytest
 ```
+
+---
+
+## Interactive Web UI
+
+The platform includes a single-page Streamlit application with 3 functional views:
+- **Search Passages (`docs/screenshots/search.png`):** Interactive passage retrieval across indexed RFP packages supporting BM25 keyword matching, BGE dense embeddings, and cross-encoder reranking with filters by bid package and document type.
+- **Ask Q&A Agent:** Dynamic query routing and multi-bid synthesis with verbatim supporting quotes and page citations.
+- **Extract & Reconcile (`docs/screenshots/extract.png`):** Structured 20-field procurement schema viewer, deterministic validation status badges, dynamic confidence scores, and an expandable Addendum Reconciliation Log tracking supersessions (such as due date amendments).
+
+To launch the UI:
+```bash
+python main.py ui --port 8501
+```
+
+### UI Screenshots
+
+#### 1. Hybrid Passage Search (`docs/screenshots/search.png`)
+![Hybrid Passage Search](docs/screenshots/search.png)
+
+#### 2. Structured Extraction & Addendum Reconciliation Log (`docs/screenshots/extract.png`)
+![Structured Extraction & Addendum Reconciliation Log](docs/screenshots/extract.png)
 
 ---
 

@@ -98,16 +98,23 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+def discover_bid_dirs() -> List[Path]:
+    """Find all bid directories in project root dynamically."""
+    dirs = []
+    for item in sorted(PROJECT_ROOT.iterdir()):
+        if item.is_dir() and (item.name.lower().startswith("bid") or (item / "solicitations").exists()):
+            dirs.append(item)
+    return dirs
+
+
 @st.cache_resource(show_spinner="Initializing Search Index & Embedding Models...")
 def load_resources():
     """Load and cache IndexManager, Retriever, and QAAgent."""
     idx_mgr = IndexManager()
     # Check if index exists or build from existing bid folders
-    if not idx_mgr.bm25_index.is_ready():
-        for bid_name in ["Bid1", "Bid2", "Bid3"]:
-            bid_dir = PROJECT_ROOT / bid_name
-            if bid_dir.is_dir():
-                idx_mgr.index_bid_directory(bid_dir, bid_id=bid_name)
+    if not (idx_mgr.bm25_index.bm25 is not None and len(idx_mgr.bm25_index.chunks) > 0):
+        for bid_dir in discover_bid_dirs():
+            idx_mgr.index_bid_directory(bid_dir, bid_id=bid_dir.name)
 
     retriever = HybridRetriever(
         bm25_index=idx_mgr.bm25_index,
@@ -119,6 +126,22 @@ def load_resources():
 
 idx_mgr, retriever, qa_agent = load_resources()
 
+
+def get_available_bids() -> List[str]:
+    """Get list of active bid IDs dynamically."""
+    bids = set()
+    if idx_mgr.bm25_index.chunks:
+        for chunk in idx_mgr.bm25_index.chunks:
+            bid_id = getattr(chunk.metadata, "bid_id", None) if hasattr(chunk.metadata, "bid_id") else (chunk.metadata.get("bid_id") if isinstance(chunk.metadata, dict) else None)
+            if bid_id:
+                bids.add(bid_id)
+    if not bids:
+        for p in discover_bid_dirs():
+            bids.add(p.name)
+    return sorted(list(bids)) if bids else ["Bid1", "Bid2", "Bid3"]
+
+
+available_bids = get_available_bids()
 
 # Header
 st.markdown('<div class="main-header">📋 RFP Intelligence Platform</div>', unsafe_allow_html=True)
@@ -145,7 +168,7 @@ with tab_search:
     with col2:
         bid_filter = st.selectbox(
             "Filter by Bid",
-            options=["All Bids", "Bid1", "Bid2", "Bid3"],
+            options=["All Bids"] + available_bids,
             key="search_bid_filter"
         )
     with col3:
@@ -225,7 +248,7 @@ with tab_ask:
     with q_col2:
         bid_target = st.selectbox(
             "Target Bid",
-            options=["Auto-Route", "Bid1", "Bid2", "Bid3"],
+            options=["Auto-Route"] + available_bids,
             key="ask_bid_target"
         )
 
@@ -271,7 +294,7 @@ with tab_extract:
     with ext_col1:
         extract_bid = st.selectbox(
             "Select Bid Package",
-            options=["Bid1", "Bid2", "Bid3"],
+            options=available_bids,
             key="extract_bid_select"
         )
     with ext_col2:
