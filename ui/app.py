@@ -201,13 +201,20 @@ with tab_search:
             selected_bid = None if bid_filter == "All Bids" else bid_filter
             selected_type = None if doc_type_filter == "All Types" else doc_type_filter
 
+            mode_map = {
+                "hybrid": "hybrid",
+                "bm25": "bm25_only",
+                "dense": "dense_only",
+            }
+            mapped_mode = mode_map.get(retrieval_mode, "hybrid")
+
             with st.spinner(f"Running {retrieval_mode.upper()} retrieval..."):
                 results = retriever.search(
                     query=search_query,
                     bid_id=selected_bid,
                     doc_type=selected_type,
                     top_k=top_k,
-                    mode=retrieval_mode
+                    mode=mapped_mode
                 )
 
             if not results:
