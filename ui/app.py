@@ -33,66 +33,98 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling
+# Custom Styling (Elevated Modern Design)
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
     .main-header {
-        font-size: 2.1rem;
+        font-size: 2.2rem;
         font-weight: 700;
-        color: #1E293B;
+        letter-spacing: -0.02em;
         margin-bottom: 0.2rem;
+        background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .sub-header {
-        font-size: 1.05rem;
-        color: #64748B;
+        font-size: 1.0rem;
+        color: #94A3B8;
         margin-bottom: 1.5rem;
     }
-    .card {
-        background-color: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 12px;
+    .stat-box {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
     }
     .badge-passed {
-        background-color: #DCFCE7;
-        color: #166534;
-        padding: 3px 8px;
-        border-radius: 4px;
+        background-color: rgba(34, 197, 94, 0.15);
+        color: #4ADE80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        padding: 4px 10px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
     }
     .badge-failed {
-        background-color: #FEE2E2;
-        color: #991B1B;
-        padding: 3px 8px;
-        border-radius: 4px;
+        background-color: rgba(239, 68, 68, 0.15);
+        color: #F87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        padding: 4px 10px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
     }
     .badge-notfound {
-        background-color: #F1F5F9;
-        color: #475569;
-        padding: 3px 8px;
-        border-radius: 4px;
+        background-color: rgba(148, 163, 184, 0.15);
+        color: #CBD5E1;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        padding: 4px 10px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.8rem;
-    }
-    .badge-review {
-        background-color: #FEF3C7;
-        color: #92400E;
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
     }
     .badge-amended {
-        background-color: #DBEAFE;
-        color: #1E40AF;
-        padding: 3px 8px;
-        border-radius: 4px;
+        background-color: rgba(59, 130, 246, 0.15);
+        color: #60A5FA;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        padding: 4px 10px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
+    }
+    .badge-rel-high {
+        background-color: rgba(34, 197, 94, 0.15);
+        color: #4ADE80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .badge-rel-med {
+        background-color: rgba(234, 179, 8, 0.15);
+        color: #FACC15;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .quote-box {
+        background: rgba(15, 23, 42, 0.6);
+        border-left: 3px solid #3B82F6;
+        padding: 12px 16px;
+        border-radius: 0 8px 8px 0;
+        margin: 8px 0;
+        font-family: inherit;
+        font-size: 0.92rem;
+        line-height: 1.5;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -143,9 +175,54 @@ def get_available_bids() -> List[str]:
 
 available_bids = get_available_bids()
 
+# Sidebar: Platform Stats & Unseen Bid Uploader
+with st.sidebar:
+    st.markdown("### 📋 RFP Intelligence")
+    st.caption("AI-powered Procurement Intelligence & Verification Engine")
+    
+    st.markdown("---")
+    st.markdown("#### ⚙️ Engine Status")
+    total_chunks = len(idx_mgr.bm25_index.chunks) if idx_mgr.bm25_index else 0
+    st.markdown(f"""
+    <div class="stat-box">
+        <div style="font-size: 0.8rem; color: #94A3B8;">Active Bids: <b>{len(available_bids)}</b> ({', '.join(available_bids)})</div>
+        <div style="font-size: 0.8rem; color: #94A3B8;">Indexed Chunks: <b>{total_chunks}</b></div>
+        <div style="font-size: 0.8rem; color: #94A3B8;">Dense Model: <code>bge-small-en-v1.5</code></div>
+        <div style="font-size: 0.8rem; color: #94A3B8;">Re-ranker: <code>ms-marco-MiniLM-L6</code></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    with st.expander("📁 Ingest Unseen Bid Package", expanded=False):
+        st.caption("Upload PDFs or HTML to test on a new, unseen solicitation.")
+        new_bid_id = st.text_input("New Bid ID", placeholder="e.g. Bid4", key="new_bid_name_input")
+        uploaded_files = st.file_uploader(
+            "Upload RFP Documents",
+            type=["pdf", "html", "htm"],
+            accept_multiple_files=True,
+            key="new_bid_files"
+        )
+        if st.button("⚡ Parse & Index Package", use_container_width=True, type="primary"):
+            if not new_bid_id.strip():
+                st.error("Please provide a Bid ID.")
+            elif not uploaded_files:
+                st.error("Please upload at least one PDF or HTML file.")
+            else:
+                with st.spinner(f"Ingesting and building vector index for {new_bid_id}..."):
+                    target_dir = PROJECT_ROOT / new_bid_id.strip()
+                    target_dir.mkdir(parents=True, exist_ok=True)
+                    for uf in uploaded_files:
+                        save_path = target_dir / uf.name
+                        with open(save_path, "wb") as f_out:
+                            f_out.write(uf.getvalue())
+                    # Index the new directory
+                    idx_mgr.index_bid_directory(target_dir, bid_id=new_bid_id.strip())
+                    st.success(f"Successfully indexed {new_bid_id}! Updating...")
+                    st.rerun()
+
 # Header
 st.markdown('<div class="main-header">📋 RFP Intelligence Platform</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Multi-Agent Procurement Analysis, Hybrid Search, Addendum Reconciliation & Verification</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Multi-Agent Procurement Analysis, Hybrid Search, Addendum Reconciliation & Deterministic Verification</div>', unsafe_allow_html=True)
 
 # Tabs
 tab_search, tab_ask, tab_extract = st.tabs(["🔍 Search Passages", "💬 Ask Q&A", "📊 Extract & Reconcile"])
@@ -209,7 +286,7 @@ with tab_search:
             mapped_mode = mode_map.get(retrieval_mode, "hybrid")
 
             with st.spinner(f"Running {retrieval_mode.upper()} retrieval..."):
-                results = retriever.search(
+                raw_results = retriever.search(
                     query=search_query,
                     bid_id=selected_bid,
                     doc_type=selected_type,
@@ -217,11 +294,23 @@ with tab_search:
                     mode=mapped_mode
                 )
 
-            if not results:
-                st.info("No matching passages found for your query and filters.")
+            # Filter out non-matches below relevance thresholds
+            valid_results = []
+            for r in raw_results:
+                s = getattr(r, "rerank_score", None) or getattr(r, "rrf_score", None) or getattr(r, "bm25_score", None) or getattr(r, "score", 0.0) if not isinstance(r, dict) else r.get("score", 0.0)
+                if mapped_mode == "bm25_only" and (s is None or s <= 0.0):
+                    continue
+                if mapped_mode == "dense_only" and (s is None or s < 0.35):
+                    continue
+                if mapped_mode == "hybrid" and (s is not None and s < -6.5):
+                    continue
+                valid_results.append(r)
+
+            if not valid_results:
+                st.info(f"No relevant passages found for '{search_query}' with the selected filters.")
             else:
-                st.success(f"Found {len(results)} relevant passage(s):")
-                for i, r in enumerate(results, 1):
+                st.success(f"Found {len(valid_results)} relevant passage(s):")
+                for i, r in enumerate(valid_results, 1):
                     score = getattr(r, "rerank_score", None) or getattr(r, "rrf_score", None) or getattr(r, "bm25_score", None) or getattr(r, "score", 0.0) if not isinstance(r, dict) else r.get("score", 0.0)
                     if score is None:
                         score = 0.0
@@ -232,12 +321,19 @@ with tab_search:
                     chunk_id = getattr(r, "chunk_id", "") if not isinstance(r, dict) else r.get("chunk_id", "")
                     text = getattr(r, "text", "") if not isinstance(r, dict) else r.get("text", "")
 
+                    # Determine relevance pill
+                    if (mapped_mode == "hybrid" and score >= -2.5) or (mapped_mode == "bm25_only" and score >= 5.0) or (mapped_mode == "dense_only" and score >= 0.60):
+                        rel_badge = '<span class="badge-rel-high">🟢 High Match</span>'
+                    else:
+                        rel_badge = '<span class="badge-rel-med">🟡 Moderate Match</span>'
+
                     with st.expander(f"#{i} [{bid}] {file_name} (Page {page_num}) — Score: {score:.4f}", expanded=(i <= 2)):
-                        col_m1, col_m2, col_m3 = st.columns(3)
-                        col_m1.caption(f"**Doc Type:** {dtype}")
-                        col_m2.caption(f"**Chunk ID:** `{chunk_id}`")
-                        col_m3.caption(f"**Page:** {page_num}")
-                        st.markdown(f"```\n{text}\n```")
+                        col_m1, col_m2, col_m3, col_m4 = st.columns([1, 1, 1, 1])
+                        col_m1.caption(f"**Doc Type:** `{dtype}`")
+                        col_m2.caption(f"**Page:** `{page_num}`")
+                        col_m3.caption(f"**Chunk ID:** `{chunk_id}`")
+                        col_m4.markdown(rel_badge, unsafe_allow_html=True)
+                        st.markdown(f'<div class="quote-box">{text}</div>', unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
