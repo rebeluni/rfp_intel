@@ -215,13 +215,15 @@ with tab_search:
             else:
                 st.success(f"Found {len(results)} relevant passage(s):")
                 for i, r in enumerate(results, 1):
-                    score = r.get("score", 0.0)
-                    file_name = r.get("file_name", "Unknown File")
-                    page_num = r.get("page_number", 1)
-                    bid = r.get("bid_id", "Unknown")
-                    dtype = r.get("doc_type", "document")
-                    chunk_id = r.get("chunk_id", "")
-                    text = r.get("text", "")
+                    score = getattr(r, "rerank_score", None) or getattr(r, "rrf_score", None) or getattr(r, "bm25_score", None) or getattr(r, "score", 0.0) if not isinstance(r, dict) else r.get("score", 0.0)
+                    if score is None:
+                        score = 0.0
+                    file_name = getattr(r, "file_name", "Unknown File") if not isinstance(r, dict) else r.get("file_name", "Unknown File")
+                    page_num = getattr(r, "page_number", 1) if not isinstance(r, dict) else r.get("page_number", 1)
+                    bid = getattr(r, "bid_id", "Unknown") if not isinstance(r, dict) else r.get("bid_id", "Unknown")
+                    dtype = getattr(r, "doc_type", "document") if not isinstance(r, dict) else r.get("doc_type", "document")
+                    chunk_id = getattr(r, "chunk_id", "") if not isinstance(r, dict) else r.get("chunk_id", "")
+                    text = getattr(r, "text", "") if not isinstance(r, dict) else r.get("text", "")
 
                     with st.expander(f"#{i} [{bid}] {file_name} (Page {page_num}) — Score: {score:.4f}", expanded=(i <= 2)):
                         col_m1, col_m2, col_m3 = st.columns(3)
