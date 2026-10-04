@@ -60,36 +60,37 @@ fields:
 
   Pre Bid Meeting:
     specialist: "dates_logistics"
-    description: "Date, time, location and whether attendance is mandatory, optional, or 'None'."
+    description: "Date, time, location, conference details and whether attendance is mandatory, optional, or 'None' if no meeting is mentioned in the documents."
     format: "string"
     query_expansion_hints:
-      - "pre-bid conference"
       - "pre-proposal meeting"
-      - "mandatory pre-bid"
+      - "pre-bid conference"
+      - "pre bid meeting date time"
       - "vendor conference"
-      - "site visit"
+      - "mandatory pre-bid"
 
   Installation:
     specialist: "dates_logistics"
-    description: "Whether installation, configuration, staging, deployment, or imaging services are required."
+    description: "Whether on-site installation, configuration, staging, deployment, or imaging services are required by the solicitation. If no on-site installation is required or only factory configuration is specified, state 'No on-site installation required; factory configuration per specifications' or 'None'. Never output raw table text."
     format: "string"
     query_expansion_hints:
       - "installation required"
       - "deployment services"
-      - "imaging services"
-      - "white glove delivery"
-      - "inside delivery"
+      - "on-site installation"
+      - "device setup"
+      - "staging deployment"
 
   Bid Bond Requirement:
     specialist: "commercial_legal"
-    description: "Required bid bond, surety, letter of credit, dollar amount, percentage, or 'Not required'."
+    description: "Required bid bond, surety, proposal guarantee, dollar amount, percentage, or 'Not required'. If bond requirements are deferred to other contract documents without a specific amount stated in the RFP, succinctly state that no specific bid bond amount is given and the RFP defers to other contract documents."
     format: "string"
     query_expansion_hints:
       - "bid bond"
       - "bid security"
       - "surety requirement"
+      - "insurance and bonds"
       - "proposal guarantee"
-      - "performance bond"
+      - "bonds enumerated elsewhere"
 
   Delivery Date:
     specialist: "dates_logistics"
@@ -99,19 +100,23 @@ fields:
       - "delivery deadline"
       - "delivery schedule"
       - "days after receipt of order"
+      - "delivery within days"
       - "lead time"
       - "delivery timeline"
 
   Payment Terms:
     specialist: "commercial_legal"
-    description: "Payment terms, invoicing schedule, or discount periods (e.g., Net 30, prompt pay discount)."
+    description: "Payment terms, invoicing instructions, billing submission schedule (e.g. invoice submission within N days of delivery, invoice email recipient), prompt payment, or Net days."
     format: "string"
     query_expansion_hints:
+      - "invoicing instructions"
+      - "invoice"
+      - "payment"
+      - "remit"
+      - "net days"
       - "payment terms"
-      - "invoicing terms"
-      - "net 30"
+      - "invoices submitted"
       - "billing instructions"
-      - "prompt payment"
 
   Any Additional Documentation Required:
     specialist: "commercial_legal"
@@ -149,22 +154,26 @@ fields:
 
   Model_no:
     specialist: "product_specs"
-    description: "Model number(s), product family identifiers, or hardware chassis codes of the requested items."
+    description: "Model number(s), product family name, series, or hardware chassis identifiers (e.g. Latitude 5550, ThinkPad L15). Distinct from orderable part numbers or SKUs."
     format: "string"
     query_expansion_hints:
       - "model number"
+      - "product family"
+      - "product model"
+      - "model #"
       - "equipment model"
       - "hardware model"
-      - "product series"
 
   Part_no:
     specialist: "product_specs"
-    description: "Part number(s), SKU numbers, or manufacturer part codes of the requested products."
+    description: "Orderable part number(s), SKU numbers, manufacturer part numbers (MPN), or component codes for the base system and accessories (e.g. base system SKU, dock part number, WD22TB4). Distinct from product model family."
     format: "string"
     query_expansion_hints:
       - "part number"
       - "SKU"
       - "manufacturer part number"
+      - "dock part number"
+      - "base system SKU"
       - "item number"
       - "ordering code"
 

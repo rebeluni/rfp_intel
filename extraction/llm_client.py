@@ -451,12 +451,22 @@ Expected Format: {field_def.get('format', 'string')}
 EVIDENCE PASSAGES:
 {passages_text}
 
-Extract the field value according to the rules and return JSON:
+EXTRACTION RULES:
+1. Normalization: Values must be clean, complete, and concise. No ellipses ("..."), no truncated sentences, and NEVER output raw spec-table text.
+2. Grounding & Citations: Every non-null value MUST have an exact contiguous verbatim quote from ONE of the passages above, matching word-for-word, along with the exact file_name and page_number. If no real quote supports the value, set value to null.
+3. Absence Semantics:
+   - If the documents explicitly state a requirement is not required or does not take place (e.g. no pre-bid meeting, no on-site installation), return value "None" or "Not required" with the supporting verbatim quote and citation.
+   - If the documents are completely silent or the field is genuinely not mentioned in the passages, return value null, status "NOT_FOUND", and reason "Not found in documents".
+   - For "Bid Bond Requirement": If documents state bonds/insurance are "enumerated elsewhere" without specifying an amount, return a concise statement stating that no specific bid bond amount is given and the RFP defers to other contract documents, with the verbatim quote.
+   - For "Pre Bid Meeting": If no pre-bid meeting or conference is mentioned in the documents, return value "None" with reason "None mentioned in solicitation".
+   - For "Installation": If on-site installation is not required by the solicitation, return "No on-site installation required; factory configuration per specifications" or "None".
+
+Return JSON:
 {{
-  "value": "extracted value or null",
+  "value": "extracted normalized value or null",
   "status": "FOUND" or "NOT_FOUND",
-  "reason": "explanation of finding or 'Not found in documents'",
-  "quote": "verbatim contiguous quote from cited chunk or null",
+  "reason": "succinct explanation of finding or 'Not found in documents'",
+  "quote": "exact contiguous verbatim quote from cited chunk or null",
   "file_name": "exact file name cited or null",
   "page_number": 1,
   "chunk_id": "exact chunk ID cited or null"
