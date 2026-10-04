@@ -198,6 +198,7 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 - BM25 and Hybrid+CrossEncoder achieve an identical **86.36% Recall@5** (19/22 queries successfully placed the ground-truth page in the top 5 candidates).
 - Dense search successfully captures semantic paraphrases (e.g. warranty coverage and contact roles).
 - BM25 excels at exact alphanumeric identifiers (solicitation numbers, SKU codes, telephone numbers).
+- Detailed per-query hit/miss tables, miss analysis, and the full 22-question benchmark definition are documented in [`docs/eval_report.md`](docs/eval_report.md) and [`search/eval.py`](search/eval.py).
 
 ---
 
