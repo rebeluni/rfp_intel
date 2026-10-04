@@ -37,6 +37,15 @@ QUESTIONS = [
     # --- General ---
     ("What is the difference in issuing authority between Bid1 and Bid2?", None),
     ("Summarise all three bids in one paragraph each.", None),
+    # --- Task C6 Additions ---
+    ("What is the submission deadline for Bid1 after all addendums?", "Bid1"),
+    ("Which affidavits are required for the Dell laptop bid?", "Bid2"),
+    ("Is a bid bond required, and if so, how much for Bid1?", "Bid1"),
+    ("Is a bid bond required, and if so, how much for Bid2?", "Bid2"),
+    ("Is a bid bond required, and if so, how much for Bid3?", "Bid3"),
+    ("What changed in Addendum 2 compared to the original RFP?", "Bid1"),
+    ("Compare the warranty requirements of both bids.", None),
+    ("What is the required fuel efficiency rating for delivery vehicles across the bids?", None),
 ]
 
 def run_qa_log():

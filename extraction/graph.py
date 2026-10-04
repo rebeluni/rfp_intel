@@ -362,11 +362,26 @@ class ExtractionPipeline:
 
         with self.tracer.start_step("qa_node", {"bid_id": bid_id}) as ctx:
             logger.info(f"[Q&A Node] Verifying Q&A readiness and synthesized summaries for '{bid_id}'...")
-            title_field = fields_map.get("solicitation_title") or fields_map.get("title")
+            title_field = (
+                fields_map.get("Title") or
+                fields_map.get("title") or
+                fields_map.get("solicitation_title")
+            )
             bid_title = title_field.value if title_field else None
-            agency_field = fields_map.get("issuing_agency") or fields_map.get("agency")
+
+            agency_field = (
+                fields_map.get("company_name") or
+                fields_map.get("Company Name") or
+                fields_map.get("issuing_agency") or
+                fields_map.get("agency")
+            )
             agency_name = agency_field.value if agency_field else None
-            solicitation_num_field = fields_map.get("solicitation_number") or fields_map.get("bid_number")
+
+            solicitation_num_field = (
+                fields_map.get("Bid Number") or
+                fields_map.get("bid_number") or
+                fields_map.get("solicitation_number")
+            )
             solicitation_num = solicitation_num_field.value if solicitation_num_field else None
 
             qa_meta = {

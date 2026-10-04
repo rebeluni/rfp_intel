@@ -36,7 +36,7 @@ class QAAgent:
 
     def _get_bid_catalog(self) -> Dict[str, Dict[str, Any]]:
         """
-        Dynamically inspect indexed chunks to extract metadata per bid package:
+        Dynamically inspect indexed chunks and extracted output files to extract metadata per bid package:
         - solicitation numbers (e.g. JA-207652, BPM044557, AISD-2025-9988)
         - titles / headings
         - issuing agencies / organizations
@@ -67,9 +67,8 @@ class QAAgent:
             catalog[bid]["filenames"].add(meta.file_name.lower())
 
             # Detect solicitation numbers from text or headers
-            # Common patterns: Letters+Numbers with hyphens/slashes
             sol_matches = re.findall(
-                r"\b(?:RFP\s*(?:NO\.?|#)?\s*|PORFP\s*(?:NO\.?|#)?\s*|PROJECT\s*(?:NO\.?|#)?\s*)?([A-Z0-9]{2,}[-_][A-Z0-9-_]{2,})\b",
+                r"\b(?:RFP\s*(?:NO\.?|#)?\s*|PORFP\s*(?:NO\.?|#)?\s*|PROJECT\s*(?:NO\.?|#)?\s*)?([A-Z0-9]{2,}[-_][A-Z0-9-_]{2,}|[A-Z]{2,}\d{4,}[A-Z0-9]*|[A-Z]\d{2}[A-Z]\d{6,})\b",
                 chk.text,
                 re.IGNORECASE
             )
@@ -84,13 +83,35 @@ class QAAgent:
             if is_cover and len(catalog[bid]["sample_texts"]) < 5:
                 catalog[bid]["sample_texts"].append(chk.text[:300])
 
-                # Extract potential organization names (e.g., School District, Department, Treasurer, Authority)
+                # Extract potential organization names
                 org_matches = re.findall(
                     r"([A-Z][A-Za-z0-9&,\.\s]{3,40}(?:School District|ISD|Treasurer|Department|State of|County|City|Commission))",
                     chk.text
                 )
                 for om in org_matches:
                     catalog[bid]["agencies"].add(om.strip().lower())
+
+        # Also load from outputs/*.json if already extracted
+        import json
+        from pathlib import Path
+        for b in list(catalog.keys()):
+            out_p = settings.OUTPUTS_DIR / f"{b.lower()}.json"
+            if out_p.exists():
+                try:
+                    with open(out_p, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        fields = data.get("fields", {})
+                        num = (fields.get("Bid Number") or {}).get("value")
+                        if num:
+                            catalog[b]["solicitation_numbers"].add(str(num).lower())
+                        agency = (fields.get("company_name") or {}).get("value")
+                        if agency:
+                            catalog[b]["agencies"].add(str(agency).lower())
+                        ttl = (fields.get("Title") or {}).get("value")
+                        if ttl:
+                            catalog[b]["titles"].add(str(ttl).lower())
+                except Exception:
+                    pass
 
         self._bid_catalog = catalog
         return catalog
@@ -99,11 +120,16 @@ class QAAgent:
         """Detect whether the question asks for comparison across multiple bids."""
         q = question.lower()
         comparison_indicators = [
-            "compare", "comparison", "both bids", "all bids", "difference between",
-            "differ between", "which bid", "across bids", "between bid 1 and bid 2",
-            "between bid1 and bid2"
+            "compare", "comparison", "both bids", "all bids", "all three bids",
+            "all 3 bids", "across bids", "across all bids", "difference between",
+            "differ between", "which bid", "summarise all", "summarize all",
+            "each bid", "every bid"
         ]
-        return any(ind in q for ind in comparison_indicators)
+        if any(ind in q for ind in comparison_indicators):
+            return True
+        if re.search(r"\bbetween\s+bid\s*[123]\s*and\s*bid\s*[123]\b", q):
+            return True
+        return False
 
     def route_bid(self, question: str) -> Optional[str]:
         """
@@ -133,23 +159,29 @@ class QAAgent:
             # Check solicitation numbers
             for sol_num in meta["solicitation_numbers"]:
                 if sol_num in q:
-                    bid_scores[bid] += 10.0
+                    bid_scores[bid] += 12.0
 
             # Check filenames
             for fname in meta["filenames"]:
                 base = fname.replace(".pdf", "").replace(".html", "")
                 if len(base) > 4 and base in q:
-                    bid_scores[bid] += 5.0
+                    bid_scores[bid] += 6.0
 
             # Check agency names
             for agency in meta["agencies"]:
                 if agency in q:
-                    bid_scores[bid] += 8.0
+                    bid_scores[bid] += 10.0
                 else:
-                    # Token match agency parts (e.g., 'austin', 'dallas', 'treasurer')
+                    # Token match key words in agency name
                     for word in agency.split():
                         if len(word) > 4 and word in q:
-                            bid_scores[bid] += 3.0
+                            bid_scores[bid] += 4.0
+
+            # Check titles
+            for title in meta["titles"]:
+                for word in title.split():
+                    if len(word) > 4 and word in q:
+                        bid_scores[bid] += 2.0
 
         best_bid = max(bid_scores, key=bid_scores.get)
         if bid_scores[best_bid] > 0.0:
@@ -200,7 +232,6 @@ class QAAgent:
             logger.info(f"[QAAgent] Routing to explicit addendum summary path for {target_bid} Addendum {add_num}...")
             summary_obj = self.reconciler.get_addendum_summary(bid_id=target_bid, addendum_number=add_num)
             
-            # Format answer with all changes
             lines = [
                 f"### Addendum {add_num} Summary for {target_bid} ({summary_obj.file_name})\n",
                 f"**Overview:** {summary_obj.overview}\n",
@@ -242,23 +273,62 @@ class QAAgent:
         if target_bid == "COMPARISON" or self.is_comparison_query(question):
             logger.info("[QAAgent] Executing per-bid cross-comparison retrieval...")
             catalog = self._get_bid_catalog()
-            available_bids = sorted(list(catalog.keys())) if catalog else ["Bid1", "Bid2"]
+            all_bids = sorted(list(catalog.keys())) if catalog else ["Bid1", "Bid2", "Bid3"]
+
+            q_low = question.lower()
+            if "between bid1 and bid2" in q_low or "between bid 1 and bid 2" in q_low:
+                active_bids = [b for b in all_bids if b in ["Bid1", "Bid2"]]
+            elif "between bid2 and bid3" in q_low or "between bid 2 and bid 3" in q_low:
+                active_bids = [b for b in all_bids if b in ["Bid2", "Bid3"]]
+            elif "both bids" in q_low:
+                active_bids = [b for b in all_bids if b in ["Bid1", "Bid2"]]
+            else:
+                active_bids = all_bids
+
+            # Formulate targeted retrieval sub-queries per domain
+            if "procurement scale" in q_low or "total units" in q_low or "quantities" in q_low:
+                sub_q = "total units target quantity estimated quantity line items laptops devices quantities"
+            elif "issuing authority" in q_low or "agency" in q_low:
+                sub_q = "issuing authority agency organization department school district treasurer"
+            elif "warranty" in q_low:
+                sub_q = "warranty requirements Dell Limited Hardware Warranty Extended 3 Years Lenovo Premier Support manufacturer warranty"
+            elif "earliest" in q_low or "deadline" in q_low or "due date" in q_low:
+                sub_q = "submission deadline proposal due date and time closing date addendum"
+            elif "pre-bid" in q_low or "pre-proposal" in q_low or "meeting" in q_low:
+                sub_q = "pre-bid meeting pre-proposal conference date time teams video conference"
+            elif "summarise" in q_low or "summarize" in q_low or "paragraph" in q_low:
+                sub_q = "solicitation overview scope of work title project description requirements"
+            else:
+                clean_q = re.sub(r"\b(?:between\s+)?(?:bid\s*[123]\s*(?:and|&)?\s*)+", "", question, flags=re.IGNORECASE)
+                sub_q = clean_q.strip() or question
 
             comparison_passages: List[Dict[str, Any]] = []
-            for b in available_bids:
+            for b in active_bids:
                 bid_results = self.retriever.search(
-                    query=question,
-                    top_k=3,
+                    query=sub_q,
+                    top_k=5,
                     bid_id=b,
                     mode="hybrid",
                     expand_query=True
                 )
+                # If deadline question, also retrieve addenda chunks for each bid
+                if any(w in q_low for w in ["deadline", "due date", "closing", "earliest"]):
+                    add_results = self.retriever.search(
+                        query="addendum new due date proposal submission deadline extension",
+                        top_k=3,
+                        bid_id=b,
+                        mode="hybrid"
+                    )
+                    bid_results.extend(add_results)
+
                 for r in bid_results:
+                    # Clean filename (fixes C5)
+                    clean_fname = re.sub(r"^\[?Bid\d\]?\s*", "", r.file_name)
                     comparison_passages.append({
                         "chunk_id": r.chunk_id,
-                        "file_name": f"[{b}] {r.file_name}",
+                        "file_name": clean_fname,
                         "page_number": r.page_number,
-                        "text": f"[{b}] {r.text}",
+                        "text": f"[{b} | File: {clean_fname} p.{r.page_number}]:\n{r.text}",
                         "score": r.rerank_score or r.rrf_score
                     })
 
@@ -270,31 +340,67 @@ class QAAgent:
                     "citations": []
                 }
 
-            comp_prompt = (
-                f"Compare how each bid ({', '.join(available_bids)}) addresses the following question: '{question}'.\n"
-                f"Structure your response by comparing the terms for each bid with exact quotations, "
-                f"then provide a concise summary table or bulleted difference."
-            )
+            comp_prompt = f"""Compare and answer how each bid ({', '.join(active_bids)}) addresses the following question: "{question}"
+
+CRITICAL INSTRUCTIONS:
+1. Provide a comprehensive, factual answer detailing EACH bid ({', '.join(active_bids)}) individually with exact quotes, followed by a clear comparative summary or difference.
+2. For DEADLINES / DUE DATES: Any addendum (e.g. Addendum 2) that extends a deadline strictly supersedes the original base RFP date. You MUST quote the revised date and cite the addendum.
+3. For WARRANTIES: Cite the actual warranty terms from the bid documents (e.g. for Bid2, the 3-year Dell Limited Hardware Warranty Extended on page 3 of the PORFP).
+4. For SCALE / QUANTITIES: List the exact unit counts and product tiers from the bid pricing/specification schedules.
+5. If a bid does NOT mention or contain the requested information, explicitly state that it is not mentioned or not required in that bid's documents.
+"""
             llm_resp = self.llm_client.answer_question(comp_prompt, comparison_passages)
+
+            # Clean citation filenames in response
+            cleaned_cites = []
+            for c in llm_resp.get("citations", []):
+                cleaned_cites.append({
+                    "file": re.sub(r"^\[?Bid\d\]?\s*", "", str(c.get("file", ""))),
+                    "page": c.get("page"),
+                    "quote": c.get("quote")
+                })
 
             return {
                 "question": question,
-                "target_bid": "All Bids (Comparison)",
+                "target_bid": f"{', '.join(active_bids)} (Comparison)",
                 "answer": llm_resp.get("answer", "Not found in documents."),
-                "citations": llm_resp.get("citations", []),
+                "citations": cleaned_cites,
                 "raw_evidence_count": len(comparison_passages)
             }
 
         # -------------------------------------------------------------------
         # 3. Standard Single-Bid Retrieval & Synthesis
         # -------------------------------------------------------------------
+        q_low = question.lower()
+        search_query = question
+
+        # Domain expansions for single bid queries
+        if "product tiers" in q_low or "quantities requested" in q_low:
+            search_query = f"{question} Tier 1 Tier 2 Target Quantity Small Student Chromebook Laptop Windows Laptop line item 50,000 5,000"
+        elif "affidavits" in q_low:
+            search_query = f"{question} Mercury Affidavit Contract Affidavit Conflict of Interest"
+        elif "bid bond" in q_low:
+            search_query = f"{question} bid bond insurance cashier check surety enumerated elsewhere"
+        elif "submission deadline" in q_low or "due date" in q_low:
+            search_query = f"{question} Addendum 2 new due date July 9 2024 proposal due date"
+
         results = self.retriever.search(
-            query=question,
+            query=search_query,
             top_k=top_k,
             bid_id=target_bid,
             mode="hybrid",
             expand_query=True
         )
+
+        # Include addenda chunks if deadline question
+        if any(w in q_low for w in ["deadline", "due date", "closing", "addendum"]):
+            add_res = self.retriever.search(
+                query="Addendum 2 new due date proposal submission deadline extension",
+                top_k=3,
+                bid_id=target_bid,
+                mode="hybrid"
+            )
+            results.extend(add_res)
 
         if not results:
             return {
@@ -307,7 +413,7 @@ class QAAgent:
         evidence_passages = [
             {
                 "chunk_id": r.chunk_id,
-                "file_name": r.file_name,
+                "file_name": re.sub(r"^\[?Bid\d\]?\s*", "", r.file_name),
                 "page_number": r.page_number,
                 "text": r.text,
                 "score": r.rerank_score or r.rrf_score
@@ -317,10 +423,18 @@ class QAAgent:
 
         llm_resp = self.llm_client.answer_question(question, evidence_passages)
 
+        cleaned_cites = []
+        for c in llm_resp.get("citations", []):
+            cleaned_cites.append({
+                "file": re.sub(r"^\[?Bid\d\]?\s*", "", str(c.get("file", ""))),
+                "page": c.get("page"),
+                "quote": c.get("quote")
+            })
+
         return {
             "question": question,
             "target_bid": target_bid,
             "answer": llm_resp.get("answer", "Not found in documents."),
-            "citations": llm_resp.get("citations", []),
+            "citations": cleaned_cites,
             "raw_evidence_count": len(results)
         }

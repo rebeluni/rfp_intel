@@ -61,7 +61,7 @@ class AddendumSummary(BaseModel):
     addendum_number: Optional[int] = None
     file_name: str
     overview: str
-    all_changes: List[str] = Field(default_factory=list)
+    all_changes: List[Any] = Field(default_factory=list)
 
 
 class ValidationSummary(BaseModel):
