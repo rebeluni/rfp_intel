@@ -152,16 +152,12 @@ class ValidatorAgent:
         retrieval_score = 0.50
 
         if cited_chunk and cited_quote:
-            retrieval_score = float(cited_chunk.get("score") or 0.50)
-            norm_quote = re.sub(r"\s+", " ", cited_quote.lower()).strip()
+            raw_score = float(cited_chunk.get("score") or 0.50)
+            retrieval_score = raw_score
+            norm_quote = re.sub(r"\s+", " ", cited_quote.lower()).strip(' "\'“”‘’')
             norm_chunk_text = re.sub(r"\s+", " ", cited_chunk.get("text", "").lower())
-            if norm_quote in norm_chunk_text:
+            if norm_quote and norm_quote in norm_chunk_text:
                 is_contiguous_match = True
-            else:
-                # If slight punctuation difference, check if 90%+ contiguous core matches
-                core_len = min(len(norm_quote), 60)
-                if core_len > 15 and norm_quote[:core_len] in norm_chunk_text:
-                    is_contiguous_match = True
 
         if not is_contiguous_match:
             val_issues.append(
@@ -188,22 +184,29 @@ class ValidatorAgent:
                 val_issues.append("Contact info does not contain an email address")
 
         # -------------------------------------------------------------------
-        # 5. Dynamic Confidence Computation (Item 4c)
+        # 5. Dynamic Confidence Computation (Item 4c & B3)
         # -------------------------------------------------------------------
-        # Base from retrieval score (normalized between 0.30 and 0.60)
-        norm_ret_score = min(max(retrieval_score, 0.0), 1.0)
-        base_confidence = 0.30 + (norm_ret_score * 0.30)
+        # Multi-factor confidence:
+        # - Retrieval score normalized (0.15 to 0.35)
+        # - Exact contiguous citation in cited chunk (+0.30)
+        # - Physical page verified (+0.05)
+        # - Format / syntax check passed (+0.15)
+        # - Quality of quote & cleanliness (+0.10)
+        norm_ret = retrieval_score if retrieval_score > 0.05 else (retrieval_score * 30.0)
+        norm_ret = min(max(norm_ret, 0.1), 1.0)
+        base_confidence = 0.15 + (norm_ret * 0.20)
 
         if is_contiguous_match:
             base_confidence += 0.30
+        if cited_page is not None and cited_page > 0:
+            base_confidence += 0.05
         if format_passed:
             base_confidence += 0.15
-        if not val_issues:
+        if len(cited_quote) >= 15 and "..." not in str(field.value):
             base_confidence += 0.10
 
-        # Cap confidence
         if val_issues:
-            calculated_confidence = min(round(base_confidence * 0.65, 2), 0.55)
+            calculated_confidence = min(round(base_confidence * 0.45, 2), 0.40)
             is_valid = False
         else:
             calculated_confidence = min(round(base_confidence, 2), 0.98)
@@ -231,6 +234,7 @@ class ValidatorAgent:
     ) -> Tuple[Dict[str, FieldOutput], ValidationSummary, Dict[str, FieldValidation]]:
         """
         Validate all fields in a package, returning updated fields and Section 8.1 ValidationSummary.
+        Ensures every field belongs to EXACTLY one bucket (B6).
         """
         summary = ValidationSummary()
         validations: Dict[str, FieldValidation] = {}
@@ -250,10 +254,9 @@ class ValidatorAgent:
             validated_fields[f_name] = val_field
             validations[f_name] = val_detail
 
-            # Partition into passed, failed, not_found, errors
+            # Mutually exclusive partitioning (B6): exactly one bucket per field
             if val_field.status == "ERROR":
                 summary.errors.append(f_name)
-                summary.failed.append(f_name)
             elif val_field.value is None or val_field.status == "NOT_FOUND":
                 summary.not_found.append(f_name)
             elif val_detail.is_valid:
@@ -270,8 +273,9 @@ class ValidatorAgent:
         bid_id: Optional[str]
     ) -> Tuple[bool, Optional[FieldOutput]]:
         """
-        Item 4b: For NOT_FOUND fields, re-retrieve with expanded queries
+        Item 4b / B2: For NOT_FOUND fields, re-retrieve with expanded queries
         and have the LLM confirm absence or extract if found.
+        R6: API failures must NEVER be disguised as absence.
         """
         hints = field_def.get("query_expansion_hints", [])
         if not hints or not bid_id:
@@ -285,7 +289,8 @@ class ValidatorAgent:
                 bid_id=bid_id,
                 top_k=5,
                 mode="hybrid",
-                expand_query=True
+                expand_query=True,
+                exclude_doc_type="addendum"
             )
             if not results:
                 return True, None
@@ -302,9 +307,19 @@ class ValidatorAgent:
             ]
 
             recovered = self.llm_client.extract_field(field_name, field_def, passages)
+            if recovered.status == "ERROR":
+                # Per R6, preserve API error rather than treating as absent
+                return False, recovered
+
             if recovered and recovered.status == "FOUND" and recovered.value is not None:
                 return False, recovered
             return True, None
         except Exception as e:
             logger.warning(f"Error during absence confirmation for '{field_name}': {e}")
-            return True, None
+            err_field = FieldOutput(
+                value=None,
+                status="ERROR",
+                notes=f"API/System error during absence confirmation: {str(e)}",
+                confidence=0.0
+            )
+            return False, err_field

@@ -271,8 +271,10 @@ class ExtractionPipeline:
         evidence_map = dict(state["retrieved_evidence"])
         extracted_map = dict(state["extracted_fields"])
 
+        tokens_start = self.llm_client.get_tokens()
         with self.tracer.start_step("retry_refinement", {"bid_id": bid_id, "retry_count": current_retry, "failed_fields": failed_fields}) as ctx:
             logger.info(f"[Retry Loop] Retrying {len(failed_fields)} failed fields with query expansion (attempt {current_retry})...")
+            retried_details = []
 
             for f_name in failed_fields:
                 f_def = field_defs.get(f_name, {})
@@ -290,7 +292,30 @@ class ExtractionPipeline:
                 re_ext.specialist = f_def.get("specialist")
                 extracted_map[f_name] = re_ext
 
-            ctx.complete({"retried_fields": failed_fields, "new_retry_count": current_retry})
+                step_detail = {
+                    "field": f_name,
+                    "new_query": expanded_q,
+                    "new_value": re_ext.value,
+                    "new_confidence": re_ext.confidence,
+                    "status": re_ext.status
+                }
+                retried_details.append(step_detail)
+                ctx.record_tool_call(
+                    "retry_extraction",
+                    {"field": f_name, "query": expanded_q, "attempt": current_retry},
+                    f"Result: {re_ext.value} (status: {re_ext.status}, confidence: {re_ext.confidence})"
+                )
+                print(f"  [+] [Retry {current_retry}] {f_name} -> {re_ext.value}", flush=True)
+
+            step_tokens = self.llm_client.get_tokens() - tokens_start
+            ctx.add_tokens(step_tokens)
+
+            ctx.complete({
+                "retried_fields": failed_fields,
+                "retry_details": retried_details,
+                "new_retry_count": current_retry,
+                "step_tokens": step_tokens
+            }, tokens=step_tokens)
 
             return {
                 "retrieved_evidence": evidence_map,
@@ -304,6 +329,7 @@ class ExtractionPipeline:
         fields_map = state["extracted_fields"]
         summary = state.get("validation_summary", ValidationSummary())
 
+        tokens_start = self.llm_client.get_tokens()
         with self.tracer.start_step("reconciliation", {"bid_id": bid_id, "field_count": len(fields_map)}) as ctx:
             logger.info(f"[Reconciliation] Reconciling all fields against ordered addenda chunks for '{bid_id}'...")
 
@@ -313,14 +339,15 @@ class ExtractionPipeline:
                 summary=summary
             )
 
-            tokens = self.llm_client.get_tokens()
-            ctx.add_tokens(tokens)
+            step_tokens = self.llm_client.get_tokens() - tokens_start
+            ctx.add_tokens(step_tokens)
 
             ctx.complete({
                 "addendum_changes_count": len(change_log),
                 "amended_fields": [c.field for c in change_log],
-                "cumulative_tokens": tokens
-            }, tokens=tokens)
+                "step_tokens": step_tokens,
+                "cumulative_tokens": self.llm_client.get_tokens()
+            }, tokens=step_tokens)
 
             return {
                 "extracted_fields": reconciled_fields,
@@ -359,22 +386,16 @@ class ExtractionPipeline:
         fields_map = state["extracted_fields"]
         change_log = state.get("addendum_changes", [])
         summary = state.get("validation_summary", ValidationSummary())
+        validations = state.get("validations", {})
         evidence_map = state.get("retrieved_evidence", {})
 
         with self.tracer.start_step("finalizer", {"bid_id": bid_id}) as ctx:
             logger.info(f"[Finalizer] Packaging Section 8.1 extraction result for '{bid_id}'...")
 
-            # Enforce Section 8.1 requirement:
-            # Delete the FieldSource(file="Solicitation Document", page=1) fallback.
+            # Clean citationless values per R5:
             # A found value without a real citation must fail validation and become null.
             for f_name, f_out in fields_map.items():
-                if f_out.value is None:
-                    f_out.sources = []
-                    if f_name not in summary.not_found and f_name not in summary.failed:
-                        summary.not_found.append(f_name)
-                    if f_name in summary.passed:
-                        summary.passed.remove(f_name)
-                elif not f_out.sources:
+                if f_out.value is not None and not f_out.sources:
                     logger.warning(
                         f"[Finalizer] Field '{f_name}' had value '{f_out.value}' but NO valid citation. "
                         f"Failing validation and setting to null."
@@ -384,15 +405,47 @@ class ExtractionPipeline:
                     f_out.status = "NOT_FOUND"
                     f_out.notes = "Failed validation: No valid citation found in documents"
                     f_out.sources = []
-                    if f_name in summary.passed:
-                        summary.passed.remove(f_name)
-                    if f_name not in summary.failed:
-                        summary.failed.append(f_name)
+                    f_out.needs_review = True
+                    f_out.review_reason = "Missing verifiable citation in documents"
+                elif f_out.value is None or f_out.status == "NOT_FOUND":
+                    f_out.sources = []
+                    f_out.confidence = 0.0
 
-            # Re-calculate compliance score
+            # Partition into mutually exclusive buckets (B6): exactly one bucket per field
+            new_errors = []
+            new_not_found = []
+            new_failed = []
+            new_passed = []
+
+            for f_name, f_out in fields_map.items():
+                val_detail = validations.get(f_name)
+                if f_out.status == "ERROR":
+                    new_errors.append(f_name)
+                    f_out.needs_review = True
+                    f_out.review_reason = f_out.notes or "API/System error during extraction"
+                elif f_out.value is None or f_out.status == "NOT_FOUND":
+                    new_not_found.append(f_name)
+                elif val_detail and not val_detail.is_valid:
+                    new_failed.append(f_name)
+                    f_out.needs_review = True
+                    f_out.review_reason = val_detail.feedback or "Failed deterministic validation checks"
+                elif f_name in summary.failed:
+                    new_failed.append(f_name)
+                    f_out.needs_review = True
+                    if not f_out.review_reason:
+                        f_out.review_reason = val_detail.feedback if val_detail else "Failed validation after retries"
+                else:
+                    new_passed.append(f_name)
+
+            summary.errors = new_errors
+            summary.not_found = new_not_found
+            summary.failed = new_failed
+            summary.passed = new_passed
+
+            # Calculate Completeness (B6): found fields (passed + failed) / total fields
             total_fields = len(fields_map)
-            passed_count = len(summary.passed)
-            compliance = round((passed_count / total_fields) * 100.0, 1) if total_fields > 0 else 0.0
+            found_count = len(new_passed) + len(new_failed)
+            completeness = round((found_count / total_fields) * 100.0, 1) if total_fields > 0 else 0.0
 
             total_chunks = sum(len(p) for p in evidence_map.values())
 
@@ -401,8 +454,9 @@ class ExtractionPipeline:
                 fields=fields_map,
                 addendum_changes=change_log,
                 validation=summary,
-                overall_compliance_score=compliance,
-                summary=f"Extraction completed for {bid_id}. Compliance: {compliance}%. Passed: {passed_count}/{total_fields}.",
+                completeness=completeness,
+                overall_compliance_score=completeness,
+                summary=f"Extraction completed for {bid_id}. Completeness: {completeness}%. Passed: {len(new_passed)}/{total_fields}, Failed: {len(new_failed)}/{total_fields}, Not Found: {len(new_not_found)}/{total_fields}.",
                 raw_evidence_count=total_chunks
             )
 
@@ -411,8 +465,12 @@ class ExtractionPipeline:
             logger.info(f"Structured trace successfully saved to {trace_file}")
 
             ctx.complete({
-                "compliance_score": compliance,
-                "passed_fields": passed_count,
+                "completeness": completeness,
+                "overall_compliance_score": completeness,
+                "passed_fields": len(new_passed),
+                "failed_fields": len(new_failed),
+                "not_found_fields": len(new_not_found),
+                "error_fields": len(new_errors),
                 "total_fields": total_fields,
                 "trace_file": str(trace_file)
             })

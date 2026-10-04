@@ -35,6 +35,8 @@ class FieldOutput(BaseModel):
     notes: Optional[str] = Field(default=None, description="Context, addendum annotations, or absence explanation")
     status: Optional[str] = Field(default=None, description="'FOUND', 'NOT_FOUND', or 'ERROR'")
     specialist: Optional[str] = Field(default=None, description="Assigned specialist category")
+    needs_review: Optional[bool] = Field(default=False, description="Flagged true if validation failed after retries")
+    review_reason: Optional[str] = Field(default=None, description="Reason why field requires human review")
 
 
 # Backwards compatibility alias
@@ -87,6 +89,7 @@ class BidExtractionResult(BaseModel):
     fields: Dict[str, FieldOutput] = Field(description="Extracted fields dictionary keyed by field_name")
     addendum_changes: List[AddendumChange] = Field(default_factory=list, description="Full addendum change log")
     validation: ValidationSummary = Field(default_factory=ValidationSummary, description="Validation summary")
+    completeness: float = Field(default=0.0, ge=0.0, le=100.0, description="Completeness percentage (found fields / total fields)")
     overall_compliance_score: float = Field(default=0.0, ge=0.0, le=100.0, description="Completeness & compliance %")
     summary: Optional[str] = Field(default=None, description="Executive summary of the bid")
     raw_evidence_count: int = Field(default=0, description="Total chunks retrieved during extraction")
