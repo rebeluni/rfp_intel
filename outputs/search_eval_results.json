@@ -5,28 +5,32 @@
       "recall_at_1": 0.3636,
       "recall_at_3": 0.7273,
       "recall_at_5": 0.8182,
-      "mrr": 0.5379
+      "mrr": 0.5379,
+      "latency_ms": 379.89
     },
     "bm25_only": {
       "total_queries": 22,
       "recall_at_1": 0.5455,
       "recall_at_3": 0.8182,
       "recall_at_5": 0.8636,
-      "mrr": 0.6856
+      "mrr": 0.6856,
+      "latency_ms": 3.54
     },
     "hybrid_norerank": {
       "total_queries": 22,
       "recall_at_1": 0.5,
       "recall_at_3": 0.8182,
       "recall_at_5": 0.8182,
-      "mrr": 0.6591
+      "mrr": 0.6591,
+      "latency_ms": 70.69
     },
     "hybrid_rerank": {
       "total_queries": 22,
       "recall_at_1": 0.5455,
       "recall_at_3": 0.8182,
       "recall_at_5": 0.8636,
-      "mrr": 0.6833
+      "mrr": 0.6833,
+      "latency_ms": 4678.71
     }
   },
   "details": {
@@ -41,6 +45,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 7371.96,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -53,6 +58,7 @@
         "recall_at_3": 0,
         "recall_at_5": 1,
         "reciprocal_rank": 0.25,
+        "latency_ms": 49.7,
         "top_citation": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -65,6 +71,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 49.75,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -77,6 +84,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 49.8,
         "top_citation": "Austin_Laptop_Specs.pdf (p.1 | Section: General)"
       },
       {
@@ -89,6 +97,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 44.88,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.3 | Section: Section 2 \u2013 Agency Point of Contact (POC) Information)"
       },
       {
@@ -101,6 +110,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 48.14,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.3 | Section: Section 2 \u2013 Agency Point of Contact (POC) Information)"
       },
       {
@@ -113,6 +123,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 49.28,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: General)"
       },
       {
@@ -125,6 +136,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 44.96,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.7 | Section: Scope And Specifications Of The)"
       },
       {
@@ -137,6 +149,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 45.72,
         "top_citation": "Dell_Laptop_Specs.pdf (p.3 | Section: General)"
       },
       {
@@ -149,6 +162,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 44.78,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.6 | Section: Scope And Specifications Of The)"
       },
       {
@@ -161,6 +175,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 48.99,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -173,6 +188,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 49.8,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.3 | Section: Section 2 \u2013 Agency Point of Contact (POC) Information)"
       },
       {
@@ -185,6 +201,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 45.12,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.9 | Section: Offer Submittal)"
       },
       {
@@ -197,6 +214,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 45.2,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.61 | Section: Superintendent Of Schools)"
       },
       {
@@ -209,6 +227,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 46.91,
         "top_citation": "Mercury_Affidavit.pdf (p.1 | Section: Mercury Affidavit)"
       },
       {
@@ -221,6 +240,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 47.35,
         "top_citation": "Contract_Affidavit.pdf (p.3 | Section: Further Affirm That:)"
       },
       {
@@ -233,6 +253,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 44.31,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -245,6 +266,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 46.28,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.5 | Section: General)"
       },
       {
@@ -257,6 +279,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 46.45,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -269,6 +292,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 45.78,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -281,6 +305,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 43.8,
         "top_citation": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -293,6 +318,7 @@
         "recall_at_3": 0,
         "recall_at_5": 1,
         "reciprocal_rank": 0.25,
+        "latency_ms": 48.69,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.31 | Section: Evaluation Process)"
       }
     ],
@@ -307,6 +333,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4.13,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -319,6 +346,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.16,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.1 | Section: Section 1 \u2013General Information)"
       },
       {
@@ -331,6 +359,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.5,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -343,6 +372,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.65,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -355,6 +385,7 @@
         "recall_at_3": 0,
         "recall_at_5": 1,
         "reciprocal_rank": 0.25,
+        "latency_ms": 4.8,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -367,6 +398,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 4.57,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -379,6 +411,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4.13,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: General)"
       },
       {
@@ -391,6 +424,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 3.07,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.20 | Section: Price Offer Summary)"
       },
       {
@@ -403,6 +437,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.3,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -415,6 +450,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 2.73,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: General)"
       },
       {
@@ -427,6 +463,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.57,
         "top_citation": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: Addendum No. 2)"
       },
       {
@@ -439,6 +476,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 2.92,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -451,6 +489,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 2.83,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -463,6 +502,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 5.0,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -475,6 +515,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 2.59,
         "top_citation": "Mercury_Affidavit.pdf (p.1 | Section: Austin Independent School District)"
       },
       {
@@ -487,6 +528,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 2.43,
         "top_citation": "Mercury_Affidavit.pdf (p.1 | Section: Austin Independent School District)"
       },
       {
@@ -499,6 +541,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 2.72,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.4 | Section: Section 5 \u2013 Evaluation Criteria \u2013 Technical Proposal)"
       },
       {
@@ -511,6 +554,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 2.56,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.3 | Section: General)"
       },
       {
@@ -523,6 +567,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 3.83,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.4 | Section: General)"
       },
       {
@@ -535,6 +580,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 6.1,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -547,6 +593,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 2.74,
         "top_citation": "PORFP_-_Austin_Laptop_Final.pdf (p.3 | Section: Section 3)"
       },
       {
@@ -559,6 +606,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 3.62,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.2 | Section: General)"
       }
     ],
@@ -573,6 +621,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 126.42,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -585,6 +634,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 79.27,
         "top_citation": "Dell Laptops w_Extended Warranty - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -597,6 +647,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 78.64,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -609,6 +660,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 91.5,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -621,6 +673,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 334.9,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -633,6 +686,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 55.71,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -645,6 +699,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 52.29,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: General)"
       },
       {
@@ -657,6 +712,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 47.34,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.2 | Section: General)"
       },
       {
@@ -669,6 +725,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 45.99,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -681,6 +738,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 46.53,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.5 | Section: Scope And Specifications Of The)"
       },
       {
@@ -693,6 +751,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 50.06,
         "top_citation": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: Addendum No. 2)"
       },
       {
@@ -705,6 +764,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 54.89,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -717,6 +777,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 58.79,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.3 | Section: Scope And Specifications Of The)"
       },
       {
@@ -729,6 +790,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 48.52,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.9 | Section: Offer Submittal)"
       },
       {
@@ -741,6 +803,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 44.45,
         "top_citation": "Mercury_Affidavit.pdf (p.1 | Section: Austin Independent School District)"
       },
       {
@@ -753,6 +816,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 48.83,
         "top_citation": "Contract_Affidavit.pdf (p.1 | Section: Authority)"
       },
       {
@@ -765,6 +829,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 49.34,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.4 | Section: Section 5 \u2013 Evaluation Criteria \u2013 Technical Proposal)"
       },
       {
@@ -777,6 +842,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 47.97,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.3 | Section: General)"
       },
       {
@@ -789,6 +855,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 47.21,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -801,6 +868,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 49.23,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -813,6 +881,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 45.58,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.3 | Section: Section 2 \u2013 Agency Point of Contact (POC) Information)"
       },
       {
@@ -825,6 +894,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 51.67,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.2 | Section: General)"
       }
     ],
@@ -839,6 +909,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 7104.61,
         "top_citation": "Addendum 2 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: Addendum No. 2)"
       },
       {
@@ -851,6 +922,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4768.38,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.1 | Section: Section 1 \u2013General Information)"
       },
       {
@@ -863,6 +935,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4429.09,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -875,6 +948,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4507.77,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -887,6 +961,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 4871.88,
         "top_citation": "Austin_ISD_Laptop_Procurement.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -899,6 +974,7 @@
         "recall_at_3": 0,
         "recall_at_5": 1,
         "reciprocal_rank": 0.2,
+        "latency_ms": 4366.94,
         "top_citation": "Austin_ISD_Laptop_Procurement.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -911,6 +987,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4783.84,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1 | Section: General)"
       },
       {
@@ -923,6 +1000,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.3333333333333333,
+        "latency_ms": 4527.99,
         "top_citation": "PORFP_-_Austin_Laptop_Final.pdf (p.3 | Section: Section 3)"
       },
       {
@@ -935,6 +1013,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4364.3,
         "top_citation": "Dell_Laptop_Specs.pdf (p.1 | Section: Specification / Bid Tables:)"
       },
       {
@@ -947,6 +1026,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 4466.54,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.6 | Section: Scope And Specifications Of The)"
       },
       {
@@ -959,6 +1039,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 4294.79,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.32 | Section: Proposal General Information)"
       },
       {
@@ -971,6 +1052,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 4528.83,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.2 | Section: Bid Submission Instructions)"
       },
       {
@@ -983,6 +1065,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4410.18,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -995,6 +1078,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4893.78,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -1007,6 +1091,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 4671.82,
         "top_citation": "Mercury_Affidavit.pdf (p.1 | Section: Austin Independent School District)"
       },
       {
@@ -1019,6 +1104,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4617.7,
         "top_citation": "Contract_Affidavit.pdf (p.1 | Section: Authority)"
       },
       {
@@ -1031,6 +1117,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4697.08,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.4 | Section: Section 5 \u2013 Evaluation Criteria \u2013 Technical Proposal)"
       },
       {
@@ -1043,6 +1130,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4442.02,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.1)"
       },
       {
@@ -1055,6 +1143,7 @@
         "recall_at_3": 0,
         "recall_at_5": 0,
         "reciprocal_rank": 0.0,
+        "latency_ms": 4671.76,
         "top_citation": "Student and Staff Computing Devices __SOURCING #168884__ - Bid Information - {3} _ BidNet Direct.html (p.1 | Section: Portal Bid Details & Schedule)"
       },
       {
@@ -1067,6 +1156,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4424.71,
         "top_citation": "JA-207652 Student and Staff Computing Devices FINAL.pdf (p.2 | Section: Purchasing Department)"
       },
       {
@@ -1079,6 +1169,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 0.5,
+        "latency_ms": 4478.55,
         "top_citation": "PORFP_-_Dell_Laptop_Final.pdf (p.1 | Section: Section 1 \u2013General Information)"
       },
       {
@@ -1091,6 +1182,7 @@
         "recall_at_3": 1,
         "recall_at_5": 1,
         "reciprocal_rank": 1.0,
+        "latency_ms": 4609.16,
         "top_citation": "Addendum 1 RFP JA-207652 Student and Staff Computing Devices.pdf (p.2 | Section: General)"
       }
     ]

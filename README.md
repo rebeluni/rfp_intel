@@ -161,11 +161,11 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 > **Note on Evaluation Granularity:** With 22 evaluation queries, exactly **one query represents 4.545% (4.5 points)** of the total recall. Small numerical differences reflect single-query shifts rather than systemic variance.
 
 | Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Latency (avg) |
-|---|---|---|---|---|---|
-| **BM25 Only** | 59.09% | 77.27% | **86.36%** | **0.6856** | 4.8 ms |
-| **Dense Only (BGE-small)** | 50.00% | 68.18% | 81.82% | 0.6273 | 42.1 ms |
-| **Hybrid (No Rerank)** | 54.55% | 72.73% | 81.82% | 0.6485 | 45.6 ms |
-| **Hybrid + Cross-Encoder Rerank** | 54.55% | 77.27% | **86.36%** | 0.6833 | 118.4 ms |
+| --- | --- | --- | --- | --- | --- |
+| **BM25 Only** | 54.55% | 81.82% | 86.36% | 0.6856 | 3.5 ms |
+| **Dense Only (BGE-small)** | 36.36% | 72.73% | 81.82% | 0.5379 | 379.9 ms |
+| **Hybrid (No Rerank)** | 50.00% | 81.82% | 81.82% | 0.6591 | 70.7 ms |
+| **Hybrid + Cross-Encoder Rerank** | 54.55% | 81.82% | 86.36% | 0.6833 | 4678.7 ms |
 
 ### Key Benchmark Observations:
 - BM25 and Hybrid+CrossEncoder achieve an identical **86.36% Recall@5** (19/22 queries successfully placed the ground-truth page in the top 5 candidates).

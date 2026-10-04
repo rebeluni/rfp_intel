@@ -268,14 +268,17 @@ class RetrievalEvaluator:
           2. file_match: file_name matches expected file
           3. page_match: res.page_number == expected_page (or page_start <= expected_page <= page_end)
         """
+        import time
         # Map internal mode names
         internal_mode = "hybrid" if mode == "hybrid_rerank" else mode
 
+        t0 = time.perf_counter()
         results: List[SearchResult] = self.retriever.search(
             query=item.query,
             top_k=top_k,
             mode=internal_mode,
         )
+        latency_ms = (time.perf_counter() - t0) * 1000.0
 
         matched_rank: Optional[int] = None
         matched_chunk_id: Optional[str] = None
@@ -308,6 +311,7 @@ class RetrievalEvaluator:
             "recall_at_3": 1 if (matched_rank and matched_rank <= 3) else 0,
             "recall_at_5": 1 if (matched_rank and matched_rank <= 5) else 0,
             "reciprocal_rank": reciprocal_rank,
+            "latency_ms": round(latency_ms, 2),
             "top_citation": results[0].format_citation() if results else "None",
         }
 
@@ -332,6 +336,7 @@ class RetrievalEvaluator:
             r3 = sum(i["recall_at_3"] for i in items_evaluated) / total
             r5 = sum(i["recall_at_5"] for i in items_evaluated) / total
             mrr = sum(i["reciprocal_rank"] for i in items_evaluated) / total
+            avg_latency = sum(i["latency_ms"] for i in items_evaluated) / total
 
             mode_metrics[m] = {
                 "total_queries": total,
@@ -339,6 +344,7 @@ class RetrievalEvaluator:
                 "recall_at_3": round(r3, 4),
                 "recall_at_5": round(r5, 4),
                 "mrr": round(mrr, 4),
+                "latency_ms": round(avg_latency, 2),
             }
 
         return {
@@ -350,8 +356,8 @@ class RetrievalEvaluator:
         """Format an honest Markdown comparison table."""
         metrics = benchmark_res["metrics"]
         lines = [
-            "| Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Description |",
-            "| :--- | :---: | :---: | :---: | :---: | :--- |",
+            "| Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Latency (ms) | Description |",
+            "| :--- | :---: | :---: | :---: | :---: | :---: | :--- |",
         ]
         descriptions = {
             "dense_only": "Dense semantic search (bge-small-en-v1.5)",
@@ -361,9 +367,10 @@ class RetrievalEvaluator:
         }
         for mode, data in metrics.items():
             desc = descriptions.get(mode, "")
+            lat = f"{data.get('latency_ms', 0.0):.1f} ms"
             lines.append(
                 f"| `{mode}` | {data['recall_at_1']:.4f} | {data['recall_at_3']:.4f} | "
-                f"{data['recall_at_5']:.4f} | {data['mrr']:.4f} | {desc} |"
+                f"{data['recall_at_5']:.4f} | {data['mrr']:.4f} | {lat} | {desc} |"
             )
         table_str = "\n".join(lines)
         return table_str
