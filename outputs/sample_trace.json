@@ -1,10 +1,10 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:58:38.648742+00:00",
+    "timestamp": "2026-10-04T16:11:59.740024+00:00",
     "agent": "orchestrator_planner",
     "input": {
-      "bid_id": "Bid3",
+      "bid_id": "Bid2",
       "total_fields": 20
     },
     "tool_calls": [],
@@ -19,14 +19,14 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.28
+    "latency_ms": 0.37
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:59:23.675462+00:00",
+    "timestamp": "2026-10-04T16:13:20.922977+00:00",
     "agent": "retrieval",
     "input": {
-      "bid_id": "Bid3",
+      "bid_id": "Bid2",
       "specialist_groups": [
         "commercial_legal",
         "dates_logistics",
@@ -44,46 +44,46 @@
           ],
           "total_fields": 20
         },
-        "output_summary": "Retrieved 97 chunks across 20 fields."
+        "output_summary": "Retrieved 99 chunks across 20 fields."
       }
     ],
     "output": {
       "retrieved_fields_count": 20,
-      "total_chunks": 97
+      "total_chunks": 99
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 45023.26
+    "latency_ms": 81179.26
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T13:00:41.533144+00:00",
+    "timestamp": "2026-10-04T16:14:38.951816+00:00",
     "agent": "extractor",
     "input": {
-      "bid_id": "Bid3",
+      "bid_id": "Bid2",
       "fields_to_extract": 20
     },
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 17,
-      "step_tokens": 63354,
-      "step_prompt_tokens": 60049,
-      "step_completion_tokens": 3305,
-      "cumulative_tokens": 63354
+      "found_fields_count": 18,
+      "step_tokens": 77430,
+      "step_prompt_tokens": 74309,
+      "step_completion_tokens": 3121,
+      "cumulative_tokens": 77430
     },
-    "tokens": 63354,
-    "prompt_tokens": 60049,
-    "completion_tokens": 3305,
-    "latency_ms": 77856.3
+    "tokens": 77430,
+    "prompt_tokens": 74309,
+    "completion_tokens": 3121,
+    "latency_ms": 78020.08
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T13:00:54.287202+00:00",
+    "timestamp": "2026-10-04T16:14:50.496424+00:00",
     "agent": "validator",
     "input": {
-      "bid_id": "Bid3",
+      "bid_id": "Bid2",
       "retry_iteration": 0
     },
     "tool_calls": [],
@@ -96,14 +96,14 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 12750.63
+    "latency_ms": 11511.2
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T13:00:54.289697+00:00",
+    "timestamp": "2026-10-04T16:14:50.501472+00:00",
     "agent": "reconciliation",
     "input": {
-      "bid_id": "Bid3",
+      "bid_id": "Bid2",
       "field_count": 20
     },
     "tool_calls": [],
@@ -113,28 +113,28 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 73236
+      "cumulative_tokens": 85334
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.64
+    "latency_ms": 1.03
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T13:00:54.291724+00:00",
+    "timestamp": "2026-10-04T16:14:50.501472+00:00",
     "agent": "qa_node",
     "input": {
-      "bid_id": "Bid3"
+      "bid_id": "Bid2"
     },
     "tool_calls": [],
     "output": {
       "qa_ready": true,
       "metadata": {
-        "bid_id": "Bid3",
-        "title": "High-Performance Student & Staff Laptops Procurement",
-        "issuing_agency": "Austin Independent School District",
-        "solicitation_number": "#AISD-P8820 (Project Number: AISD-2025-9988)",
+        "bid_id": "Bid2",
+        "title": "Dell Laptops w/Extended Warranty",
+        "issuing_agency": "MD State Treasurer’s Office",
+        "solicitation_number": "#E20P4600040 (eMMA Project Number: BPM044557)",
         "fields_ready": 18,
         "status": "ready"
       }
@@ -142,6 +142,6 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.34
+    "latency_ms": 0.22
   }
 ]

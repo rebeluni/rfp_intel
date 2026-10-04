@@ -133,6 +133,43 @@ class ExtractorAgent:
                     })
                 return passages
 
+        # Comprehensive scan for Payment Terms / Invoicing instructions across bid chunks
+        if field_name == "Payment Terms" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            payment_keywords = ["invoicing instructions", "invoice(s) shall be submitted", "invoice", "payment terms", "remit", "net 30", "net 10", "net 45", "days of delivering"]
+            payment_chunks = []
+            for chk in self.retriever.bm25_index.chunks:
+                meta = chk.metadata
+                if meta.bid_id.lower() != bid_id.lower():
+                    continue
+                if exclude_doc_type:
+                    dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                    if dt_val.lower() == exclude_doc_type.lower():
+                        continue
+                t_lower = chk.text.lower()
+                matches = sum(1 for kw in payment_keywords if kw in t_lower)
+                if matches > 0:
+                    score = float(matches)
+                    if "invoicing instructions" in t_lower or "invoice(s) shall be submitted" in t_lower:
+                        score += 3.0
+                    if "days of delivering" in t_lower:
+                        score += 2.0
+                    payment_chunks.append((chk, score))
+
+            if payment_chunks:
+                payment_chunks.sort(key=lambda x: x[1], reverse=True)
+                passages = []
+                for chk, score in payment_chunks[:max(top_k, 5)]:
+                    passages.append({
+                        "chunk_id": chk.chunk_id,
+                        "file_name": chk.metadata.file_name,
+                        "page_number": chk.metadata.page_number,
+                        "text": chk.text,
+                        "score": score,
+                        "section": chk.metadata.section,
+                        "doc_type": chk.metadata.doc_type.value if hasattr(chk.metadata.doc_type, "value") else str(chk.metadata.doc_type),
+                    })
+                return passages
+
         # Scan for Part_no / SKU evidence across both system and accessory/dock chunks
         if field_name == "Part_no" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
             part_chunks = []

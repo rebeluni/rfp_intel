@@ -107,7 +107,7 @@ fields:
 
   Payment Terms:
     specialist: "commercial_legal"
-    description: "Payment terms, prompt payment window, and invoicing instructions from the buyer/district to the contractor (e.g. invoice submission within N days of delivery, Net 30). Restrict strictly to buyer-to-contractor terms; do NOT extract subcontractor prompt-payment pass-through clauses. If buyer payment terms are not specified in the solicitation, return null with note stating buyer payment terms are not specified."
+    description: "Payment terms, prompt payment timeline, and invoicing instructions for the contractor (e.g. invoice submission within N days of delivering the equipment, Net 30, invoice recipient/email, required invoice details and proof of delivery). Extract invoicing instructions and submission timelines. Do NOT extract subcontractor prompt-payment pass-through clauses. If no payment terms or invoicing instructions are found in the solicitation, return null."
     format: "string"
     query_expansion_hints:
       - "invoicing instructions"

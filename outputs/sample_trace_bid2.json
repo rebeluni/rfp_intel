@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:54:18.801925+00:00",
+    "timestamp": "2026-10-04T16:11:59.740024+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid2",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.29
+    "latency_ms": 0.37
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:55:42.314698+00:00",
+    "timestamp": "2026-10-04T16:13:20.922977+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid2",
@@ -44,21 +44,21 @@
           ],
           "total_fields": 20
         },
-        "output_summary": "Retrieved 100 chunks across 20 fields."
+        "output_summary": "Retrieved 99 chunks across 20 fields."
       }
     ],
     "output": {
       "retrieved_fields_count": 20,
-      "total_chunks": 100
+      "total_chunks": 99
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 83508.93
+    "latency_ms": 81179.26
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T12:57:00.429359+00:00",
+    "timestamp": "2026-10-04T16:14:38.951816+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid2",
@@ -67,20 +67,20 @@
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 17,
-      "step_tokens": 78278,
-      "step_prompt_tokens": 74945,
-      "step_completion_tokens": 3333,
-      "cumulative_tokens": 78278
+      "found_fields_count": 18,
+      "step_tokens": 77430,
+      "step_prompt_tokens": 74309,
+      "step_completion_tokens": 3121,
+      "cumulative_tokens": 77430
     },
-    "tokens": 78278,
-    "prompt_tokens": 74945,
-    "completion_tokens": 3333,
-    "latency_ms": 78113.17
+    "tokens": 77430,
+    "prompt_tokens": 74309,
+    "completion_tokens": 3121,
+    "latency_ms": 78020.08
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T12:57:20.182883+00:00",
+    "timestamp": "2026-10-04T16:14:50.496424+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
@@ -88,85 +88,19 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 16,
-      "failed": 1,
-      "not_found": 3,
-      "needs_retry": true
-    },
-    "tokens": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 19718.5
-  },
-  {
-    "step_id": 5,
-    "timestamp": "2026-10-04T12:57:26.463685+00:00",
-    "agent": "retry_refinement",
-    "input": {
-      "bid_id": "Bid2",
-      "retry_count": 1,
-      "failed_fields": [
-        "Due Date"
-      ]
-    },
-    "tool_calls": [
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Due Date",
-          "query": "Due Date submission deadline closing date bid opening date",
-          "attempt": 1
-        },
-        "output_summary": "Result: 06/10/2024 02:00 PM EDT (status: FOUND, confidence: 0.9)"
-      }
-    ],
-    "output": {
-      "retried_fields": [
-        "Due Date"
-      ],
-      "retry_details": [
-        {
-          "field": "Due Date",
-          "new_query": "Due Date submission deadline closing date bid opening date",
-          "new_value": "06/10/2024 02:00 PM EDT",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        }
-      ],
-      "new_retry_count": 1,
-      "step_tokens": 5367,
-      "step_prompt_tokens": 5214,
-      "step_completion_tokens": 153,
-      "cumulative_tokens": 95402
-    },
-    "tokens": 5367,
-    "prompt_tokens": 5214,
-    "completion_tokens": 153,
-    "latency_ms": 6278.75
-  },
-  {
-    "step_id": 6,
-    "timestamp": "2026-10-04T12:57:45.953541+00:00",
-    "agent": "validator",
-    "input": {
-      "bid_id": "Bid2",
-      "retry_iteration": 1
-    },
-    "tool_calls": [],
-    "output": {
-      "passed": 17,
+      "passed": 18,
       "failed": 0,
-      "not_found": 3,
+      "not_found": 2,
       "needs_retry": false
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 19488.35
+    "latency_ms": 11511.2
   },
   {
-    "step_id": 7,
-    "timestamp": "2026-10-04T12:57:45.955034+00:00",
+    "step_id": 5,
+    "timestamp": "2026-10-04T16:14:50.501472+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid2",
@@ -179,16 +113,16 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 107159
+      "cumulative_tokens": 85334
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.62
+    "latency_ms": 1.03
   },
   {
-    "step_id": 8,
-    "timestamp": "2026-10-04T12:57:45.956789+00:00",
+    "step_id": 6,
+    "timestamp": "2026-10-04T16:14:50.501472+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid2"
@@ -201,13 +135,13 @@
         "title": "Dell Laptops w/Extended Warranty",
         "issuing_agency": "MD State Treasurer’s Office",
         "solicitation_number": "#E20P4600040 (eMMA Project Number: BPM044557)",
-        "fields_ready": 17,
+        "fields_ready": 18,
         "status": "ready"
       }
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.14
+    "latency_ms": 0.22
   }
 ]
