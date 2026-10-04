@@ -223,7 +223,7 @@ class GeminiClient(BaseLLMClient):
                         self.last_tokens_used = t_tokens
 
                     text = candidates[0]["content"]["parts"][0]["text"]
-                    return text, tokens
+                    return text, t_tokens
             except (httpx.TimeoutException, httpx.NetworkError) as e:
                 last_error = str(e)
                 logger.warning(

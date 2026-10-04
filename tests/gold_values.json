@@ -1,0 +1,38 @@
+{
+  "Bid1": {
+    "Bid Number": "JA-207652",
+    "Title": "Student and Staff Computing Devices",
+    "Due Date": "July 9, 2024",
+    "company_name": "Dallas ISD",
+    "Pre Bid Meeting": "June 10, 2024",
+    "Term of Bid": "three (3) year agreement",
+    "Installation": "software installation",
+    "Bid Bond Requirement": "defers to other contract documents",
+    "Product": "Chromebook"
+  },
+  "Bid2": {
+    "Title": "Dell Laptops w/Extended Warranty",
+    "Due Date": "06/10/2024",
+    "Bid Submission Type": "eMMA",
+    "Payment Terms": "10 days",
+    "Product": "Dell Latitude 5550",
+    "MFG for Registration": "Dell",
+    "Contract or Cooperative to use": "060B5400007",
+    "Any Additional Documentation Required": "Mercury Affidavit",
+    "contact_info": "Tamaira Hawkins",
+    "Installation": "No on-site installation required",
+    "Pre Bid Meeting": "None"
+  },
+  "Bid3": {
+    "Bid Number": "AISD-2025-9988",
+    "Title": "High-Performance Student & Staff Laptops Procurement",
+    "Due Date": "12/18/2025",
+    "Product": "Lenovo ThinkPad L15 Gen 5",
+    "MFG for Registration": "Lenovo",
+    "Contract or Cooperative to use": "Educational Technology Master Contract",
+    "Any Additional Documentation Required": "Mercury Affidavit",
+    "contact_info": "Rachel Adams",
+    "Installation": "No on-site installation required",
+    "Pre Bid Meeting": "None"
+  }
+}

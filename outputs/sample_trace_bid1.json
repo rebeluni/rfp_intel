@@ -1,0 +1,281 @@
+[
+  {
+    "step_id": 1,
+    "timestamp": "2026-10-04T08:22:25.729052+00:00",
+    "agent": "orchestrator_planner",
+    "input": {
+      "bid_id": "Bid1",
+      "total_fields": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "specialist_groups": {
+        "commercial_legal": 8,
+        "dates_logistics": 6,
+        "product_specs": 6
+      },
+      "status": "planned"
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 0.25
+  },
+  {
+    "step_id": 2,
+    "timestamp": "2026-10-04T08:24:07.623693+00:00",
+    "agent": "retrieval",
+    "input": {
+      "bid_id": "Bid1",
+      "specialist_groups": [
+        "commercial_legal",
+        "dates_logistics",
+        "product_specs"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "hybrid_retriever.search_parallel",
+        "args": {
+          "specialists": [
+            "commercial_legal",
+            "dates_logistics",
+            "product_specs"
+          ],
+          "total_fields": 20
+        },
+        "output_summary": "Retrieved 100 chunks across 20 fields."
+      }
+    ],
+    "output": {
+      "retrieved_fields_count": 20,
+      "total_chunks": 100
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 101891.56
+  },
+  {
+    "step_id": 3,
+    "timestamp": "2026-10-04T08:25:26.739466+00:00",
+    "agent": "extractor",
+    "input": {
+      "bid_id": "Bid1",
+      "fields_to_extract": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "extracted_fields_count": 20,
+      "found_fields_count": 15,
+      "step_tokens": 70180,
+      "step_prompt_tokens": 65546,
+      "step_completion_tokens": 4634,
+      "cumulative_tokens": 70180
+    },
+    "tokens": 70180,
+    "prompt_tokens": 65546,
+    "completion_tokens": 4634,
+    "latency_ms": 79082.94
+  },
+  {
+    "step_id": 4,
+    "timestamp": "2026-10-04T08:26:02.322966+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 0
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 14,
+      "failed": 1,
+      "not_found": 5,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 35549.67
+  },
+  {
+    "step_id": 5,
+    "timestamp": "2026-10-04T08:26:09.731771+00:00",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_count": 1,
+      "failed_fields": [
+        "Bid Number"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Bid Number",
+          "query": "Bid Number RFP number bid number solicitation identifier",
+          "attempt": 1
+        },
+        "output_summary": "Result: JA-207652 (status: FOUND, confidence: 0.9)"
+      }
+    ],
+    "output": {
+      "retried_fields": [
+        "Bid Number"
+      ],
+      "retry_details": [
+        {
+          "field": "Bid Number",
+          "new_query": "Bid Number RFP number bid number solicitation identifier",
+          "new_value": "JA-207652",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        }
+      ],
+      "new_retry_count": 1,
+      "step_tokens": 4902,
+      "step_prompt_tokens": 4729,
+      "step_completion_tokens": 173,
+      "cumulative_tokens": 90376
+    },
+    "tokens": 4902,
+    "prompt_tokens": 4729,
+    "completion_tokens": 173,
+    "latency_ms": 7407.14
+  },
+  {
+    "step_id": 6,
+    "timestamp": "2026-10-04T08:26:45.129975+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 1
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 15,
+      "failed": 1,
+      "not_found": 4,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 35395.79
+  },
+  {
+    "step_id": 7,
+    "timestamp": "2026-10-04T08:26:52.538357+00:00",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_count": 2,
+      "failed_fields": [
+        "Bid Number"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Bid Number",
+          "query": "Bid Number RFP number bid number solicitation identifier",
+          "attempt": 2
+        },
+        "output_summary": "Result: JA-207652 (status: FOUND, confidence: 0.9)"
+      }
+    ],
+    "output": {
+      "retried_fields": [
+        "Bid Number"
+      ],
+      "retry_details": [
+        {
+          "field": "Bid Number",
+          "new_query": "Bid Number RFP number bid number solicitation identifier",
+          "new_value": "JA-207652",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        }
+      ],
+      "new_retry_count": 2,
+      "step_tokens": 4902,
+      "step_prompt_tokens": 4729,
+      "step_completion_tokens": 173,
+      "cumulative_tokens": 110700
+    },
+    "tokens": 4902,
+    "prompt_tokens": 4729,
+    "completion_tokens": 173,
+    "latency_ms": 7406.69
+  },
+  {
+    "step_id": 8,
+    "timestamp": "2026-10-04T08:27:20.863093+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 2
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 15,
+      "failed": 1,
+      "not_found": 4,
+      "needs_retry": false
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 28323.99
+  },
+  {
+    "step_id": 9,
+    "timestamp": "2026-10-04T08:27:25.431791+00:00",
+    "agent": "reconciliation",
+    "input": {
+      "bid_id": "Bid1",
+      "field_count": 20
+    },
+    "tool_calls": [],
+    "output": {
+      "addendum_changes_count": 1,
+      "amended_fields": [
+        "Due Date"
+      ],
+      "step_tokens": 6426,
+      "step_prompt_tokens": 6195,
+      "step_completion_tokens": 231,
+      "cumulative_tokens": 128584
+    },
+    "tokens": 6426,
+    "prompt_tokens": 6195,
+    "completion_tokens": 231,
+    "latency_ms": 4566.86
+  },
+  {
+    "step_id": 10,
+    "timestamp": "2026-10-04T08:27:25.434953+00:00",
+    "agent": "qa_node",
+    "input": {
+      "bid_id": "Bid1"
+    },
+    "tool_calls": [],
+    "output": {
+      "qa_ready": true,
+      "metadata": {
+        "bid_id": "Bid1",
+        "title": "Student and Staff Computing Devices SOURCING #168884",
+        "issuing_agency": "Dallas ISD",
+        "solicitation_number": "JA-207652",
+        "fields_ready": 16,
+        "status": "ready"
+      }
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 1.69
+  }
+]
