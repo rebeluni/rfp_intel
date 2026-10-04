@@ -203,6 +203,30 @@ class QAAgent:
 
         return None
 
+    def _get_indexed_bids(self) -> List[str]:
+        """Dynamically return list of unique bid IDs present in the search index or project folders."""
+        catalog = self._get_bid_catalog()
+        if catalog:
+            return sorted(list(catalog.keys()))
+        bids = set()
+        if hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            for chk in self.retriever.bm25_index.chunks:
+                b = chk.metadata.bid_id
+                if b:
+                    bids.add(b)
+        if not bids and hasattr(self.retriever, "dense_indexer") and self.retriever.dense_indexer.chunks:
+            for chk in self.retriever.dense_indexer.chunks:
+                b = chk.metadata.bid_id
+                if b:
+                    bids.add(b)
+        if not bids:
+            from pathlib import Path
+            root = Path(settings.PROJECT_ROOT)
+            for d in root.iterdir():
+                if d.is_dir() and d.name.lower().startswith("bid"):
+                    bids.add(d.name)
+        return sorted(list(bids))
+
     def ask(self, question: str, bid_id: Optional[str] = None, top_k: int = 5) -> Dict[str, Any]:
         """
         Answer a question with dynamic routing, comparison handling, addendum summary paths,
@@ -221,13 +245,14 @@ class QAAgent:
 
         if is_addendum_summary_q:
             add_num = int(add_match.group(1))
+            available_bids = self._get_indexed_bids()
             if not target_bid or target_bid == "COMPARISON":
-                for b in ["Bid1", "Bid2", "Bid3"]:
+                for b in available_bids:
                     if any(c.get("addendum_number") == add_num for c in self.reconciler.get_addendum_chunks(b)):
                         target_bid = b
                         break
             if not target_bid:
-                target_bid = "Bid1"
+                target_bid = available_bids[0] if available_bids else "Bid1"
 
             logger.info(f"[QAAgent] Routing to explicit addendum summary path for {target_bid} Addendum {add_num}...")
             summary_obj = self.reconciler.get_addendum_summary(bid_id=target_bid, addendum_number=add_num)
@@ -272,8 +297,7 @@ class QAAgent:
         # -------------------------------------------------------------------
         if target_bid == "COMPARISON" or self.is_comparison_query(question):
             logger.info("[QAAgent] Executing per-bid cross-comparison retrieval...")
-            catalog = self._get_bid_catalog()
-            all_bids = sorted(list(catalog.keys())) if catalog else ["Bid1", "Bid2", "Bid3"]
+            all_bids = self._get_indexed_bids()
 
             q_low = question.lower()
             # Resolve target bids dynamically from question or indexed catalog
