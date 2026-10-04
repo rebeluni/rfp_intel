@@ -174,6 +174,15 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 
 ---
 
+### D3 Search Optimization Experiments (22-Query Benchmark)
+
+| Experiment | Status | Recall@1 | Recall@3 | Recall@5 | MRR | Delta MRR | Decision |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Table Row-Group Repeating Headers | `run` | 54.55% | 81.82% | 86.36% | 0.6833 | 0.0000 | **Kept** |
+| Dense Model Upgrade: BAAI/bge-base-en-v1.5 | `not run` | - | - | - | - | - | Not Run |
+| Weighted RRF (w_bm25=0.7, w_dense=0.3) | `run` | 54.55% | 81.82% | 86.36% | 0.6909 | +0.0076 | **Kept** |
+| Query Expansion on BM25 Only | `run` | 54.55% | 81.82% | 86.36% | 0.6856 | +0.0454 | **Kept** |
+
 ## Known Limitations & Design Trade-offs
 
 1. **Bid1 Pages 54–59 (IRS Form W-9 & Vector Instructions):**
