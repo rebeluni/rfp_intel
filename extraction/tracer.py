@@ -7,7 +7,7 @@ Saves complete execution trace to outputs/sample_trace.json.
 import json
 import time
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
@@ -30,6 +30,8 @@ class TraceStep(BaseModel):
     tool_calls: List[ToolCallRecord] = Field(default_factory=list)
     output: Dict[str, Any]
     tokens: int = 0
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
     latency_ms: float = 0.0
 
 
@@ -67,6 +69,8 @@ class StepContext:
         self.step_input = step_input
         self.tool_calls: List[ToolCallRecord] = []
         self.tokens: int = 0
+        self.prompt_tokens: int = 0
+        self.completion_tokens: int = 0
         self.start_time: float = 0.0
         self._completed: bool = False
 
@@ -77,8 +81,10 @@ class StepContext:
             output_summary=output_summary
         ))
 
-    def add_tokens(self, count: int) -> None:
+    def add_tokens(self, count: int, prompt_count: int = 0, completion_count: int = 0) -> None:
         self.tokens += count
+        self.prompt_tokens += prompt_count
+        self.completion_tokens += completion_count
 
     def __enter__(self) -> "StepContext":
         self.start_time = time.perf_counter()
@@ -90,28 +96,42 @@ class StepContext:
         latency = (time.perf_counter() - self.start_time) * 1000.0
         step = TraceStep(
             step_id=self.step_id,
-            timestamp=datetime.utcnow().isoformat() + "Z",
+            timestamp=datetime.now(timezone.utc).isoformat(),
             agent=self.agent,
             input=self.step_input,
             tool_calls=self.tool_calls,
             output={"status": "error" if exc_type else "success", "error": str(exc_val) if exc_val else None},
             tokens=self.tokens,
+            prompt_tokens=self.prompt_tokens,
+            completion_tokens=self.completion_tokens,
             latency_ms=round(latency, 2),
         )
         self.tracer.add_step(step)
 
-    def complete(self, output: Dict[str, Any], tokens: Optional[int] = None) -> None:
+    def complete(
+        self,
+        output: Dict[str, Any],
+        tokens: Optional[int] = None,
+        prompt_tokens: Optional[int] = None,
+        completion_tokens: Optional[int] = None
+    ) -> None:
         if tokens is not None:
             self.tokens = tokens
+        if prompt_tokens is not None:
+            self.prompt_tokens = prompt_tokens
+        if completion_tokens is not None:
+            self.completion_tokens = completion_tokens
         latency = (time.perf_counter() - self.start_time) * 1000.0
         step = TraceStep(
             step_id=self.step_id,
-            timestamp=datetime.utcnow().isoformat() + "Z",
+            timestamp=datetime.now(timezone.utc).isoformat(),
             agent=self.agent,
             input=self.step_input,
             tool_calls=self.tool_calls,
             output=output,
             tokens=self.tokens,
+            prompt_tokens=self.prompt_tokens,
+            completion_tokens=self.completion_tokens,
             latency_ms=round(latency, 2),
         )
         self.tracer.add_step(step)

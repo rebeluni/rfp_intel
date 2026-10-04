@@ -30,6 +30,9 @@ class Settings(BaseModel):
         default_factory=lambda: float(os.getenv("LLM_TEMPERATURE", "0.0"))
     )
     LLM_MAX_TOKENS: int = Field(default_factory=lambda: int(os.getenv("LLM_MAX_TOKENS", "2048")))
+    LLM_RATE_LIMIT_RPM: float = Field(
+        default_factory=lambda: float(os.getenv("LLM_RATE_LIMIT_RPM", "15.0"))
+    )
 
     # API Keys
     GEMINI_API_KEY: Optional[str] = Field(default_factory=lambda: os.getenv("GEMINI_API_KEY"))

@@ -47,7 +47,7 @@ class ThreadSafeRateLimiter:
 
 
 # Global shared rate limiter for all threads
-shared_rate_limiter = ThreadSafeRateLimiter(requests_per_minute=14.0)
+shared_rate_limiter = ThreadSafeRateLimiter(requests_per_minute=getattr(settings, "LLM_RATE_LIMIT_RPM", 15.0))
 
 
 # ---------------------------------------------------------------------------
@@ -134,12 +134,25 @@ class GeminiClient(BaseLLMClient):
         # Thread-safe token tracking
         self._tokens_lock = threading.Lock()
         self.total_tokens_used = 0
+        self.total_prompt_tokens = 0
+        self.total_completion_tokens = 0
         self.last_tokens_used = 0
+        self.last_prompt_tokens = 0
+        self.last_completion_tokens = 0
 
     def get_tokens(self) -> int:
         """Return total tokens consumed across calls."""
         with self._tokens_lock:
             return self.total_tokens_used
+
+    def get_token_usage(self) -> Dict[str, int]:
+        """Return cumulative breakdown of token usage {prompt_tokens, completion_tokens, total_tokens}."""
+        with self._tokens_lock:
+            return {
+                "prompt_tokens": self.total_prompt_tokens,
+                "completion_tokens": self.total_completion_tokens,
+                "total_tokens": self.total_tokens_used
+            }
 
     def get_last_tokens(self) -> int:
         """Return tokens consumed by the most recent API call."""
@@ -198,10 +211,16 @@ class GeminiClient(BaseLLMClient):
                         raise RuntimeError(f"No candidates returned by Gemini: {data}")
 
                     usage = data.get("usageMetadata", {})
-                    tokens = usage.get("totalTokenCount", 0)
+                    p_tokens = usage.get("promptTokenCount", 0)
+                    c_tokens = usage.get("candidatesTokenCount", 0)
+                    t_tokens = usage.get("totalTokenCount", p_tokens + c_tokens)
                     with self._tokens_lock:
-                        self.total_tokens_used += tokens
-                        self.last_tokens_used = tokens
+                        self.total_prompt_tokens += p_tokens
+                        self.total_completion_tokens += c_tokens
+                        self.total_tokens_used += t_tokens
+                        self.last_prompt_tokens = p_tokens
+                        self.last_completion_tokens = c_tokens
+                        self.last_tokens_used = t_tokens
 
                     text = candidates[0]["content"]["parts"][0]["text"]
                     return text, tokens

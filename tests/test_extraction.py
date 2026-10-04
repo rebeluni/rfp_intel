@@ -271,3 +271,22 @@ def test_validation_mutually_exclusive_buckets_and_completeness():
     assert "field_not_found" in summary.not_found
     assert "field_error" in summary.errors
 
+
+def test_trace_step_token_tracking(tmp_path):
+    from extraction.tracer import StructuredTracer
+    trace_file = tmp_path / "test_trace.json"
+    tracer = StructuredTracer(trace_path=trace_file)
+
+    with tracer.start_step("extractor", {"task": "test"}) as ctx:
+        ctx.add_tokens(count=150, prompt_count=100, completion_count=50)
+        ctx.complete({"result": "ok"}, tokens=150, prompt_tokens=100, completion_tokens=50)
+
+    saved_path = tracer.save()
+    assert saved_path.exists()
+    assert len(tracer.steps) == 1
+    step = tracer.steps[0]
+    assert step.tokens == 150
+    assert step.prompt_tokens == 100
+    assert step.completion_tokens == 50
+    assert step.agent == "extractor"
+

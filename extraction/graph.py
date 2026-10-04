@@ -200,6 +200,8 @@ class ExtractionPipeline:
                     print(f"  [+] [{group_name}] {f_name}: {ext.value}", flush=True)
                 return res
 
+            tok_before = self.llm_client.get_token_usage()
+
             with ThreadPoolExecutor(max_workers=3) as executor:
                 futures = {
                     executor.submit(extract_group, group_name, f_list): group_name
@@ -210,15 +212,21 @@ class ExtractionPipeline:
                     group_res = fut.result()
                     extracted_map.update(group_res)
 
-            tokens = self.llm_client.get_tokens()
-            ctx.add_tokens(tokens)
+            tok_after = self.llm_client.get_token_usage()
+            step_p = tok_after["prompt_tokens"] - tok_before["prompt_tokens"]
+            step_c = tok_after["completion_tokens"] - tok_before["completion_tokens"]
+            step_t = tok_after["total_tokens"] - tok_before["total_tokens"]
+            ctx.add_tokens(step_t, step_p, step_c)
 
             found_count = sum(1 for f in extracted_map.values() if f.value is not None)
             ctx.complete({
                 "extracted_fields_count": len(extracted_map),
                 "found_fields_count": found_count,
-                "cumulative_tokens": tokens
-            }, tokens=tokens)
+                "step_tokens": step_t,
+                "step_prompt_tokens": step_p,
+                "step_completion_tokens": step_c,
+                "cumulative_tokens": tok_after["total_tokens"]
+            }, tokens=step_t, prompt_tokens=step_p, completion_tokens=step_c)
 
             return {"extracted_fields": extracted_map}
 
@@ -271,7 +279,7 @@ class ExtractionPipeline:
         evidence_map = dict(state["retrieved_evidence"])
         extracted_map = dict(state["extracted_fields"])
 
-        tokens_start = self.llm_client.get_tokens()
+        tok_before = self.llm_client.get_token_usage()
         with self.tracer.start_step("retry_refinement", {"bid_id": bid_id, "retry_count": current_retry, "failed_fields": failed_fields}) as ctx:
             logger.info(f"[Retry Loop] Retrying {len(failed_fields)} failed fields with query expansion (attempt {current_retry})...")
             retried_details = []
@@ -307,15 +315,21 @@ class ExtractionPipeline:
                 )
                 print(f"  [+] [Retry {current_retry}] {f_name} -> {re_ext.value}", flush=True)
 
-            step_tokens = self.llm_client.get_tokens() - tokens_start
-            ctx.add_tokens(step_tokens)
+            tok_after = self.llm_client.get_token_usage()
+            step_p = tok_after["prompt_tokens"] - tok_before["prompt_tokens"]
+            step_c = tok_after["completion_tokens"] - tok_before["completion_tokens"]
+            step_t = tok_after["total_tokens"] - tok_before["total_tokens"]
+            ctx.add_tokens(step_t, step_p, step_c)
 
             ctx.complete({
                 "retried_fields": failed_fields,
                 "retry_details": retried_details,
                 "new_retry_count": current_retry,
-                "step_tokens": step_tokens
-            }, tokens=step_tokens)
+                "step_tokens": step_t,
+                "step_prompt_tokens": step_p,
+                "step_completion_tokens": step_c,
+                "cumulative_tokens": tok_after["total_tokens"]
+            }, tokens=step_t, prompt_tokens=step_p, completion_tokens=step_c)
 
             return {
                 "retrieved_evidence": evidence_map,
@@ -329,7 +343,7 @@ class ExtractionPipeline:
         fields_map = state["extracted_fields"]
         summary = state.get("validation_summary", ValidationSummary())
 
-        tokens_start = self.llm_client.get_tokens()
+        tok_before = self.llm_client.get_token_usage()
         with self.tracer.start_step("reconciliation", {"bid_id": bid_id, "field_count": len(fields_map)}) as ctx:
             logger.info(f"[Reconciliation] Reconciling all fields against ordered addenda chunks for '{bid_id}'...")
 
@@ -339,15 +353,20 @@ class ExtractionPipeline:
                 summary=summary
             )
 
-            step_tokens = self.llm_client.get_tokens() - tokens_start
-            ctx.add_tokens(step_tokens)
+            tok_after = self.llm_client.get_token_usage()
+            step_p = tok_after["prompt_tokens"] - tok_before["prompt_tokens"]
+            step_c = tok_after["completion_tokens"] - tok_before["completion_tokens"]
+            step_t = tok_after["total_tokens"] - tok_before["total_tokens"]
+            ctx.add_tokens(step_t, step_p, step_c)
 
             ctx.complete({
                 "addendum_changes_count": len(change_log),
                 "amended_fields": [c.field for c in change_log],
-                "step_tokens": step_tokens,
-                "cumulative_tokens": self.llm_client.get_tokens()
-            }, tokens=step_tokens)
+                "step_tokens": step_t,
+                "step_prompt_tokens": step_p,
+                "step_completion_tokens": step_c,
+                "cumulative_tokens": tok_after["total_tokens"]
+            }, tokens=step_t, prompt_tokens=step_p, completion_tokens=step_c)
 
             return {
                 "extracted_fields": reconciled_fields,
@@ -477,7 +496,13 @@ class ExtractionPipeline:
 
             # Persist structured trace
             trace_file = self.tracer.save()
-            logger.info(f"Structured trace successfully saved to {trace_file}")
+            import shutil
+            bid_trace_path = settings.OUTPUTS_DIR / f"sample_trace_{bid_id.lower()}.json"
+            try:
+                shutil.copyfile(trace_file, bid_trace_path)
+            except Exception as e:
+                logger.warning(f"Could not write bid-specific trace file: {e}")
+            logger.info(f"Structured trace successfully saved to {trace_file} and {bid_trace_path}")
 
             ctx.complete({
                 "completeness": completeness,

@@ -147,6 +147,20 @@ def cmd_serve(args: argparse.Namespace) -> None:
     uvicorn.run("api.server:app", host=host, port=port, reload=False)
 
 
+def cmd_ui(args: argparse.Namespace) -> None:
+    """Run Streamlit interactive web interface."""
+    import subprocess
+    port = args.port or 8501
+    app_path = settings.PROJECT_ROOT / "ui" / "app.py"
+    print(f"Launching Streamlit UI on http://localhost:{port}...")
+    subprocess.run([
+        sys.executable, "-m", "streamlit", "run",
+        str(app_path),
+        "--server.port", str(port),
+        "--server.headless", "true"
+    ])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="main.py",
@@ -168,6 +182,10 @@ def main() -> None:
     p_serve.add_argument("--host", default=None, help="Host address (default: 0.0.0.0)")
     p_serve.add_argument("--port", type=int, default=None, help="Port number (default: 8000)")
 
+    # Command: ui
+    p_ui = subparsers.add_parser("ui", help="Start the interactive Streamlit web UI")
+    p_ui.add_argument("--port", type=int, default=8501, help="Port number (default: 8501)")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -180,6 +198,8 @@ def main() -> None:
         cmd_ask(args)
     elif args.command == "serve":
         cmd_serve(args)
+    elif args.command == "ui":
+        cmd_ui(args)
 
 
 if __name__ == "__main__":
