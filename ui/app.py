@@ -193,33 +193,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("---")
-    with st.expander("📁 Ingest Unseen Bid Package", expanded=False):
-        st.caption("Upload PDFs or HTML to test on a new, unseen solicitation.")
-        new_bid_id = st.text_input("New Bid ID", placeholder="e.g. Bid4", key="new_bid_name_input")
-        uploaded_files = st.file_uploader(
-            "Upload RFP Documents",
-            type=["pdf", "html", "htm"],
-            accept_multiple_files=True,
-            key="new_bid_files"
-        )
-        if st.button("⚡ Parse & Index Package", use_container_width=True, type="primary"):
-            if not new_bid_id.strip():
-                st.error("Please provide a Bid ID.")
-            elif not uploaded_files:
-                st.error("Please upload at least one PDF or HTML file.")
-            else:
-                with st.spinner(f"Ingesting and building vector index for {new_bid_id}..."):
-                    target_dir = PROJECT_ROOT / new_bid_id.strip()
-                    target_dir.mkdir(parents=True, exist_ok=True)
-                    for uf in uploaded_files:
-                        save_path = target_dir / uf.name
-                        with open(save_path, "wb") as f_out:
-                            f_out.write(uf.getvalue())
-                    # Index the new directory
-                    idx_mgr.index_bid_directory(target_dir, bid_id=new_bid_id.strip())
-                    st.success(f"Successfully indexed {new_bid_id}! Updating...")
-                    st.rerun()
+
 
 # Header
 st.markdown('<div class="main-header">📋 RFP Intelligence Platform</div>', unsafe_allow_html=True)
