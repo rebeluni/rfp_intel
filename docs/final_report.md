@@ -180,25 +180,29 @@ Every extracted field is scored dynamically across four dimensions:
 Each field marked `null` was audited by searching the raw document text (PyMuPDF text dumps and HTML strings):
 
 1. **Bid1:**
-   - `Delivery Date`: The raw RFP text confirms this is an annual Indefinite Delivery / Indefinite Quantity (IDIQ) catalog agreement. Delivery deadlines are governed by individual school purchase orders rather than a single fixed solicitation-wide delivery date.
+   - `Delivery Date`: The raw RFP text (p.8) asks vendors to state how quickly shipping could occur after a purchase order is received (*"How quickly could shipping occur once your company receives a Purchase Order?"*). This is an open-market multi-tier agreement where delivery timelines are governed by individual purchase orders; no single fixed delivery date is stated in the solicitation. The word "IDIQ" does not appear anywhere in the Bid1 documents.
    - `Model_no` and `Part_no`: Dallas ISD RFP explicitly solicits generic device tiers (Tier 1 Small Student Chromebook, Staff Laptop Tier 1, etc.) for evaluation purposes (RFP page 35). No single chassis model number is prescribed by the district.
    - `MFG for Registration`: The RFP allows multiple hardware manufacturers across tiers; deal registration with a single OEM is not required.
 2. **Bid2:**
    - `Term of Bid`: Raw text in `PORFP_-_Dell_Laptop_Final.pdf` confirms this is a one-time purchase order for 30 laptops under an existing Master Contract. It has no ongoing multi-year term.
    - `Pre Bid Meeting`: Grep search across all Bid2 files for `pre-bid`, `pre-proposal`, and `conference` confirms zero occurrences. The solicitation is completely silent; correctly marked `null`.
-   - `Bid Summary`: The 6-page PORFP form has no narrative executive summary section.
-   - `Bid Bond Requirement`: One-time hardware purchase orders under the State of Maryland Master Contract do not require a bid bond.
+   - `Bid Summary`: The 4-page PORFP form (verified: `pymupdf page_count = 4`) has no narrative executive summary section.
+   - `Bid Bond Requirement`: A full-text search of all Bid2 documents for `bid bond`, `surety`, and `bond` returns **zero matches**. The documents are silent on this topic; the correct characterization is "not mentioned in the documents", not "not required".
 3. **Bid3:**
-   - `Term of Bid`, `Pre Bid Meeting`, `Bid Bond Requirement`: Inherits the structure of Bid2; these requirements do not exist in the documents.
-   - `company_name`: During initial parallel extraction, the HTTP request for `company_name` experienced an transient socket drop and gracefully defaulted to `null` with `needs_review: true`, adhering to Rule R6.
+   - `Term of Bid`, `Pre Bid Meeting`: These requirements do not exist in the documents (verified by full-text search).
+   - `Bid Bond Requirement`: A full-text search of all Bid3 documents for `bid bond`, `surety`, and `bond` returns **zero matches**. Documents are silent on this topic; correct answer is "not mentioned in the documents".
+   - `company_name`: During initial parallel extraction, the HTTP request for `company_name` experienced a transient socket drop and gracefully defaulted to `null` with `needs_review: true`, adhering to Rule R6.
 
 ---
 
 ## Part 7: Known Limitations & System Boundaries
 
-1. **Non-Extractable Vector Drawings (Bid1 Pages 54–59):**
-   - Dallas ISD solicitation pages 54–59 contain CAD architectural drawings, classroom network cabling topologies, and physical drop diagrams.
-   - These pages are constructed entirely of vector path drawing primitives (e.g. page 54 contains 262 drawing path objects and only 4 text characters). Because they lack underlying text streams, OCR on raw geometric lines yields no coherent text. The platform logs `non-extractable (vector outlines)` and flags them for manual human review rather than fabricating contents.
+1. **Bid1 Pages 54–59 (IRS W-9 Form — Vector Outline Instructions):**
+   - **Before:** Previously incorrectly described as "CAD architectural drawings, classroom network cabling topologies, and physical drop diagrams".
+   - **After (verified):** Page 54 is the **IRS Form W-9** (Request for Taxpayer Identification Number) rendered as an interactive PDF with **35 fillable widget fields** (Text, CheckBox, Signature). PyMuPDF `page.widgets()` confirms exactly 35 widget fields; the only visible text is 5 chars (`SIGN\n`) because form labels are rendered as vector paths.
+   - Pages 55–59 are the **W-9 instructions** composed entirely of vector stroke drawing objects (199–216 drawing paths per page, **0 text characters** extracted). These are instruction pages rendered as vector outlines, not CAD drawings.
+   - OCR via `pytesseract` is **not available** (`No module named 'pytesseract'`). Rasterization via Gemini vision requires an additional API call per page and is not currently implemented.
+   - The platform flags these pages as `non-extractable (vector outlines — W-9 form and instructions)` and recommends manual human review rather than hallucinating W-9 field values into procurement fields.
 2. **Free-Tier Rate Limiting:**
    - On free tier Gemini API keys, Google enforces a 15 Requests-Per-Minute (RPM) quota. The shared `ThreadSafeRateLimiter` (`LLM_RATE_LIMIT_RPM=15.0`) successfully prevents HTTP 429 throttling across parallel threads, but limits overall end-to-end extraction speed to ~45–60 seconds per 20-field package.
 
