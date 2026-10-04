@@ -1,5 +1,7 @@
 # RFP Intelligence Platform
 
+> **🎥 Video Walkthrough & Demo:** [Watch Demo on Google Drive](https://drive.google.com/drive/folders/1yPj4AjigEAdJqJMpVTZOFULtCTp3y4Vp?usp=drive_link)
+
 An enterprise-grade RFP Intelligence Platform combining a hybrid RAG search engine (BM25 + BAAI/bge-small-en-v1.5 dense embeddings + cross-encoder re-ranking) with a multi-agent system (LangGraph) to parse, index, extract, and reconcile structured data from complex procurement solicitations and addenda.
 
 ---
