@@ -290,3 +290,170 @@ def test_trace_step_token_tracking(tmp_path):
     assert step.completion_tokens == 50
     assert step.agent == "extractor"
 
+
+def test_transient_retry_logic(monkeypatch):
+    """Offline unit test: transient network errors (Timeout, ConnectionError) are retried and recover."""
+    from unittest.mock import MagicMock
+    import json
+    import httpx
+    from extraction.llm_client import GeminiClient
+
+    client = GeminiClient(api_key="mock_key")
+    call_count = 0
+
+    def mock_post(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            raise httpx.TimeoutException("Read timed out")
+        elif call_count == 2:
+            raise ConnectionError("Connection reset by peer")
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "candidates": [{
+                "content": {
+                    "parts": [{
+                        "text": json.dumps({
+                            "value": "JA-207652",
+                            "status": "FOUND",
+                            "quote": "Solicitation JA-207652",
+                            "file_name": "rfp.pdf",
+                            "page_number": 1,
+                            "reason": "Found solicitation number"
+                        })
+                    }]
+                }
+            }],
+            "usageMetadata": {"promptTokenCount": 50, "candidatesTokenCount": 20, "totalTokenCount": 70}
+        }
+        return mock_resp
+
+    monkeypatch.setattr(httpx.Client, "post", mock_post)
+    import time
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+
+    res = client.extract_field("Bid Number", {"description": "Bid number"}, [{"file_name": "rfp.pdf", "page_number": 1, "text": "Solicitation JA-207652"}])
+    assert call_count == 3
+    assert res.value == "JA-207652"
+    assert res.status == "FOUND"
+
+
+def test_bid_summary_generation_from_scope(monkeypatch):
+    """Offline unit test: Bid Summary synthesizes purpose, scope, and equipment from scope chunks."""
+    from unittest.mock import MagicMock
+    import json
+    import httpx
+    from extraction.llm_client import GeminiClient
+
+    client = GeminiClient(api_key="mock_key")
+
+    mock_summary_json = {
+        "value": "Dallas Independent School District is soliciting offers for student and staff computing devices across high school campuses.",
+        "status": "FOUND",
+        "quote": "Dallas Independent School District is soliciting offers for student and staff computing devices",
+        "file_name": "scope.pdf",
+        "page_number": 1,
+        "reason": "Generated from district scope and objectives."
+    }
+
+    def mock_post(*args, **kwargs):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "candidates": [{
+                "content": {
+                    "parts": [{"text": json.dumps(mock_summary_json)}]
+                }
+            }],
+            "usageMetadata": {"promptTokenCount": 100, "candidatesTokenCount": 40, "totalTokenCount": 140}
+        }
+        return mock_resp
+
+    monkeypatch.setattr(httpx.Client, "post", mock_post)
+
+    scope_passages = [{
+        "file_name": "scope.pdf",
+        "page_number": 1,
+        "text": "Dallas Independent School District is soliciting offers for student and staff computing devices to support high school campus programs.",
+        "score": 0.92
+    }]
+
+    res = client.extract_field("Bid Summary", {"description": "1-2 paragraph executive summary"}, scope_passages)
+    assert res.value is not None
+    assert "Dallas Independent School District" in res.value
+    assert "student and staff computing devices" in res.value
+    assert len(res.sources) == 1
+    assert res.sources[0].file == "scope.pdf"
+
+
+def test_null_none_semantics_for_absent_fields():
+    """Offline unit test: Absent fields yield value=None, confidence=0.0, status=NOT_FOUND, sources=[]."""
+    from extraction.validator_agent import ValidatorAgent
+    from extraction.models import FieldOutput
+
+    validator = ValidatorAgent(retriever=None, llm_client=None)
+
+    absent_field = FieldOutput(
+        value=None,
+        status="NOT_FOUND",
+        confidence=0.0,
+        sources=[]
+    )
+
+    validated_field, val_detail = validator.validate_field(
+        field_name="Payment Terms",
+        field=absent_field,
+        retrieved_passages=[]
+    )
+
+    assert validated_field.value is None
+    assert validated_field.confidence == 0.0
+    assert validated_field.status == "NOT_FOUND"
+    assert validated_field.sources == []
+    assert val_detail.is_valid is True
+    assert val_detail.issue_type is None
+    assert "absent" in val_detail.feedback.lower() or "not found" in val_detail.feedback.lower()
+
+
+def test_buyer_payment_terms_distinction():
+    """Offline unit test: Distinguishes contractor invoicing timing from buyer payment terms."""
+    from extraction.validator_agent import ValidatorAgent
+    from extraction.models import FieldOutput, FieldSource
+
+    validator = ValidatorAgent(retriever=None, llm_client=None)
+
+    buyer_terms_field = FieldOutput(
+        value="Net 30 days from invoice approval",
+        status="FOUND",
+        confidence=0.90,
+        sources=[
+            FieldSource(
+                file="contract.pdf",
+                page=5,
+                chunk_id="c_pay",
+                quote="Payment terms are Net 30 days from invoice approval by the District."
+            )
+        ]
+    )
+
+    passages = [{
+        "chunk_id": "c_pay",
+        "file_name": "contract.pdf",
+        "page_number": 5,
+        "text": "Payment terms are Net 30 days from invoice approval by the District. Invoices must be submitted within 10 days.",
+        "score": 0.85
+    }]
+
+    val_field, val_detail = validator.validate_field(
+        field_name="Payment Terms",
+        field=buyer_terms_field,
+        retrieved_passages=passages
+    )
+
+    assert val_detail.is_valid is True
+    assert val_field.confidence >= 0.70
+    assert "Net 30" in str(val_field.value)
+
+
