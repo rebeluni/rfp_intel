@@ -210,6 +210,17 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
 | **Weighted RRF (w_bm25=0.7, w_dense=0.3)** | Increasing BM25 weight yields identical candidate pool before Cross-Encoder reranking; kept unweighted RRF (k=60) for balanced generality. | `run` | +0.0000 | +0.0000 | +0.0076 | **Kept** |
 | **Query Expansion on BM25 Only** | BM25 query expansion preserves/boosts domain keyword matching (with expansion MRR=0.6856 vs without expansion MRR=0.6402). | `run` | +0.0455 | +0.0454 | +0.0454 | **Kept** |
 
+## Assumptions
+
+- **Bid Package Ingestion:** Each bid folder is processed as one atomic unit; the folder name (e.g., `Bid1`, `Bid2`, `Bid3`) serves as the canonical `bid_id`.
+- **Document Classification:** Document type (`solicitation`, `addendum`, `pricing_sheet`, `attachment`, `affidavit`) is inferred deterministically from file names and content structure, with an LLM fallback when classification heuristics are uncertain.
+- **LLM Provider:** Google Gemini (via `GEMINI_API_KEY`) is the supported LLM provider across extraction, QA synthesis, and structured JSON parsing.
+- **Literal Date & Time Preservation:** Dates and times are extracted and reported verbatim as written in the source documents (e.g. the Bid1 addendum specifies "CST" for a July date); no timezone normalization or assumption is applied.
+- **Strict Evidence Grounding & Null Policy:** A field is assigned `null` (with status `NOT_FOUND`) when the underlying package documents do not explicitly state it; the system does not hallucinate or infer missing values.
+- **Synthetic Consistency Baseline:** `Bid3` is a synthetic package created by systematically perturbing `Bid2` entities, dates, and specifications, serving as an automated consistency and regression test rather than an independent real-world dataset.
+- **Benchmark Gold Standards:** Gold values in `tests/gold_values.json` were authored by the developer with AI assistance to evaluate exact field extraction and are not an external third-party benchmark.
+- **Evaluation Granularity:** The information retrieval benchmark consists of 22 queries; exactly one query represents ~4.545 percentage points of recall.
+
 ## Known Limitations & Design Trade-offs
 
 1. **Bid1 Pages 54–59 (IRS Form W-9 & Vector Instructions):**
@@ -217,3 +228,4 @@ Evaluation performed across **22 ground-truth target queries** with strict citat
    - Standard PDF text extraction via PyMuPDF parses embedded font streams. Unfilled interactive form widgets on page 54 are filtered to avoid indexing 35 blank lines of template noise, while pages 55–59 contain vector glyph outlines that yield no text without optical character recognition (OCR). When system OCR (Tesseract) or multimodal vision APIs are not active, these pages are safely classified as `non-extractable (vector outlines)` rather than hallucinating specifications.
 2. **Rate Limits on Free Tier LLMs:**
    - When using free tier Gemini API keys (15 RPM), the extraction pipeline uses a shared thread-safe rate limiter (`LLM_RATE_LIMIT_RPM=15.0`) to pace parallel extraction threads across specialist groups without throwing HTTP 429 errors.
+
