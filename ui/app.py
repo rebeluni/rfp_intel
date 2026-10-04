@@ -162,15 +162,16 @@ idx_mgr, retriever, qa_agent = load_resources()
 def get_available_bids() -> List[str]:
     """Get list of active bid IDs dynamically."""
     bids = set()
-    if idx_mgr.bm25_index.chunks:
+    for p in discover_bid_dirs():
+        bids.add(p.name)
+    if idx_mgr.bm25_index and idx_mgr.bm25_index.chunks:
         for chunk in idx_mgr.bm25_index.chunks:
             bid_id = getattr(chunk.metadata, "bid_id", None) if hasattr(chunk.metadata, "bid_id") else (chunk.metadata.get("bid_id") if isinstance(chunk.metadata, dict) else None)
-            if bid_id:
+            if bid_id and (bid_id.lower().startswith("bid") or (PROJECT_ROOT / bid_id).is_dir()):
                 bids.add(bid_id)
     if not bids:
-        for p in discover_bid_dirs():
-            bids.add(p.name)
-    return sorted(list(bids)) if bids else ["Bid1", "Bid2", "Bid3"]
+        bids = {"Bid1", "Bid2", "Bid3"}
+    return sorted(list(bids), key=lambda x: (0 if x == "Bid1" else 1 if x == "Bid2" else 2 if x == "Bid3" else 3, x))
 
 
 available_bids = get_available_bids()
@@ -235,43 +236,44 @@ with tab_search:
     st.subheader("Hybrid Passage Search")
     st.write("Retrieve document chunks across indexed RFP packages with BM25 keyword matching, BGE dense embeddings, and cross-encoder reranking.")
 
-    col1, col2, col3 = st.columns([3, 1, 1])
-    with col1:
-        search_query = st.text_input(
-            "Search Query",
-            placeholder="e.g. liquidated damages per day or Dell laptop specifications",
-            key="search_query"
-        )
-    with col2:
-        bid_filter = st.selectbox(
-            "Filter by Bid",
-            options=["All Bids"] + available_bids,
-            key="search_bid_filter"
-        )
-    with col3:
-        doc_type_filter = st.selectbox(
-            "Filter Doc Type",
-            options=["All Types", "solicitation", "addendum", "pricing_sheet", "attachment"],
-            key="search_doc_filter"
-        )
+    with st.form(key="search_form"):
+        col1, col2, col3 = st.columns([3, 1, 1])
+        with col1:
+            search_query = st.text_input(
+                "Search Query",
+                placeholder="e.g. liquidated damages per day or Dell laptop specifications",
+                key="search_query"
+            )
+        with col2:
+            bid_filter = st.selectbox(
+                "Filter by Bid",
+                options=["All Bids"] + available_bids,
+                key="search_bid_filter"
+            )
+        with col3:
+            doc_type_filter = st.selectbox(
+                "Filter Doc Type",
+                options=["All Types", "solicitation", "addendum", "pricing_sheet", "attachment"],
+                key="search_doc_filter"
+            )
 
-    col_mode, col_topk, col_btn = st.columns([2, 1, 1])
-    with col_mode:
-        retrieval_mode = st.radio(
-            "Retrieval Mode",
-            options=["hybrid", "bm25", "dense"],
-            index=0,
-            horizontal=True,
-            key="search_mode"
-        )
-    with col_topk:
-        top_k = st.slider("Results to show", min_value=1, max_value=20, value=5, key="search_topk")
-    with col_btn:
-        st.write("")
-        st.write("")
-        do_search = st.button("Search", type="primary", use_container_width=True)
+        col_mode, col_topk, col_btn = st.columns([2, 1, 1])
+        with col_mode:
+            retrieval_mode = st.radio(
+                "Retrieval Mode",
+                options=["hybrid", "bm25", "dense"],
+                index=0,
+                horizontal=True,
+                key="search_mode"
+            )
+        with col_topk:
+            top_k = st.slider("Results to show", min_value=1, max_value=20, value=5, key="search_topk")
+        with col_btn:
+            st.write("")
+            st.write("")
+            do_search = st.form_submit_button("Search", type="primary", use_container_width=True)
 
-    if do_search or search_query:
+    if do_search:
         if not search_query.strip():
             st.warning("Please enter a search query.")
         else:
@@ -343,23 +345,24 @@ with tab_ask:
     st.subheader("RFP Question Answering with Verbatim Citations")
     st.write("Ask natural language questions across one or all bids. The system dynamically routes queries to the relevant package and provides answers grounded in document quotes.")
 
-    q_col1, q_col2 = st.columns([4, 1])
-    with q_col1:
-        question_input = st.text_input(
-            "Enter Question",
-            placeholder="e.g. When is the proposal due date for Dallas ISD? or Compare warranties across all bids.",
-            key="ask_question_input"
-        )
-    with q_col2:
-        bid_target = st.selectbox(
-            "Target Bid",
-            options=["Auto-Route"] + available_bids,
-            key="ask_bid_target"
-        )
+    with st.form(key="ask_form"):
+        q_col1, q_col2 = st.columns([4, 1])
+        with q_col1:
+            question_input = st.text_input(
+                "Enter Question",
+                placeholder="e.g. When is the proposal due date for Dallas ISD? or Compare warranties across all bids.",
+                key="ask_question_input"
+            )
+        with q_col2:
+            bid_target = st.selectbox(
+                "Target Bid",
+                options=["Auto-Route"] + available_bids,
+                key="ask_bid_target"
+            )
 
-    ask_btn = st.button("Ask Question", type="primary")
+        ask_btn = st.form_submit_button("Ask Question", type="primary")
 
-    if ask_btn or question_input:
+    if ask_btn:
         if not question_input.strip():
             st.warning("Please enter a question.")
         else:
@@ -410,13 +413,18 @@ with tab_extract:
     result_data: Optional[Dict[str, Any]] = None
 
     if load_existing:
-        out_path = settings.OUTPUTS_DIR / f"{extract_bid.lower()}.json"
-        if out_path.exists():
-            with open(out_path, "r", encoding="utf-8") as f:
+        cand_files = [
+            settings.OUTPUTS_DIR / f"{extract_bid.lower()}.json",
+            settings.OUTPUTS_DIR / f"{extract_bid}.json",
+            settings.OUTPUTS_DIR / f"bid{extract_bid.lower().replace('bid', '')}.json",
+        ]
+        found_file = next((cf for cf in cand_files if cf.exists()), None)
+        if found_file:
+            with open(found_file, "r", encoding="utf-8") as f:
                 result_data = json.load(f)
-            st.success(f"Loaded existing results from `{out_path.name}`")
+            st.success(f"Loaded existing results from `{found_file.name}`")
         else:
-            st.error(f"Saved file `{out_path.name}` not found. Please click 'Run Full Pipeline' to generate it.")
+            st.error(f"Saved file for `{extract_bid}` not found. Please click 'Run Full Pipeline' to generate it.")
 
     elif run_extract:
         with st.spinner(f"Running multi-agent extraction pipeline for {extract_bid}..."):
@@ -433,10 +441,16 @@ with tab_extract:
 
     # If neither button was clicked in this run, default to loading existing saved file if present
     if result_data is None:
-        default_file = settings.OUTPUTS_DIR / f"{extract_bid.lower()}.json"
-        if default_file.exists():
-            with open(default_file, "r", encoding="utf-8") as f:
-                result_data = json.load(f)
+        cand_files = [
+            settings.OUTPUTS_DIR / f"{extract_bid.lower()}.json",
+            settings.OUTPUTS_DIR / f"{extract_bid}.json",
+            settings.OUTPUTS_DIR / f"bid{extract_bid.lower().replace('bid', '')}.json",
+        ]
+        for cf in cand_files:
+            if cf.exists():
+                with open(cf, "r", encoding="utf-8") as f:
+                    result_data = json.load(f)
+                break
 
     if result_data:
         val = result_data.get("validation", {})
