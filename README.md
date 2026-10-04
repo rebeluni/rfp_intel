@@ -158,7 +158,7 @@ pytest
 
 Evaluation performed across **22 ground-truth target queries** with strict citation matching (`expected_file` and `expected_page`).
 
-> **Note on Evaluation Granularity:** With 22 evaluation queries, exactly **one query represents 4.545% (4.5 points)** of the total recall. Small numerical differences reflect single-query shifts rather than systemic variance.
+> **Note on Evaluation Granularity:** With 22 evaluation queries, exactly **one query represents 4.545% (4.5 points)** of the total recall. Small numerical differences reflect single-query shifts rather than systemic variance. Gold values were authored by the developer with AI assistance and are not an independent benchmark.
 
 | Retrieval Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Latency (avg) |
 |---|---|---|---|---|---|

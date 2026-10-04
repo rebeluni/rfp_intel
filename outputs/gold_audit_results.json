@@ -1,8 +1,8 @@
 {
   "total_fields": 60,
   "overall_accuracy": 100.0,
-  "matches": 48,
-  "expected_null_ok": 12,
+  "matches": 49,
+  "expected_null_ok": 11,
   "mismatches": 0,
   "missing": 0,
   "bids": {
@@ -196,8 +196,8 @@
     "Bid2": {
       "bid_id": "Bid2",
       "total": 20,
-      "matches": 16,
-      "expected_null_ok": 4,
+      "matches": 17,
+      "expected_null_ok": 3,
       "mismatches": 0,
       "missing": 0,
       "correct": 20,
@@ -239,7 +239,7 @@
             "eMaryland Marketplace Advantage",
             "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system"
           ],
-          "extracted": "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system."
+          "extracted": "State's eMaryland Marketplace Advantage (eMMA) e-Procurement system"
         },
         {
           "field": "Term of Bid",
@@ -275,13 +275,18 @@
             "Delivery within 45 days of Award",
             "45 days"
           ],
-          "extracted": "Delivery within 45 days of Award"
+          "extracted": "Delivery within 45 days of Award."
         },
         {
           "field": "Payment Terms",
-          "status": "EXPECTED_NULL_OK",
-          "expected": null,
-          "extracted": null
+          "status": "MATCH",
+          "expected": [
+            "within 10 days of delivering the equipment",
+            "STOaccountspayable@treasurer.state.md.us",
+            "within 10 days",
+            "Email invoices to: STOaccountspayable@treasurer.state.md.us"
+          ],
+          "extracted": "Email invoices to: STOaccountspayable@treasurer.state.md.us. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum the following: Contractor name, mailing address, social security number or Federal Tax ID number, and phone number; Reference the States assigned PORFP number; Date, invoice number and amount due. Proof of delivery including packing slip or delivery confirmation, and equipment serial numbers."
         },
         {
           "field": "Any Additional Documentation Required",
@@ -328,7 +333,7 @@
             "WD22TB4",
             "210-BLYZ, WD22TB4"
           ],
-          "extracted": "210-BLYZ, 379-BFNZ, 619-ARSB, 658-BCSB, 338-CNRG, 338-CNRK, 321-BKTQ, 409-BCXY, 631-BBSQ, 370-BBTL, 400-BRFT, 391-BJHB, 583-BLNH, 555-BKQC, 555-BKLQ, 451-BDGX, 492-BDMN, 346-BKLV, 537-BBDO, 340-DMNY, 340-AGIK, 387-BBPC, 817-BBBB, 658-BFQB, 340-DMMK, 389-FGSN, 319-BBKK, 634-BRWG, 379-BDZB, 362-7806, 364-1846, 364-4107, 365-0257, 366-0135, 366-0141, 371-0941, 375-3088, 383-0464, WD22TB4"
+          "extracted": "210-BLYZ, WD22TB4"
         },
         {
           "field": "Product",
@@ -338,7 +343,7 @@
             "SI# CC7802 Dell Latitude 5550",
             "1. SI# CC7802 Dell Latitude 5550 (Qty: 30)"
           ],
-          "extracted": "1. SI# CC7802 Dell Latitude 5550 (Qty: 30), Laptops must be Microsoft Copilot ready; 2. Dell Thunderbolt 4 Dock \u2013 WD22TB4 (Qty: 30); 3. Dell Limited Hardware Warranty Extended for all machines purchased - 3 Years"
+          "extracted": "1. SI# CC7802 Dell Latitude 5550 (Quantity: 30) \n2. Dell Thunderbolt 4 Dock \u2013 WD22TB4 (Quantity: 30)"
         },
         {
           "field": "Product Specification",
@@ -348,7 +353,7 @@
             "Intel Core Ultra 5 125U processor",
             "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor"
           ],
-          "extracted": "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, Integrated Intel graphics for Intel Core Ultra 5 125U processor, 16 GB (2 x 8 GB, DDR5, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit 45% NTSC FHD Cam, English US backlit AI hotkey keyboard with numeric keypad (99-key), Intel Wi-Fi 6E AX211 Bluetooth 5.3 wireless card, 3-cell 54 Wh ExpressCharge Capable battery, 65W USB Type-C AC adapter, ENERGY STAR Qualified, EPEAT 2018 Registered (Gold)"
+          "extracted": "Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), 16 GB DDR5 memory, 256 GB SSD, 15.6\" FHD display, Windows 11 Pro, and 3-year Dell Limited Hardware Warranty"
         },
         {
           "field": "Bid Summary",
@@ -357,7 +362,7 @@
             "State of Maryland Treasurer's Office is seeking a refresh of laptops",
             "refresh of laptops to accommodate MD529 employees"
           ],
-          "extracted": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to accommodate MD529 employees who have been included in the staff. The procurement objective is to acquire 30 units of Dell Latitude 5550 laptops that are Microsoft Copilot ready along with 30 units of Dell Thunderbolt 4 Docks (Model WD22TB4). Deliverables include the hardware items accompanied by a 3-year Dell Limited Hardware Warranty extended for all machines purchased, with a warranty certificate or affidavit to be presented upon award. All items are due by June 10, 2024."
+          "extracted": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to accommodate MD529 employees who have been included in our staff as of June 1, 2023. The scope requires the delivery of 30 units of Dell Latitude 5550 laptops (Microsoft Copilot ready) and 30 units of Dell Thunderbolt 4 Docks (WD22TB4) under the Desktop, Laptop and Tablet 2015 Master Contract (060B5400007). Additionally, the contractor must provide a 3-year extended Dell Limited Hardware Warranty certificate or affidavit upon award. All products are due by June 10, 2024."
         },
         {
           "field": "contact_info",

@@ -31,7 +31,7 @@
     "Installation": ["No on-site installation required", "No on-site installation required; factory configuration per specifications"],
     "Bid Bond Requirement": null,
     "Delivery Date": ["Delivery within 45 days of Award", "45 days"],
-    "Payment Terms": null,
+    "Payment Terms": ["within 10 days of delivering the equipment", "STOaccountspayable@treasurer.state.md.us", "within 10 days", "Email invoices to: STOaccountspayable@treasurer.state.md.us"],
     "Any Additional Documentation Required": ["Contract Affidavit and Mercury Affidavit", "Mercury Affidavit", "Contract Affidavit"],
     "MFG for Registration": ["Dell"],
     "Contract or Cooperative to use": ["060B5400007", "Desktop, Laptop and Tablet 2015 Master Contract, 060B5400007", "Desktop, Laptop and Tablet 2015 Master Contract"],
