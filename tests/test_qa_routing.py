@@ -80,3 +80,20 @@ def test_ambiguous_question_handling(mock_qa_agent):
     # Should not crash, returns best guess or None
     routed = mock_qa_agent.route_bid("Is there any document?")
     assert routed is None or routed in ["Bid1", "Bid2", "Bid3"]
+
+
+def test_dynamic_multi_bid_resolution_with_unseen_bid(mock_qa_agent):
+    # Add a 4th unseen bid to mock catalog
+    chunk4 = MagicMock()
+    chunk4.text = "Seattle Public Schools Solicitation SPS-2026-001 Hardware"
+    chunk4.metadata.bid_id = "Bid4"
+    chunk4.metadata.file_name = "SPS_Hardware.pdf"
+    chunk4.metadata.page_number = 1
+    chunk4.metadata.doc_type.value = "bid_page"
+    mock_qa_agent.retriever.bm25_index.chunks.append(chunk4)
+    mock_qa_agent._bid_catalog = None  # Reset catalog cache
+
+    # Ask multi-bid comparison involving Bid1 and Bid4
+    assert mock_qa_agent.is_comparison_query("Compare warranty between Bid1 and Bid4") is True
+    # Verify routing to Bid4 works directly from metadata
+    assert mock_qa_agent.route_bid("What is in SPS-2026-001?") == "Bid4"

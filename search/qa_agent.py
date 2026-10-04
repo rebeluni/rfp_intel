@@ -276,12 +276,19 @@ class QAAgent:
             all_bids = sorted(list(catalog.keys())) if catalog else ["Bid1", "Bid2", "Bid3"]
 
             q_low = question.lower()
-            if "between bid1 and bid2" in q_low or "between bid 1 and bid 2" in q_low:
-                active_bids = [b for b in all_bids if b in ["Bid1", "Bid2"]]
-            elif "between bid2 and bid3" in q_low or "between bid 2 and bid 3" in q_low:
-                active_bids = [b for b in all_bids if b in ["Bid2", "Bid3"]]
+            # Resolve target bids dynamically from question or indexed catalog
+            explicit_bids = []
+            matches = re.findall(r"\bbid\s*[-_]?\s*([A-Za-z0-9]+)\b", q_low)
+            for m in matches:
+                candidate = f"Bid{m.upper()}" if not m.lower().startswith("bid") else m
+                for b in all_bids:
+                    if candidate.lower() == b.lower() and b not in explicit_bids:
+                        explicit_bids.append(b)
+
+            if len(explicit_bids) >= 2:
+                active_bids = explicit_bids
             elif "both bids" in q_low:
-                active_bids = [b for b in all_bids if b in ["Bid1", "Bid2"]]
+                active_bids = all_bids[:2] if len(all_bids) >= 2 else all_bids
             else:
                 active_bids = all_bids
 
@@ -291,7 +298,7 @@ class QAAgent:
             elif "issuing authority" in q_low or "agency" in q_low:
                 sub_q = "issuing authority agency organization department school district treasurer"
             elif "warranty" in q_low:
-                sub_q = "warranty requirements Dell Limited Hardware Warranty Extended 3 Years Lenovo Premier Support manufacturer warranty"
+                sub_q = "warranty extended warranty manufacturer warranty years coverage support terms"
             elif "earliest" in q_low or "deadline" in q_low or "due date" in q_low:
                 sub_q = "submission deadline proposal due date and time closing date addendum"
             elif "pre-bid" in q_low or "pre-proposal" in q_low or "meeting" in q_low:
@@ -345,7 +352,7 @@ class QAAgent:
 CRITICAL INSTRUCTIONS:
 1. Provide a comprehensive, factual answer detailing EACH bid ({', '.join(active_bids)}) individually with exact quotes, followed by a clear comparative summary or difference.
 2. For DEADLINES / DUE DATES: Any addendum (e.g. Addendum 2) that extends a deadline strictly supersedes the original base RFP date. You MUST quote the revised date and cite the addendum.
-3. For WARRANTIES: Cite the actual warranty terms from the bid documents (e.g. for Bid2, the 3-year Dell Limited Hardware Warranty Extended on page 3 of the PORFP).
+3. For WARRANTIES: Cite the actual warranty terms, coverage duration, and support tiers specified in each bid's documents.
 4. For SCALE / QUANTITIES: List the exact unit counts and product tiers from the bid pricing/specification schedules.
 5. If a bid does NOT mention or contain the requested information, explicitly state that it is not mentioned or not required in that bid's documents.
 """
@@ -375,14 +382,14 @@ CRITICAL INSTRUCTIONS:
         search_query = question
 
         # Domain expansions for single bid queries
-        if "product tiers" in q_low or "quantities requested" in q_low:
-            search_query = f"{question} Tier 1 Tier 2 Target Quantity Small Student Chromebook Laptop Windows Laptop line item 50,000 5,000"
-        elif "affidavits" in q_low:
-            search_query = f"{question} Mercury Affidavit Contract Affidavit Conflict of Interest"
+        if "product tiers" in q_low or "quantities requested" in q_low or "scale" in q_low:
+            search_query = f"{question} product tier target quantity requested quantity line items total units"
+        elif "affidavits" in q_low or "forms" in q_low:
+            search_query = f"{question} required affidavits compliance forms certification"
         elif "bid bond" in q_low:
-            search_query = f"{question} bid bond insurance cashier check surety enumerated elsewhere"
-        elif "submission deadline" in q_low or "due date" in q_low:
-            search_query = f"{question} Addendum 2 new due date July 9 2024 proposal due date"
+            search_query = f"{question} bid bond insurance cashier check surety proposal guarantee"
+        elif "submission deadline" in q_low or "due date" in q_low or "closing" in q_low:
+            search_query = f"{question} proposal submission deadline closing date extension"
 
         results = self.retriever.search(
             query=search_query,
@@ -395,7 +402,7 @@ CRITICAL INSTRUCTIONS:
         # Include addenda chunks if deadline question
         if any(w in q_low for w in ["deadline", "due date", "closing", "addendum"]):
             add_res = self.retriever.search(
-                query="Addendum 2 new due date proposal submission deadline extension",
+                query="addendum new due date proposal submission deadline extension amended date",
                 top_k=3,
                 bid_id=target_bid,
                 mode="hybrid"
