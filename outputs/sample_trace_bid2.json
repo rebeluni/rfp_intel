@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T08:28:22.152389+00:00",
+    "timestamp": "2026-10-04T12:10:57.036858+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid2",
@@ -23,7 +23,7 @@
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T08:29:34.286812+00:00",
+    "timestamp": "2026-10-04T12:12:27.307648+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid2",
@@ -54,11 +54,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 72129.44
+    "latency_ms": 90268.34
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T08:30:52.738942+00:00",
+    "timestamp": "2026-10-04T12:13:48.565075+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid2",
@@ -67,20 +67,20 @@
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 15,
-      "step_tokens": 73882,
-      "step_prompt_tokens": 70911,
-      "step_completion_tokens": 2971,
-      "cumulative_tokens": 73882
+      "found_fields_count": 17,
+      "step_tokens": 78150,
+      "step_prompt_tokens": 74945,
+      "step_completion_tokens": 3205,
+      "cumulative_tokens": 78150
     },
-    "tokens": 73882,
-    "prompt_tokens": 70911,
-    "completion_tokens": 2971,
-    "latency_ms": 78450.82
+    "tokens": 78150,
+    "prompt_tokens": 74945,
+    "completion_tokens": 3205,
+    "latency_ms": 81253.29
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T08:31:21.196446+00:00",
+    "timestamp": "2026-10-04T12:14:09.985297+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
@@ -88,28 +88,25 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 12,
-      "failed": 4,
-      "not_found": 4,
+      "passed": 16,
+      "failed": 1,
+      "not_found": 3,
       "needs_retry": true
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 28456.27
+    "latency_ms": 21412.68
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T08:31:46.897300+00:00",
+    "timestamp": "2026-10-04T12:14:16.734015+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid2",
       "retry_count": 1,
       "failed_fields": [
-        "Product Specification",
-        "Bid Number",
-        "MFG for Registration",
-        "contact_info"
+        "Product Specification"
       ]
     },
     "tool_calls": [
@@ -120,87 +117,36 @@
           "query": "Product Specification hardware specifications minimum requirements processor ram storage",
           "attempt": 1
         },
-        "output_summary": "Result: Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, Integrated Intel graphics for Intel Core Ultra 5 125U processor, 16 GB: 2 x 8 GB, DDR5, 5600 MT/s, 256 GB, M.2 2230, TLC, Gen 4 PCIe NVMe, SSD, 15.6\", FHD 1920x1080, 60Hz, IPS, Non-Touch, AG, 250 nit, 45% NTSC, FHD Cam, English US backlit AI hotkey keyboard with numeric keypad (99-key), Intel Wi-Fi 6E AX211 wireless card, Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter (status: FOUND, confidence: 0.9)"
-      },
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Bid Number",
-          "query": "Bid Number RFP number bid number solicitation identifier",
-          "attempt": 1
-        },
-        "output_summary": "Result: BPM044557 (status: FOUND, confidence: 0.9)"
-      },
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "MFG for Registration",
-          "query": "MFG for Registration partner certification authorized reseller OEM authorization",
-          "attempt": 1
-        },
-        "output_summary": "Result: Dell (status: FOUND, confidence: 0.9)"
-      },
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "contact_info",
-          "query": "contact_info contact person buyer email contract administrator",
-          "attempt": 1
-        },
-        "output_summary": "Result: Tamaira Hawkins | 410-260-7533 | Thawkins@treasurer.state.md.us (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM, 256 GB M.2 NVMe SSD, 15.6\" FHD 1920x1080 display, English US backlit AI hotkey keyboard, Intel Wi-Fi 6E and Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter, and 3-year Dell Limited Hardware Warranty. (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
       "retried_fields": [
-        "Product Specification",
-        "Bid Number",
-        "MFG for Registration",
-        "contact_info"
+        "Product Specification"
       ],
       "retry_details": [
         {
           "field": "Product Specification",
           "new_query": "Product Specification hardware specifications minimum requirements processor ram storage",
-          "new_value": "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, Integrated Intel graphics for Intel Core Ultra 5 125U processor, 16 GB: 2 x 8 GB, DDR5, 5600 MT/s, 256 GB, M.2 2230, TLC, Gen 4 PCIe NVMe, SSD, 15.6\", FHD 1920x1080, 60Hz, IPS, Non-Touch, AG, 250 nit, 45% NTSC, FHD Cam, English US backlit AI hotkey keyboard with numeric keypad (99-key), Intel Wi-Fi 6E AX211 wireless card, Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        },
-        {
-          "field": "Bid Number",
-          "new_query": "Bid Number RFP number bid number solicitation identifier",
-          "new_value": "BPM044557",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        },
-        {
-          "field": "MFG for Registration",
-          "new_query": "MFG for Registration partner certification authorized reseller OEM authorization",
-          "new_value": "Dell",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        },
-        {
-          "field": "contact_info",
-          "new_query": "contact_info contact person buyer email contract administrator",
-          "new_value": "Tamaira Hawkins | 410-260-7533 | Thawkins@treasurer.state.md.us",
+          "new_value": "Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM, 256 GB M.2 NVMe SSD, 15.6\" FHD 1920x1080 display, English US backlit AI hotkey keyboard, Intel Wi-Fi 6E and Bluetooth 5.3, 3-cell 54 Wh battery, 65W AC adapter, and 3-year Dell Limited Hardware Warranty.",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 1,
-      "step_tokens": 21819,
-      "step_prompt_tokens": 20716,
-      "step_completion_tokens": 1103,
-      "cumulative_tokens": 113712
+      "step_tokens": 5718,
+      "step_prompt_tokens": 5315,
+      "step_completion_tokens": 403,
+      "cumulative_tokens": 95625
     },
-    "tokens": 21819,
-    "prompt_tokens": 20716,
-    "completion_tokens": 1103,
-    "latency_ms": 25699.35
+    "tokens": 5718,
+    "prompt_tokens": 5315,
+    "completion_tokens": 403,
+    "latency_ms": 6742.1
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T08:32:10.048207+00:00",
+    "timestamp": "2026-10-04T12:14:35.376731+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
@@ -208,19 +154,19 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 15,
+      "passed": 16,
       "failed": 1,
-      "not_found": 4,
+      "not_found": 3,
       "needs_retry": true
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 23149.48
+    "latency_ms": 18641.26
   },
   {
     "step_id": 7,
-    "timestamp": "2026-10-04T08:32:16.618776+00:00",
+    "timestamp": "2026-10-04T12:14:43.061977+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid2",
@@ -237,7 +183,7 @@
           "query": "Product Specification hardware specifications minimum requirements processor ram storage",
           "attempt": 2
         },
-        "output_summary": "Result: Intel Core Ultra 5 125U processor, Windows 11 Pro, 16 GB DDR5 RAM, 256 GB SSD, 15.6 inch FHD display, Microsoft Copilot ready (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit display, English US backlit AI hotkey keyboard with numeric keypad, Intel Wi-Fi 6E AX211 and Bluetooth 5.3 wireless card, 3-cell 54 Wh battery, 65W USB Type-C AC adapter, and 3-year Dell Limited Hardware Warranty. (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
@@ -248,25 +194,25 @@
         {
           "field": "Product Specification",
           "new_query": "Product Specification hardware specifications minimum requirements processor ram storage",
-          "new_value": "Intel Core Ultra 5 125U processor, Windows 11 Pro, 16 GB DDR5 RAM, 256 GB SSD, 15.6 inch FHD display, Microsoft Copilot ready",
+          "new_value": "Dell Latitude 5550 XCTO Base with Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch AG 250 nit display, English US backlit AI hotkey keyboard with numeric keypad, Intel Wi-Fi 6E AX211 and Bluetooth 5.3 wireless card, 3-cell 54 Wh battery, 65W USB Type-C AC adapter, and 3-year Dell Limited Hardware Warranty.",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 2,
-      "step_tokens": 5268,
-      "step_prompt_tokens": 5084,
-      "step_completion_tokens": 184,
-      "cumulative_tokens": 133138
+      "step_tokens": 5601,
+      "step_prompt_tokens": 5315,
+      "step_completion_tokens": 286,
+      "cumulative_tokens": 112983
     },
-    "tokens": 5268,
-    "prompt_tokens": 5084,
-    "completion_tokens": 184,
-    "latency_ms": 6568.95
+    "tokens": 5601,
+    "prompt_tokens": 5315,
+    "completion_tokens": 286,
+    "latency_ms": 7683.15
   },
   {
     "step_id": 8,
-    "timestamp": "2026-10-04T08:32:39.980652+00:00",
+    "timestamp": "2026-10-04T12:15:03.627431+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid2",
@@ -274,19 +220,19 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 16,
+      "passed": 17,
       "failed": 0,
-      "not_found": 4,
+      "not_found": 3,
       "needs_retry": false
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 23361.05
+    "latency_ms": 20562.55
   },
   {
     "step_id": 9,
-    "timestamp": "2026-10-04T08:32:39.982821+00:00",
+    "timestamp": "2026-10-04T12:15:03.630424+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid2",
@@ -299,16 +245,16 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 147296
+      "cumulative_tokens": 124740
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.62
+    "latency_ms": 1.39
   },
   {
     "step_id": 10,
-    "timestamp": "2026-10-04T08:32:39.984445+00:00",
+    "timestamp": "2026-10-04T12:15:03.632445+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid2"
@@ -320,14 +266,14 @@
         "bid_id": "Bid2",
         "title": "Dell Laptops w/Extended Warranty",
         "issuing_agency": "MD State Treasurer’s Office",
-        "solicitation_number": "BPM044557",
-        "fields_ready": 16,
+        "solicitation_number": "#E20P4600040 (eMMA Project Number: BPM044557)",
+        "fields_ready": 17,
         "status": "ready"
       }
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.22
+    "latency_ms": 0.35
   }
 ]

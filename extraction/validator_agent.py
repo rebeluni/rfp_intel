@@ -131,33 +131,48 @@ class ValidatorAgent:
         cited_page = primary_source.page
         cited_chunk_id = primary_source.chunk_id
 
-        # Find the specific cited chunk among retrieved passages
-        cited_chunk = None
-        for p in retrieved_passages:
-            if cited_chunk_id and p.get("chunk_id") == cited_chunk_id:
-                cited_chunk = p
-                break
-            if cited_file and p.get("file_name") == cited_file and p.get("page_number") == cited_page:
-                cited_chunk = p
-                break
-
-        # Fallback to any chunk matching the file if page differed slightly
-        if not cited_chunk and cited_file:
+        # Collect candidate matching chunks for this citation
+        candidate_chunks = []
+        if cited_chunk_id:
+            for p in retrieved_passages:
+                if p.get("chunk_id") == cited_chunk_id:
+                    candidate_chunks.append(p)
+        if not candidate_chunks and cited_file:
             for p in retrieved_passages:
                 if p.get("file_name") == cited_file:
-                    cited_chunk = p
-                    break
+                    if cited_page is not None and p.get("page_number") == cited_page:
+                        candidate_chunks.append(p)
+            if not candidate_chunks:
+                for p in retrieved_passages:
+                    if p.get("file_name") == cited_file:
+                        candidate_chunks.append(p)
+        if not candidate_chunks:
+            candidate_chunks = retrieved_passages
 
         is_contiguous_match = False
         retrieval_score = 0.50
+        matched_chunk = None
 
-        if cited_chunk and cited_quote:
-            raw_score = float(cited_chunk.get("score") or 0.50)
-            retrieval_score = raw_score
-            norm_quote = re.sub(r"\s+", " ", cited_quote.lower()).strip(' "\'“”‘’')
-            norm_chunk_text = re.sub(r"\s+", " ", cited_chunk.get("text", "").lower())
-            if norm_quote and norm_quote in norm_chunk_text:
-                is_contiguous_match = True
+        def _clean_markdown(text: str) -> str:
+            # Remove markdown syntax characters (*, _, #, >, `, |)
+            t = re.sub(r"[\*_#>`|]", "", text)
+            # Normalize whitespace
+            return re.sub(r"\s+", " ", t.lower()).strip(' "\'“”‘’:,;')
+
+        if cited_quote:
+            norm_quote = re.sub(r"\s+", " ", cited_quote.lower()).strip(' "\'“”‘’:,;')
+            clean_quote = _clean_markdown(cited_quote)
+
+            for p in candidate_chunks:
+                chk_text = p.get("text", "")
+                norm_chunk_text = re.sub(r"\s+", " ", chk_text.lower())
+                clean_chunk_text = _clean_markdown(chk_text)
+
+                if (norm_quote and norm_quote in norm_chunk_text) or (clean_quote and clean_quote in clean_chunk_text):
+                    is_contiguous_match = True
+                    matched_chunk = p
+                    retrieval_score = float(p.get("score") or 0.50)
+                    break
 
         if not is_contiguous_match:
             val_issues.append(

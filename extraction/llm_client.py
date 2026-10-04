@@ -224,13 +224,13 @@ class GeminiClient(BaseLLMClient):
 
                     text = candidates[0]["content"]["parts"][0]["text"]
                     return text, t_tokens
-            except (httpx.TimeoutException, httpx.NetworkError) as e:
+            except (httpx.TimeoutException, httpx.NetworkError, httpx.HTTPError, ConnectionError, OSError) as e:
                 last_error = str(e)
                 logger.warning(
                     f"Gemini API timeout/network error (attempt {attempt}/{max_attempts}): {e}"
                 )
                 if attempt < max_attempts:
-                    time.sleep(3.0 * attempt)
+                    time.sleep(2.0 * (2.0 ** (attempt - 1)))
                 else:
                     raise RuntimeError(f"Gemini API call timed out after {max_attempts} attempts: {e}")
 
@@ -257,31 +257,42 @@ class GeminiClient(BaseLLMClient):
 
         prompt = self._build_extraction_prompt(field_name, field_def, evidence_passages)
 
-        try:
-            # Attempt 1
-            raw_text, _ = self._call_api(prompt)
-            parsed = self._try_parse_pydantic(raw_text)
+        parsed = None
+        last_exception = None
+        for outer_attempt in range(1, 4):
+            try:
+                # Attempt 1
+                raw_text, _ = self._call_api(prompt)
+                parsed = self._try_parse_pydantic(raw_text)
 
-            # One Repair Retry if validation failed
-            if parsed is None:
-                logger.warning(f"Initial JSON validation failed for '{field_name}'. Executing repair retry...")
-                repair_prompt = (
-                    f"Your previous response failed validation:\n"
-                    f"Previous Response: {raw_text}\n\n"
-                    f"Please fix the response and return ONLY valid JSON matching this schema:\n"
-                    f"{json.dumps(LLMFieldExtraction.model_json_schema(), indent=2)}\n"
-                    f"Original Request:\n{prompt}"
-                )
-                raw_text_repaired, _ = self._call_api(repair_prompt)
-                parsed = self._try_parse_pydantic(raw_text_repaired)
-        except Exception as e:
-            logger.error(f"API call error during extraction of '{field_name}': {e}")
+                # One Repair Retry if validation failed
+                if parsed is None:
+                    logger.warning(f"Initial JSON validation failed for '{field_name}'. Executing repair retry...")
+                    repair_prompt = (
+                        f"Your previous response failed validation:\n"
+                        f"Previous Response: {raw_text}\n\n"
+                        f"Please fix the response and return ONLY valid JSON matching this schema:\n"
+                        f"{json.dumps(LLMFieldExtraction.model_json_schema(), indent=2)}\n"
+                        f"Original Request:\n{prompt}"
+                    )
+                    raw_text_repaired, _ = self._call_api(repair_prompt)
+                    parsed = self._try_parse_pydantic(raw_text_repaired)
+                last_exception = None
+                break
+            except Exception as e:
+                last_exception = e
+                logger.warning(f"API call error during extraction of '{field_name}' (attempt {outer_attempt}/3): {e}")
+                if outer_attempt < 3:
+                    time.sleep(2.0 * outer_attempt)
+
+        if last_exception is not None and parsed is None:
+            logger.error(f"API call failed after retries during extraction of '{field_name}': {last_exception}")
             return FieldOutput(
                 value=None,
                 sources=[],
                 confidence=0.0,
                 status="ERROR",
-                notes=f"API Error: {str(e)}"
+                notes=f"API Error: {str(last_exception)}"
             )
 
         # Handle parsed result
@@ -473,12 +484,15 @@ EVIDENCE PASSAGES:
 EXTRACTION RULES:
 1. Normalization: Values must be clean, complete, and concise. No ellipses ("..."), no truncated sentences, and NEVER output raw spec-table text.
 2. Grounding & Citations: Every non-null value MUST have an exact contiguous verbatim quote from ONE of the passages above, matching word-for-word, along with the exact file_name and page_number. If no real quote supports the value, set value to null.
-3. Absence Semantics:
-   - If the documents explicitly state a requirement is not required or does not take place (e.g. no pre-bid meeting, no on-site installation), return value "None" or "Not required" with the supporting verbatim quote and citation.
-   - If the documents are completely silent or the field is genuinely not mentioned in the passages, return value null, status "NOT_FOUND", and reason "Not found in documents".
-   - For "Bid Bond Requirement": If documents state bonds/insurance are "enumerated elsewhere" without specifying an amount, return a concise statement stating that no specific bid bond amount is given and the RFP defers to other contract documents, with the verbatim quote.
-   - For "Pre Bid Meeting": If no pre-bid meeting or conference is mentioned in the documents, return value "None" with reason "None mentioned in solicitation".
+3. Absence & Field-Specific Semantics:
+   - For "Bid Summary": Synthesize a concise, comprehensive 3 to 6 sentence summary outlining the procurement scope, objectives, requested products/quantities, and core deliverables based on the evidence. NEVER return NOT_FOUND or null for Bid Summary if the passages describe the procurement scope, purpose, or requested equipment. Quote an illustrative scope or requirement sentence.
+   - For "Payment Terms": Restrict strictly to buyer-to-contractor payment terms and invoicing instructions (e.g. Net 30, invoice submission recipient). Do NOT extract subcontractor prompt-payment pass-through clauses (e.g. contractor paying subcontractors within 30 days). If buyer payment terms are not specified in the solicitation, return value null with status "NOT_FOUND" and reason "Buyer payment terms not specified in solicitation".
+   - For "Bid Number": Extract the official solicitation or PORFP identifier. If an eMMA project number is also present, use the PORFP/solicitation number as value and note the eMMA number. Ensure the verbatim quote is contiguous and matches the chunk text.
+   - For "Part_no": Extract all orderable part numbers and SKUs for both the base computer system and any accessories/docking stations specified in the solicitation, listing both if available.
+   - For "Pre Bid Meeting": If no pre-bid meeting or conference is scheduled or mentioned in the solicitation documents, return value "None" with reason "No pre-bid meeting mentioned in solicitation", quoting a relevant header or solicitation details block if available.
    - For "Installation": If on-site installation is not required by the solicitation, return "No on-site installation required; factory configuration per specifications" or "None".
+   - For "Bid Bond Requirement": If documents state bonds/insurance are "enumerated elsewhere" without specifying an amount, return a concise statement stating that no specific bid bond amount is given and the RFP defers to other contract documents, with the verbatim quote.
+   - If a field is genuinely not mentioned or silent in the passages, return value null, status "NOT_FOUND", and reason "Not found in documents".
 
 Return JSON:
 {{

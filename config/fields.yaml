@@ -4,12 +4,13 @@
 fields:
   Bid Number:
     specialist: "commercial_legal"
-    description: "Official solicitation, RFP, IFB, or PORFP identifier assigned by the issuing authority."
+    description: "Official solicitation, RFP, IFB, or PORFP identifier assigned by the issuing authority. When both a primary PORFP/solicitation number (e.g. #E20P4600040) and an eMMA project number (e.g. BPM044557) appear, use the PORFP number as the value and record the eMMA project number in notes."
     format: "string"
     query_expansion_hints:
       - "solicitation number"
       - "RFP number"
       - "bid number"
+      - "PORFP number"
       - "solicitation identifier"
       - "reference number"
       - "project number"
@@ -60,7 +61,7 @@ fields:
 
   Pre Bid Meeting:
     specialist: "dates_logistics"
-    description: "Date, time, location, conference details and whether attendance is mandatory, optional, or 'None' if no meeting is mentioned in the documents."
+    description: "Date, time, location, conference details and whether attendance is mandatory, optional, or 'None' if no meeting is mentioned or scheduled in the solicitation documents."
     format: "string"
     query_expansion_hints:
       - "pre-proposal meeting"
@@ -106,7 +107,7 @@ fields:
 
   Payment Terms:
     specialist: "commercial_legal"
-    description: "Payment terms, invoicing instructions, billing submission schedule (e.g. invoice submission within N days of delivery, invoice email recipient), prompt payment, or Net days."
+    description: "Payment terms, prompt payment window, and invoicing instructions from the buyer/district to the contractor (e.g. invoice submission within N days of delivery, Net 30). Restrict strictly to buyer-to-contractor terms; do NOT extract subcontractor prompt-payment pass-through clauses. If buyer payment terms are not specified in the solicitation, return null with note stating buyer payment terms are not specified."
     format: "string"
     query_expansion_hints:
       - "invoicing instructions"
@@ -120,14 +121,15 @@ fields:
 
   Any Additional Documentation Required:
     specialist: "commercial_legal"
-    description: "Required affidavits, compliance forms, certifications, insurance certificates, or tax documents."
+    description: "Required affidavits, compliance forms, certifications, insurance certificates, Form 1295, W-9, conflict of interest (CIQ), letter of intent, or tax documents required to be submitted with the proposal."
     format: "string"
     query_expansion_hints:
       - "required affidavits"
       - "mandatory forms"
-      - "certification of non-collusion"
+      - "form 1295"
+      - "conflict of interest CIQ"
       - "certificate of insurance"
-      - "conflict of interest"
+      - "letter of intent"
       - "compliance documentation"
 
   MFG for Registration:
@@ -212,13 +214,15 @@ fields:
 
   Bid Summary:
     specialist: "product_specs"
-    description: "A concise 3 to 6 sentence summary outlining the procurement scope, objectives, requirements, and deliverables."
+    description: "A concise 3 to 6 sentence synthesis outlining the procurement scope, objectives, requirements, requested equipment/quantities, and deliverables. Never return NOT_FOUND if the solicitation contains scope of work, project description, or equipment specifications; synthesize the summary from available scope evidence even if there is no explicit 'Executive Summary' section."
     format: "string"
     query_expansion_hints:
       - "scope of work"
       - "executive summary"
       - "project background"
       - "purpose of solicitation"
+      - "procurement overview"
+      - "requested equipment"
 
   Product Specification:
     specialist: "product_specs"

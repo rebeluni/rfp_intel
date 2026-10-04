@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T08:33:29.481952+00:00",
+    "timestamp": "2026-10-04T12:21:56.378016+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid3",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.2
+    "latency_ms": 0.26
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T08:34:11.000742+00:00",
+    "timestamp": "2026-10-04T12:22:39.618806+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid3",
@@ -44,21 +44,21 @@
           ],
           "total_fields": 20
         },
-        "output_summary": "Retrieved 99 chunks across 20 fields."
+        "output_summary": "Retrieved 97 chunks across 20 fields."
       }
     ],
     "output": {
       "retrieved_fields_count": 20,
-      "total_chunks": 99
+      "total_chunks": 97
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 41516.94
+    "latency_ms": 43236.47
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T08:35:38.606567+00:00",
+    "timestamp": "2026-10-04T12:23:57.596666+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid3",
@@ -67,20 +67,20 @@
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 16,
-      "step_tokens": 56868,
-      "step_prompt_tokens": 52878,
-      "step_completion_tokens": 3990,
-      "cumulative_tokens": 56868
+      "found_fields_count": 17,
+      "step_tokens": 63674,
+      "step_prompt_tokens": 60049,
+      "step_completion_tokens": 3625,
+      "cumulative_tokens": 63674
     },
-    "tokens": 56868,
-    "prompt_tokens": 52878,
-    "completion_tokens": 3990,
-    "latency_ms": 87604.31
+    "tokens": 63674,
+    "prompt_tokens": 60049,
+    "completion_tokens": 3625,
+    "latency_ms": 77975.9
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T08:35:56.614696+00:00",
+    "timestamp": "2026-10-04T12:24:10.426189+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid3",
@@ -88,25 +88,24 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 14,
-      "failed": 2,
-      "not_found": 3,
+      "passed": 17,
+      "failed": 1,
+      "not_found": 2,
       "needs_retry": true
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 18005.99
+    "latency_ms": 12827.13
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T08:36:06.036871+00:00",
+    "timestamp": "2026-10-04T12:24:15.054585+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid3",
       "retry_count": 1,
       "failed_fields": [
-        "Bid Number",
         "Any Additional Documentation Required"
       ]
     },
@@ -114,57 +113,40 @@
       {
         "tool": "retry_extraction",
         "args": {
-          "field": "Bid Number",
-          "query": "Bid Number RFP number bid number solicitation identifier",
-          "attempt": 1
-        },
-        "output_summary": "Result: AISD-2025-9988 (status: FOUND, confidence: 0.9)"
-      },
-      {
-        "tool": "retry_extraction",
-        "args": {
           "field": "Any Additional Documentation Required",
-          "query": "Any Additional Documentation Required mandatory forms certification of non-collusion certificate of insurance",
+          "query": "Any Additional Documentation Required mandatory forms form 1295 conflict of interest CIQ",
           "attempt": 1
         },
-        "output_summary": "Result: Letter of Authorization (LOA), Mercury Affidavit, and warranty certificate or Affidavit (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: Contract Affidavit and Non-Collusion Certification, Mercury Content Affidavit, and Warranty certificate or Affidavit to be presented upon award (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
       "retried_fields": [
-        "Bid Number",
         "Any Additional Documentation Required"
       ],
       "retry_details": [
         {
-          "field": "Bid Number",
-          "new_query": "Bid Number RFP number bid number solicitation identifier",
-          "new_value": "AISD-2025-9988",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        },
-        {
           "field": "Any Additional Documentation Required",
-          "new_query": "Any Additional Documentation Required mandatory forms certification of non-collusion certificate of insurance",
-          "new_value": "Letter of Authorization (LOA), Mercury Affidavit, and warranty certificate or Affidavit",
+          "new_query": "Any Additional Documentation Required mandatory forms form 1295 conflict of interest CIQ",
+          "new_value": "Contract Affidavit and Non-Collusion Certification, Mercury Content Affidavit, and Warranty certificate or Affidavit to be presented upon award",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 1,
-      "step_tokens": 8025,
-      "step_prompt_tokens": 7705,
-      "step_completion_tokens": 320,
-      "cumulative_tokens": 73396
+      "step_tokens": 4231,
+      "step_prompt_tokens": 4112,
+      "step_completion_tokens": 119,
+      "cumulative_tokens": 77829
     },
-    "tokens": 8025,
-    "prompt_tokens": 7705,
-    "completion_tokens": 320,
-    "latency_ms": 9418.51
+    "tokens": 4231,
+    "prompt_tokens": 4112,
+    "completion_tokens": 119,
+    "latency_ms": 4626.52
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T08:36:19.979099+00:00",
+    "timestamp": "2026-10-04T12:24:23.260134+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid3",
@@ -172,103 +154,19 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 14,
-      "failed": 2,
-      "not_found": 3,
-      "needs_retry": true
-    },
-    "tokens": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 13940.74
-  },
-  {
-    "step_id": 7,
-    "timestamp": "2026-10-04T08:36:29.463009+00:00",
-    "agent": "retry_refinement",
-    "input": {
-      "bid_id": "Bid3",
-      "retry_count": 2,
-      "failed_fields": [
-        "Bid Number",
-        "Any Additional Documentation Required"
-      ]
-    },
-    "tool_calls": [
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Bid Number",
-          "query": "Bid Number RFP number bid number solicitation identifier",
-          "attempt": 2
-        },
-        "output_summary": "Result: AISD-2025-9988 (status: FOUND, confidence: 0.9)"
-      },
-      {
-        "tool": "retry_extraction",
-        "args": {
-          "field": "Any Additional Documentation Required",
-          "query": "Any Additional Documentation Required mandatory forms certification of non-collusion certificate of insurance",
-          "attempt": 2
-        },
-        "output_summary": "Result: Letter of Authorization (LOA), Mercury Affidavit, and Warranty certificate or Affidavit to be presented upon award (status: FOUND, confidence: 0.9)"
-      }
-    ],
-    "output": {
-      "retried_fields": [
-        "Bid Number",
-        "Any Additional Documentation Required"
-      ],
-      "retry_details": [
-        {
-          "field": "Bid Number",
-          "new_query": "Bid Number RFP number bid number solicitation identifier",
-          "new_value": "AISD-2025-9988",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        },
-        {
-          "field": "Any Additional Documentation Required",
-          "new_query": "Any Additional Documentation Required mandatory forms certification of non-collusion certificate of insurance",
-          "new_value": "Letter of Authorization (LOA), Mercury Affidavit, and Warranty certificate or Affidavit to be presented upon award",
-          "new_confidence": 0.9,
-          "status": "FOUND"
-        }
-      ],
-      "new_retry_count": 2,
-      "step_tokens": 8015,
-      "step_prompt_tokens": 7705,
-      "step_completion_tokens": 310,
-      "cumulative_tokens": 89914
-    },
-    "tokens": 8015,
-    "prompt_tokens": 7705,
-    "completion_tokens": 310,
-    "latency_ms": 9481.47
-  },
-  {
-    "step_id": 8,
-    "timestamp": "2026-10-04T08:36:42.375687+00:00",
-    "agent": "validator",
-    "input": {
-      "bid_id": "Bid3",
-      "retry_iteration": 2
-    },
-    "tool_calls": [],
-    "output": {
-      "passed": 14,
-      "failed": 2,
-      "not_found": 3,
+      "passed": 18,
+      "failed": 0,
+      "not_found": 2,
       "needs_retry": false
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 12911.34
+    "latency_ms": 8205.55
   },
   {
-    "step_id": 9,
-    "timestamp": "2026-10-04T08:36:42.378243+00:00",
+    "step_id": 7,
+    "timestamp": "2026-10-04T12:24:23.263911+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid3",
@@ -281,16 +179,16 @@
       "step_tokens": 0,
       "step_prompt_tokens": 0,
       "step_completion_tokens": 0,
-      "cumulative_tokens": 98419
+      "cumulative_tokens": 84148
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 1.24
+    "latency_ms": 0.55
   },
   {
-    "step_id": 10,
-    "timestamp": "2026-10-04T08:36:42.380076+00:00",
+    "step_id": 8,
+    "timestamp": "2026-10-04T12:24:23.265288+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid3"
@@ -301,15 +199,15 @@
       "metadata": {
         "bid_id": "Bid3",
         "title": "High-Performance Student & Staff Laptops Procurement",
-        "issuing_agency": null,
-        "solicitation_number": "AISD-2025-9988",
-        "fields_ready": 16,
+        "issuing_agency": "Austin Independent School District",
+        "solicitation_number": "#AISD-P8820 (Project Number: AISD-2025-9988)",
+        "fields_ready": 18,
         "status": "ready"
       }
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.62
+    "latency_ms": 0.33
   }
 ]

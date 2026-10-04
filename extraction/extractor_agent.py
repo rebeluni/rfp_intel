@@ -87,6 +87,125 @@ class ExtractorAgent:
                     })
                 return passages
 
+        # Comprehensive scan for documentation requirements across all bid chunks
+        if field_name == "Any Additional Documentation Required" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            doc_keywords = [
+                "form 1295", "1295", "w-9", "w9", "conflict of interest", "ciq",
+                "letter of intent", "insurance", "certificate of insurance", "affidavit",
+                "mandatory forms", "proposal requirement", "submittal requirement",
+                "required forms", "certifications required"
+            ]
+            doc_chunks = []
+            for chk in self.retriever.bm25_index.chunks:
+                meta = chk.metadata
+                if meta.bid_id != bid_id:
+                    continue
+                if exclude_doc_type:
+                    dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                    if dt_val.lower() == exclude_doc_type.lower():
+                        continue
+                t_lower = chk.text.lower()
+                matches = sum(1 for kw in doc_keywords if kw in t_lower)
+                if matches > 0:
+                    score = float(matches)
+                    if "form 1295" in t_lower or "1295" in t_lower:
+                        score += 2.0
+                    if "w-9" in t_lower or "w9" in t_lower:
+                        score += 2.0
+                    if "insurance" in t_lower:
+                        score += 1.5
+                    if "conflict of interest" in t_lower or "ciq" in t_lower:
+                        score += 1.5
+                    doc_chunks.append((chk, score))
+
+            if doc_chunks:
+                doc_chunks.sort(key=lambda x: x[1], reverse=True)
+                passages = []
+                for chk, score in doc_chunks[:max(top_k, 6)]:
+                    passages.append({
+                        "chunk_id": chk.chunk_id,
+                        "file_name": chk.metadata.file_name,
+                        "page_number": chk.metadata.page_number,
+                        "text": chk.text,
+                        "score": score,
+                        "section": chk.metadata.section,
+                        "doc_type": chk.metadata.doc_type.value if hasattr(chk.metadata.doc_type, "value") else str(chk.metadata.doc_type),
+                    })
+                return passages
+
+        # Scan for Part_no / SKU evidence across both system and accessory/dock chunks
+        if field_name == "Part_no" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            part_chunks = []
+            for chk in self.retriever.bm25_index.chunks:
+                meta = chk.metadata
+                if meta.bid_id != bid_id:
+                    continue
+                if exclude_doc_type:
+                    dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                    if dt_val.lower() == exclude_doc_type.lower():
+                        continue
+                t_lower = chk.text.lower()
+                has_part_kw = any(k in t_lower for k in ["part number", "part no", "part #", "sku", "item number", "dock", "base system"])
+                if has_part_kw:
+                    score = 1.0
+                    if any(k in t_lower for k in ["part number", "part no", "sku"]):
+                        score += 2.0
+                    if "dock" in t_lower:
+                        score += 1.5
+                    part_chunks.append((chk, score))
+
+            if part_chunks:
+                part_chunks.sort(key=lambda x: x[1], reverse=True)
+                passages = []
+                for chk, score in part_chunks[:max(top_k, 5)]:
+                    passages.append({
+                        "chunk_id": chk.chunk_id,
+                        "file_name": chk.metadata.file_name,
+                        "page_number": chk.metadata.page_number,
+                        "text": chk.text,
+                        "score": score,
+                        "section": chk.metadata.section,
+                        "doc_type": chk.metadata.doc_type.value if hasattr(chk.metadata.doc_type, "value") else str(chk.metadata.doc_type),
+                    })
+                return passages
+
+        # Scan for Bid Summary evidence covering scope of work, objectives, and equipment
+        if field_name == "Bid Summary" and hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
+            summary_chunks = []
+            for chk in self.retriever.bm25_index.chunks:
+                meta = chk.metadata
+                if meta.bid_id != bid_id:
+                    continue
+                if exclude_doc_type:
+                    dt_val = meta.doc_type.value if hasattr(meta.doc_type, "value") else str(meta.doc_type)
+                    if dt_val.lower() == exclude_doc_type.lower():
+                        continue
+                t_lower = chk.text.lower()
+                score = 0.0
+                if any(k in t_lower for k in ["scope", "purpose", "overview", "background", "objective"]):
+                    score += 2.0
+                if any(k in t_lower for k in ["porfp", "request for proposal", "solicitation", "contractor shall", "procurement"]):
+                    score += 1.5
+                if any(k in t_lower for k in ["laptop", "computing", "device", "notebook", "desktop", "equipment"]):
+                    score += 1.0
+                if score > 0:
+                    summary_chunks.append((chk, score))
+
+            if summary_chunks:
+                summary_chunks.sort(key=lambda x: x[1], reverse=True)
+                passages = []
+                for chk, score in summary_chunks[:max(top_k, 5)]:
+                    passages.append({
+                        "chunk_id": chk.chunk_id,
+                        "file_name": chk.metadata.file_name,
+                        "page_number": chk.metadata.page_number,
+                        "text": chk.text,
+                        "score": score,
+                        "section": chk.metadata.section,
+                        "doc_type": chk.metadata.doc_type.value if hasattr(chk.metadata.doc_type, "value") else str(chk.metadata.doc_type),
+                    })
+                return passages
+
         hints = field_def.get("query_expansion_hints", [field_name])
         # Formulate query from field name and top 2 hints
         query = f"{field_name} {' '.join(hints[:2])}"
