@@ -53,8 +53,10 @@ class QAAgent:
 
         for chk in self.retriever.bm25_index.chunks:
             bid = chk.metadata.bid_id
-            if not bid or (not bid.lower().startswith("bid") and not (Path(settings.PROJECT_ROOT) / bid).is_dir()):
+            if not bid:
                 continue
+            if str(bid).isdigit():
+                bid = f"Bid{bid}"
             if bid not in catalog:
                 catalog[bid] = {
                     "bid_id": bid,
@@ -115,6 +117,80 @@ class QAAgent:
         self._bid_catalog = catalog
         return catalog
 
+    def score_bids(self, question: str) -> Dict[str, float]:
+        """
+        Score every indexed bid against the question using bid ID,
+        solicitation number, agency name, and title from indexed metadata.
+        """
+        catalog = self._get_bid_catalog()
+        indexed_bids = self._get_indexed_bids()
+        for b in indexed_bids:
+            if b not in catalog:
+                catalog[b] = {
+                    "bid_id": b,
+                    "solicitation_numbers": set(),
+                    "filenames": set(),
+                    "agencies": set(),
+                    "titles": set(),
+                    "sample_texts": []
+                }
+
+        if not catalog:
+            return {}
+
+        q = question.lower()
+        bid_scores: Dict[str, float] = {b: 0.0 for b in catalog}
+
+        for bid, meta in catalog.items():
+            b_low = bid.lower()
+            b_clean = b_low.replace("_", " ")
+
+            # Direct bid ID mention
+            if re.search(rf"\b{re.escape(b_low)}\b", q) or re.search(rf"\b{re.escape(b_clean)}\b", q):
+                bid_scores[bid] += 15.0
+            else:
+                for m_num in re.finditer(r"\bbid\s*[-_]?\s*([A-Za-z0-9_]+)\b", q):
+                    cand = m_num.group(1).lower()
+                    b_id_suffix = b_low.replace("bid", "").strip("_-")
+                    if cand == b_low or cand == b_id_suffix or f"bid{cand}" == b_low or b_low.endswith(f"_{cand}"):
+                        bid_scores[bid] += 15.0
+                        break
+
+            # Check solicitation numbers
+            for sol_num in meta.get("solicitation_numbers", set()):
+                if sol_num and sol_num.lower() in q:
+                    bid_scores[bid] += 12.0
+
+            # Check filenames
+            for fname in meta.get("filenames", set()):
+                base = fname.replace(".pdf", "").replace(".html", "").replace(".htm", "")
+                if len(base) > 4 and base.lower() in q:
+                    bid_scores[bid] += 6.0
+
+            # Check agency names
+            for agency in meta.get("agencies", set()):
+                if agency and agency.lower() in q:
+                    bid_scores[bid] += 10.0
+                elif agency:
+                    for word in agency.split():
+                        if len(word) > 3 and word.lower() in q and word.lower() not in {
+                            "state", "city", "county", "department", "office", "the", "and",
+                            "district", "public", "independent", "school", "schools", "board",
+                            "education", "commission", "authority", "division", "agency", "services"
+                        }:
+                            bid_scores[bid] += 4.0
+
+            # Check titles
+            for title in meta.get("titles", set()):
+                if title and len(title) > 6 and title.lower() in q:
+                    bid_scores[bid] += 8.0
+                elif title:
+                    for word in title.split():
+                        if len(word) > 4 and word.lower() in q and word.lower() not in {"request", "proposal", "solicitation"}:
+                            bid_scores[bid] += 2.0
+
+        return bid_scores
+
     def is_comparison_query(self, question: str) -> bool:
         """Detect whether the question asks for comparison across multiple bids."""
         q = question.lower()
@@ -126,7 +202,7 @@ class QAAgent:
         ]
         if any(ind in q for ind in comparison_indicators):
             return True
-        if re.search(r"\bbetween\s+bid\s*[123]\s*and\s*bid\s*[123]\b", q):
+        if re.search(r"\bbetween\s+([A-Za-z0-9_]+)\s+and\s+([A-Za-z0-9_]+)\b", q):
             return True
         return False
 
@@ -136,57 +212,16 @@ class QAAgent:
         Uses indexed metadata (solicitation numbers, issuing bodies, filenames)
         and BM25 relevance scoring. Zero hardcoded keywords.
         """
-        q = question.lower()
-
-        # 1. Comparison detection
         if self.is_comparison_query(question):
             return "COMPARISON"
 
-        # 2. Direct bid ID mentions (e.g., 'Bid 1', 'Bid1', 'Bid-1')
-        bid_direct_match = re.search(r"\bbid\s*[-_]?\s*([123])\b", q)
-        if bid_direct_match:
-            return f"Bid{bid_direct_match.group(1)}"
+        bid_scores = self.score_bids(question)
+        if bid_scores:
+            best_bid = max(bid_scores, key=bid_scores.get)
+            if bid_scores[best_bid] > 0.0:
+                return best_bid
 
-        catalog = self._get_bid_catalog()
-        if not catalog:
-            return None
-
-        # 3. Match against dynamic metadata catalog
-        bid_scores: Dict[str, float] = {b: 0.0 for b in catalog}
-
-        for bid, meta in catalog.items():
-            # Check solicitation numbers
-            for sol_num in meta["solicitation_numbers"]:
-                if sol_num in q:
-                    bid_scores[bid] += 12.0
-
-            # Check filenames
-            for fname in meta["filenames"]:
-                base = fname.replace(".pdf", "").replace(".html", "")
-                if len(base) > 4 and base in q:
-                    bid_scores[bid] += 6.0
-
-            # Check agency names
-            for agency in meta["agencies"]:
-                if agency in q:
-                    bid_scores[bid] += 10.0
-                else:
-                    # Token match key words in agency name
-                    for word in agency.split():
-                        if len(word) > 4 and word in q:
-                            bid_scores[bid] += 4.0
-
-            # Check titles
-            for title in meta["titles"]:
-                for word in title.split():
-                    if len(word) > 4 and word in q:
-                        bid_scores[bid] += 2.0
-
-        best_bid = max(bid_scores, key=bid_scores.get)
-        if bid_scores[best_bid] > 0.0:
-            return best_bid
-
-        # 4. Fallback: BM25 score aggregation across indexed corpus
+        # Fallback: BM25 score aggregation across indexed corpus
         if hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
             bm25_res = self.retriever.bm25_index.search(question, top_k=8)
             bid_chunk_scores: Dict[str, float] = {}
@@ -203,7 +238,7 @@ class QAAgent:
         return None
 
     def _get_indexed_bids(self) -> List[str]:
-        """Dynamically return list of unique bid IDs present in the search index or project folders."""
+        """Dynamically return list of unique bid IDs present in the search index or catalog."""
         catalog = self._get_bid_catalog()
         bids = set()
         if catalog:
@@ -211,20 +246,25 @@ class QAAgent:
         if hasattr(self.retriever, "bm25_index") and self.retriever.bm25_index.chunks:
             for chk in self.retriever.bm25_index.chunks:
                 b = chk.metadata.bid_id
-                if b and (b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()):
+                if b:
+                    if str(b).isdigit():
+                        b = f"Bid{b}"
                     bids.add(b)
         if not bids and hasattr(self.retriever, "dense_indexer") and self.retriever.dense_indexer.chunks:
             for chk in self.retriever.dense_indexer.chunks:
                 b = chk.metadata.bid_id
-                if b and (b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()):
+                if b:
+                    if str(b).isdigit():
+                        b = f"Bid{b}"
                     bids.add(b)
         if not bids:
             root = Path(settings.PROJECT_ROOT)
             for d in root.iterdir():
-                if d.is_dir() and d.name.lower().startswith("bid"):
+                if d.is_dir() and not d.name.startswith((".", "_")) and d.name not in {
+                    "config", "ingestion", "search", "extraction", "api", "outputs", "scripts", "tests", "ui", "backup_pre_generalize", "venv"
+                }:
                     bids.add(d.name)
-        valid_bids = [b for b in bids if b.lower().startswith("bid") or (Path(settings.PROJECT_ROOT) / b).is_dir()]
-        return sorted(valid_bids, key=lambda x: (0 if x == "Bid1" else 1 if x == "Bid2" else 2 if x == "Bid3" else 3, x))
+        return sorted(list(bids))
 
     def ask(self, question: str, bid_id: Optional[str] = None, top_k: int = 5) -> Dict[str, Any]:
         """
@@ -250,8 +290,21 @@ class QAAgent:
                     if any(c.get("addendum_number") == add_num for c in self.reconciler.get_addendum_chunks(b)):
                         target_bid = b
                         break
-            if not target_bid:
-                target_bid = available_bids[0] if available_bids else "Bid1"
+
+            # Replace fallback "Bid1" with first bid having any addendum or explicit "no addendum found"
+            if not target_bid or target_bid == "COMPARISON":
+                for b in available_bids:
+                    if self.reconciler.get_addendum_chunks(b):
+                        target_bid = b
+                        break
+
+            if not target_bid or target_bid == "COMPARISON":
+                return {
+                    "question": question,
+                    "target_bid": "None",
+                    "answer": "No addendum found.",
+                    "citations": []
+                }
 
             logger.info(f"[QAAgent] Routing to explicit addendum summary path for {target_bid} Addendum {add_num}...")
             summary_obj = self.reconciler.get_addendum_summary(bid_id=target_bid, addendum_number=add_num)
@@ -297,23 +350,27 @@ class QAAgent:
         if target_bid == "COMPARISON" or self.is_comparison_query(question):
             logger.info("[QAAgent] Executing per-bid cross-comparison retrieval...")
             all_bids = self._get_indexed_bids()
-
             q_low = question.lower()
-            # Resolve target bids dynamically from question or indexed catalog
-            explicit_bids = []
-            matches = re.findall(r"\bbid\s*[-_]?\s*([A-Za-z0-9]+)\b", q_low)
-            for m in matches:
-                candidate = f"Bid{m.upper()}" if not m.lower().startswith("bid") else m
-                for b in all_bids:
-                    if candidate.lower() == b.lower() and b not in explicit_bids:
-                        explicit_bids.append(b)
 
-            if len(explicit_bids) >= 2:
-                active_bids = explicit_bids
-            elif "both bids" in q_low:
-                active_bids = all_bids[:2] if len(all_bids) >= 2 else all_bids
+            # 4b. Resolve which bids the question refers to by scoring every bid against
+            # the question using bid ID, solicitation number, agency name and title.
+            scored_bids = self.score_bids(question)
+            identified_bids = [b for b in all_bids if scored_bids.get(b, 0.0) > 0.0]
+
+            # 4c. If the question identifies two or more bids, use exactly those.
+            # If it says "both"/"all"/"each" without identifying any, use ALL indexed bids.
+            if len(identified_bids) >= 2:
+                active_bids = identified_bids
             else:
                 active_bids = all_bids
+
+            # 4d. Always state, at the top of a comparison answer, which bids were included,
+            # and add one line if "both" was used with more than two bids ("3 bids are indexed; comparing all of them").
+            has_both = bool(re.search(r"\bboth\b", q_low))
+            header_lines = [f"Bids included in comparison: {', '.join(active_bids)}."]
+            if has_both and len(all_bids) > 2 and len(active_bids) > 2:
+                header_lines.append(f"{len(all_bids)} bids are indexed; comparing all of them.")
+            comparison_header = "\n".join(header_lines)
 
             # Formulate targeted retrieval sub-queries per domain
             if "procurement scale" in q_low or "total units" in q_low or "quantities" in q_low:
@@ -329,8 +386,15 @@ class QAAgent:
             elif "summarise" in q_low or "summarize" in q_low or "paragraph" in q_low:
                 sub_q = "solicitation overview scope of work title project description requirements"
             else:
-                clean_q = re.sub(r"\b(?:between\s+)?(?:bid\s*[123]\s*(?:and|&)?\s*)+", "", question, flags=re.IGNORECASE)
-                sub_q = clean_q.strip() or question
+                clean_q = question
+                for b in active_bids:
+                    clean_q = re.sub(rf"\b{re.escape(b)}\b", "", clean_q, flags=re.IGNORECASE)
+                    b_clean = b.replace("_", " ")
+                    clean_q = re.sub(rf"\b{re.escape(b_clean)}\b", "", clean_q, flags=re.IGNORECASE)
+                clean_q = re.sub(r"\b(?:between|and|&|both|all|each|compare|comparison)\b", "", clean_q, flags=re.IGNORECASE)
+                clean_q = re.sub(r"\bbid\s*[-_]?\s*[A-Za-z0-9_]+\b", "", clean_q, flags=re.IGNORECASE)
+                clean_q = re.sub(r"\s+", " ", clean_q).strip()
+                sub_q = clean_q or question
 
             comparison_passages: List[Dict[str, Any]] = []
             for b in active_bids:
@@ -352,8 +416,7 @@ class QAAgent:
                     bid_results.extend(add_results)
 
                 for r in bid_results:
-                    # Clean filename (fixes C5)
-                    clean_fname = re.sub(r"^\[?Bid\d\]?\s*", "", r.file_name)
+                    clean_fname = re.sub(r"^\[?[A-Za-z0-9_\-]+\]?\s*", "", r.file_name)
                     comparison_passages.append({
                         "chunk_id": r.chunk_id,
                         "file_name": clean_fname,
@@ -365,9 +428,10 @@ class QAAgent:
             if not comparison_passages:
                 return {
                     "question": question,
-                    "target_bid": "All Bids",
-                    "answer": "Not found in documents across any bids.",
-                    "citations": []
+                    "target_bid": f"{', '.join(active_bids)} (Comparison)",
+                    "answer": f"{comparison_header}\n\nNot found in documents across any bids.",
+                    "citations": [],
+                    "active_bids": active_bids
                 }
 
             comp_prompt = f"""Compare and answer how each bid ({', '.join(active_bids)}) addresses the following question: "{question}"
@@ -385,17 +449,21 @@ CRITICAL INSTRUCTIONS:
             cleaned_cites = []
             for c in llm_resp.get("citations", []):
                 cleaned_cites.append({
-                    "file": re.sub(r"^\[?Bid\d\]?\s*", "", str(c.get("file", ""))),
+                    "file": re.sub(r"^\[?[A-Za-z0-9_\-]+\]?\s*", "", str(c.get("file", ""))),
                     "page": c.get("page"),
                     "quote": c.get("quote")
                 })
 
+            raw_answer = llm_resp.get("answer", "Not found in documents.")
+            final_answer = f"{comparison_header}\n\n{raw_answer}"
+
             return {
                 "question": question,
                 "target_bid": f"{', '.join(active_bids)} (Comparison)",
-                "answer": llm_resp.get("answer", "Not found in documents."),
+                "answer": final_answer,
                 "citations": cleaned_cites,
-                "raw_evidence_count": len(comparison_passages)
+                "raw_evidence_count": len(comparison_passages),
+                "active_bids": active_bids
             }
 
         # -------------------------------------------------------------------
@@ -443,7 +511,7 @@ CRITICAL INSTRUCTIONS:
         evidence_passages = [
             {
                 "chunk_id": r.chunk_id,
-                "file_name": re.sub(r"^\[?Bid\d\]?\s*", "", r.file_name),
+                "file_name": re.sub(r"^\[?[A-Za-z0-9_\-]+\]?\s*", "", r.file_name),
                 "page_number": r.page_number,
                 "text": r.text,
                 "score": r.rerank_score or r.rrf_score
@@ -456,7 +524,7 @@ CRITICAL INSTRUCTIONS:
         cleaned_cites = []
         for c in llm_resp.get("citations", []):
             cleaned_cites.append({
-                "file": re.sub(r"^\[?Bid\d\]?\s*", "", str(c.get("file", ""))),
+                "file": re.sub(r"^\[?[A-Za-z0-9_\-]+\]?\s*", "", str(c.get("file", ""))),
                 "page": c.get("page"),
                 "quote": c.get("quote")
             })

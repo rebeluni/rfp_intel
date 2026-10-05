@@ -372,8 +372,8 @@ If no fields were modified by the addenda, return an empty array: []"""
                 return data["changes"]
             return []
         except Exception as e:
-            logger.warning(f"Error in batch addendum reconciliation: {e}")
-            return []
+            logger.error(f"Error in addendum reconciliation LLM call: {e}")
+            raise RuntimeError(f"Addendum reconciliation LLM call failed: {e}") from e
 
     def summarize_addendum(
         self,
@@ -485,9 +485,11 @@ EXTRACTION RULES:
 1. Normalization: Values must be clean, complete, and concise. No ellipses ("..."), no truncated sentences, and NEVER output raw spec-table text.
 2. Grounding & Citations: Every non-null value MUST have an exact contiguous verbatim quote from ONE of the passages above, matching word-for-word, along with the exact file_name and page_number. If no real quote supports the value, set value to null.
 3. Absence & Field-Specific Semantics:
-   - For "Bid Summary": Synthesize a concise, comprehensive 3 to 6 sentence summary outlining the procurement scope, objectives, requested products/quantities, and core deliverables based on the evidence. NEVER return NOT_FOUND or null for Bid Summary if the passages describe the procurement scope, purpose, or requested equipment. Quote an illustrative scope or requirement sentence.
+   - For "Bid Summary": Synthesize a concise, comprehensive 3 to 6 sentence summary outlining the procurement scope, objectives, requested products/quantities, and core deliverables based on the evidence. Structure the opening sentence to state what the issuing agency or organization is soliciting offers or seeking proposals for. NEVER return NOT_FOUND or null for Bid Summary if the passages describe the procurement scope, purpose, or requested equipment. Quote an illustrative scope or requirement sentence.
    - For "Payment Terms": Restrict strictly to buyer-to-contractor payment terms and invoicing instructions (e.g. Net 30, invoice submission recipient). Do NOT extract subcontractor prompt-payment pass-through clauses (e.g. contractor paying subcontractors within 30 days). If buyer payment terms are not specified in the solicitation, return value null with status "NOT_FOUND" and reason "Buyer payment terms not specified in solicitation".
-   - For "Bid Number": Extract the official solicitation or PORFP identifier. If an eMMA project number is also present, use the PORFP/solicitation number as value and note the eMMA number. Ensure the verbatim quote is contiguous and matches the chunk text.
+   - For "Bid Number": Extract the official solicitation or PORFP identifier. If an internal project or portal reference number is also present, use the primary solicitation/PORFP number as value and record the project reference in notes. Ensure the verbatim quote is contiguous and matches the chunk text.
+   - For "contact_info": Extract the designated individual buyer, contracting officer, or purchasing agent (name and email) from the primary solicitation document if available, rather than a generic department helpdesk from portal summary listings.
+   - For "Any Additional Documentation Required": When the solicitation contains a checklist or table of required submission forms/attachments (such as MWBE Forms, W-9 Form, affidavits), extract those explicit required submission form names and instructions (e.g. "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission"). Prefer the structured checklist or required submittals table over narrative sections, and use the exact form names as listed in the table (e.g. "MWBE Forms", "W9 Form").
    - For "Part_no": Extract all orderable part numbers and SKUs for both the base computer system and any accessories/docking stations specified in the solicitation, listing both if available.
    - For "Pre Bid Meeting": If no pre-bid meeting or conference is scheduled or mentioned in the solicitation documents, return value "None" with reason "No pre-bid meeting mentioned in solicitation", quoting a relevant header or solicitation details block if available.
    - For "Installation": If on-site installation is not required by the solicitation, return "No on-site installation required; factory configuration per specifications" or "None".

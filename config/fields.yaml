@@ -4,7 +4,7 @@
 fields:
   Bid Number:
     specialist: "commercial_legal"
-    description: "Official solicitation, RFP, IFB, or PORFP identifier assigned by the issuing authority. When both a primary PORFP/solicitation number (e.g. #E20P4600040) and an eMMA project number (e.g. BPM044557) appear, use the PORFP number as the value and record the eMMA project number in notes."
+    description: "Official solicitation, RFP, IFB, or PORFP identifier assigned by the issuing authority. When both a primary solicitation number (e.g. #RFP-2024-001) and an internal project or portal number (e.g. PRJ-987654) appear, use the primary solicitation number as the value and record the project number in notes."
     format: "string"
     query_expansion_hints:
       - "solicitation number"
@@ -27,8 +27,8 @@ fields:
 
   Due Date:
     specialist: "dates_logistics"
-    description: "Final deadline for proposal or bid submission including time and timezone, reflecting any addendum modifications."
-    format: "YYYY-MM-DD HH:MM TZ"
+    description: "Final deadline for proposal or bid submission including time and timezone verbatim as written in the documents, reflecting any addendum modifications."
+    format: "string"
     query_expansion_hints:
       - "proposal due date"
       - "submission deadline"
@@ -121,16 +121,40 @@ fields:
 
   Any Additional Documentation Required:
     specialist: "commercial_legal"
-    description: "Required affidavits, compliance forms, certifications, insurance certificates, Form 1295, W-9, conflict of interest (CIQ), letter of intent, or tax documents required to be submitted with the proposal."
+    description: "Required affidavits, compliance forms, certifications, insurance certificates, disclosure forms, W-9, conflict of interest (CIQ), letter of intent, or tax documents required to be submitted with the proposal. When the solicitation includes a checklist or table of required submission files/attachments (such as MWBE Forms, W9 Form, affidavits), extract those explicit submission form names."
     format: "string"
+    scan_keywords:
+      - "affidavit"
+      - "w-9"
+      - "w9"
+      - "mwbe"
+      - "m/wbe"
+      - "hub"
+      - "minority"
+      - "conflict of interest"
+      - "ciq"
+      - "letter of intent"
+      - "insurance"
+      - "certificate of insurance"
+      - "mandatory forms"
+      - "proposal requirement"
+      - "submittal requirement"
+      - "required forms"
+      - "certifications required"
+      - "disclosure"
+      - "attachments"
+      - "exhibit"
+      - "questionnaire"
     query_expansion_hints:
       - "required affidavits"
       - "mandatory forms"
-      - "form 1295"
+      - "disclosure forms"
       - "conflict of interest CIQ"
       - "certificate of insurance"
       - "letter of intent"
       - "compliance documentation"
+      - "required attachments forms"
+      - "compliance forms exhibit"
 
   MFG for Registration:
     specialist: "commercial_legal"
@@ -156,7 +180,7 @@ fields:
 
   Model_no:
     specialist: "product_specs"
-    description: "Model number(s), product family name, series, or hardware chassis identifiers (e.g. Latitude 5550, ThinkPad L15). Distinct from orderable part numbers or SKUs."
+    description: "Model number(s), product family name, series, or hardware chassis identifiers (e.g. Model X-500, Enterprise Pro 15). Distinct from orderable part numbers or SKUs."
     format: "string"
     query_expansion_hints:
       - "model number"
@@ -168,7 +192,7 @@ fields:
 
   Part_no:
     specialist: "product_specs"
-    description: "Orderable part number(s), SKU numbers, manufacturer part numbers (MPN), or component codes for the base system and accessories (e.g. base system SKU, dock part number, WD22TB4). Distinct from product model family."
+    description: "Orderable part number(s), SKU numbers, manufacturer part numbers (MPN), or component codes for the base system and accessories (e.g. base system SKU, dock part number, 100-AB12). Distinct from product model family."
     format: "string"
     query_expansion_hints:
       - "part number"
@@ -192,8 +216,17 @@ fields:
 
   contact_info:
     specialist: "commercial_legal"
-    description: "Designated procurement officer or buyer contact details: name, email address, and telephone number."
+    description: "Designated buyer, contracting officer, or procurement contact details: individual name, email address, and telephone number. Extract the individual buyer or contracting officer (e.g. Buyer name and email) from the primary solicitation document rather than a generic department helpdesk."
     format: "string"
+    scan_keywords:
+      - "poc"
+      - "buyer"
+      - "contact"
+      - "procurement officer"
+      - "phone"
+      - "email"
+      - "point of contact"
+      - "purchasing agent"
     query_expansion_hints:
       - "procurement officer"
       - "contact person"
@@ -207,6 +240,7 @@ fields:
     format: "string"
     query_expansion_hints:
       - "issuing agency"
+      - "Agency / Division Name"
       - "procuring entity"
       - "school district"
       - "organization name"
@@ -214,9 +248,10 @@ fields:
 
   Bid Summary:
     specialist: "product_specs"
-    description: "A concise 3 to 6 sentence synthesis outlining the procurement scope, objectives, requirements, requested equipment/quantities, and deliverables. Never return NOT_FOUND if the solicitation contains scope of work, project description, or equipment specifications; synthesize the summary from available scope evidence even if there is no explicit 'Executive Summary' section."
+    description: "A concise 3 to 6 sentence synthesis outlining the procurement scope, objectives, requirements, requested equipment/quantities, and deliverables. Quote the initial scope of work statement directly when available. Never return NOT_FOUND if the solicitation contains scope of work, project description, or equipment specifications; synthesize the summary from available scope evidence even if there is no explicit 'Executive Summary' section."
     format: "string"
     query_expansion_hints:
+      - "soliciting offers for"
       - "scope of work"
       - "executive summary"
       - "project background"
@@ -226,11 +261,12 @@ fields:
 
   Product Specification:
     specialist: "product_specs"
-    description: "Key technical hardware and software requirements (e.g., processor/CPU, memory/RAM, storage/SSD, display, ports, operating system, warranty)."
+    description: "Key technical hardware and software requirements (e.g., processor/CPU, memory/RAM, storage/SSD, display, ports, operating system, warranty). When distinct product tiers or equipment categories have separate minimum specifications, extract all product tiers starting from the first listed tier/category in the specifications section."
     format: "string"
     query_expansion_hints:
       - "technical specifications"
       - "hardware specifications"
       - "minimum requirements"
+      - "minimum hardware requirements"
       - "processor ram storage"
       - "display warranty requirements"

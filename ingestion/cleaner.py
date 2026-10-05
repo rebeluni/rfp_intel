@@ -153,7 +153,7 @@ class TextCleaner:
     ) -> Tuple[List[str], List[Optional[str]]]:
         """
         Detect and strip repetitive header/footer lines that occur across multiple pages,
-        using digit-normalized pattern matching (e.g. 'Page # of #', 'Dallas ISD rev #.#',
+        using digit-normalized pattern matching (e.g. 'Page # of #', 'Agency rev #.#',
         'Purchase Order Request for Proposals (PORFP)').
         Also strips bare page numbers (solitary digits) in the top/bottom header-footer zones.
         Extracts page labels to metadata and returns (cleaned_pages, page_labels).
@@ -214,8 +214,6 @@ class TextCleaner:
                 if is_hdr_ftr and norm in repeated_norm_lines:
                     continue
                 if is_hdr_ftr and re.match(r"^\s*Page\s+#(?:\s*(?:of|\|)\s*#)?\s*$", norm, re.IGNORECASE):
-                    continue
-                if is_hdr_ftr and re.match(r"^Dallas\s+ISD\s+rev\s+#\.#$", norm, re.IGNORECASE):
                     continue
 
                 cleaned_lines.append(line)

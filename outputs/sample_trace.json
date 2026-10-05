@@ -1,10 +1,10 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T16:11:59.740024+00:00",
+    "timestamp": "2026-10-05T10:28:40.752184+00:00",
     "agent": "orchestrator_planner",
     "input": {
-      "bid_id": "Bid2",
+      "bid_id": "Bid1",
       "total_fields": 20
     },
     "tool_calls": [],
@@ -19,14 +19,14 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.37
+    "latency_ms": 0.23
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T16:13:20.922977+00:00",
+    "timestamp": "2026-10-05T10:30:32.351312+00:00",
     "agent": "retrieval",
     "input": {
-      "bid_id": "Bid2",
+      "bid_id": "Bid1",
       "specialist_groups": [
         "commercial_legal",
         "dates_logistics",
@@ -44,104 +44,275 @@
           ],
           "total_fields": 20
         },
-        "output_summary": "Retrieved 99 chunks across 20 fields."
+        "output_summary": "Retrieved 119 chunks across 20 fields."
       }
     ],
     "output": {
       "retrieved_fields_count": 20,
-      "total_chunks": 99
+      "total_chunks": 119
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 81179.26
+    "latency_ms": 111595.5
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T16:14:38.951816+00:00",
+    "timestamp": "2026-10-05T10:31:50.638103+00:00",
     "agent": "extractor",
     "input": {
-      "bid_id": "Bid2",
+      "bid_id": "Bid1",
       "fields_to_extract": 20
     },
     "tool_calls": [],
     "output": {
       "extracted_fields_count": 20,
-      "found_fields_count": 18,
-      "step_tokens": 77430,
-      "step_prompt_tokens": 74309,
-      "step_completion_tokens": 3121,
-      "cumulative_tokens": 77430
+      "found_fields_count": 15,
+      "step_tokens": 84177,
+      "step_prompt_tokens": 79650,
+      "step_completion_tokens": 4527,
+      "cumulative_tokens": 84177
     },
-    "tokens": 77430,
-    "prompt_tokens": 74309,
-    "completion_tokens": 3121,
-    "latency_ms": 78020.08
+    "tokens": 84177,
+    "prompt_tokens": 79650,
+    "completion_tokens": 4527,
+    "latency_ms": 78284.93
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T16:14:50.496424+00:00",
+    "timestamp": "2026-10-05T10:32:25.898448+00:00",
     "agent": "validator",
     "input": {
-      "bid_id": "Bid2",
+      "bid_id": "Bid1",
       "retry_iteration": 0
     },
     "tool_calls": [],
     "output": {
-      "passed": 18,
-      "failed": 0,
-      "not_found": 2,
+      "passed": 13,
+      "failed": 2,
+      "not_found": 5,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 35257.99
+  },
+  {
+    "step_id": 5,
+    "timestamp": "2026-10-05T10:32:41.175840+00:00",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_count": 1,
+      "failed_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Due Date",
+          "query": "Due Date submission deadline closing date bid opening date",
+          "attempt": 1
+        },
+        "output_summary": "Result: 27-JUN-2024 14:00:00 (status: FOUND, confidence: 0.9)"
+      },
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Any Additional Documentation Required",
+          "query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "attempt": 1
+        },
+        "output_summary": "Result: MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission (status: FOUND, confidence: 0.9)"
+      }
+    ],
+    "output": {
+      "retried_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ],
+      "retry_details": [
+        {
+          "field": "Due Date",
+          "new_query": "Due Date submission deadline closing date bid opening date",
+          "new_value": "27-JUN-2024 14:00:00",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "new_query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "new_value": "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        }
+      ],
+      "new_retry_count": 1,
+      "step_tokens": 18077,
+      "step_prompt_tokens": 17747,
+      "step_completion_tokens": 330,
+      "cumulative_tokens": 120304
+    },
+    "tokens": 18077,
+    "prompt_tokens": 17747,
+    "completion_tokens": 330,
+    "latency_ms": 15273.35
+  },
+  {
+    "step_id": 6,
+    "timestamp": "2026-10-05T10:33:16.935292+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 1
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 13,
+      "failed": 2,
+      "not_found": 5,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 35758.74
+  },
+  {
+    "step_id": 7,
+    "timestamp": "2026-10-05T10:33:32.243967+00:00",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_count": 2,
+      "failed_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Due Date",
+          "query": "Due Date submission deadline closing date bid opening date",
+          "attempt": 2
+        },
+        "output_summary": "Result: 27-JUN-2024 14:00:00 (status: FOUND, confidence: 0.9)"
+      },
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Any Additional Documentation Required",
+          "query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "attempt": 2
+        },
+        "output_summary": "Result: MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission (status: FOUND, confidence: 0.9)"
+      }
+    ],
+    "output": {
+      "retried_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ],
+      "retry_details": [
+        {
+          "field": "Due Date",
+          "new_query": "Due Date submission deadline closing date bid opening date",
+          "new_value": "27-JUN-2024 14:00:00",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "new_query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "new_value": "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        }
+      ],
+      "new_retry_count": 2,
+      "step_tokens": 18076,
+      "step_prompt_tokens": 17747,
+      "step_completion_tokens": 329,
+      "cumulative_tokens": 156430
+    },
+    "tokens": 18076,
+    "prompt_tokens": 17747,
+    "completion_tokens": 329,
+    "latency_ms": 15306.54
+  },
+  {
+    "step_id": 8,
+    "timestamp": "2026-10-05T10:34:09.038287+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 2
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 13,
+      "failed": 2,
+      "not_found": 5,
       "needs_retry": false
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 11511.2
+    "latency_ms": 36793.89
   },
   {
-    "step_id": 5,
-    "timestamp": "2026-10-04T16:14:50.501472+00:00",
+    "step_id": 9,
+    "timestamp": "2026-10-05T10:34:18.733710+00:00",
     "agent": "reconciliation",
     "input": {
-      "bid_id": "Bid2",
+      "bid_id": "Bid1",
       "field_count": 20
     },
     "tool_calls": [],
     "output": {
-      "addendum_changes_count": 0,
-      "amended_fields": [],
-      "step_tokens": 0,
-      "step_prompt_tokens": 0,
-      "step_completion_tokens": 0,
-      "cumulative_tokens": 85334
+      "status": "success",
+      "addendum_changes_count": 1,
+      "amended_fields": [
+        "Due Date"
+      ],
+      "step_tokens": 8105,
+      "step_prompt_tokens": 7692,
+      "step_completion_tokens": 413,
+      "cumulative_tokens": 182585
     },
-    "tokens": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 1.03
+    "tokens": 8105,
+    "prompt_tokens": 7692,
+    "completion_tokens": 413,
+    "latency_ms": 9693.67
   },
   {
-    "step_id": 6,
-    "timestamp": "2026-10-04T16:14:50.501472+00:00",
+    "step_id": 10,
+    "timestamp": "2026-10-05T10:34:18.735712+00:00",
     "agent": "qa_node",
     "input": {
-      "bid_id": "Bid2"
+      "bid_id": "Bid1"
     },
     "tool_calls": [],
     "output": {
       "qa_ready": true,
       "metadata": {
-        "bid_id": "Bid2",
-        "title": "Dell Laptops w/Extended Warranty",
-        "issuing_agency": "MD State Treasurer’s Office",
-        "solicitation_number": "#E20P4600040 (eMMA Project Number: BPM044557)",
-        "fields_ready": 18,
+        "bid_id": "Bid1",
+        "title": "Student and Staff Computing Devices SOURCING #168884",
+        "issuing_agency": "Dallas ISD",
+        "solicitation_number": "JA-207652",
+        "fields_ready": 15,
         "status": "ready"
       }
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.22
+    "latency_ms": 0.3
   }
 ]

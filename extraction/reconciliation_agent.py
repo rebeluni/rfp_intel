@@ -21,6 +21,17 @@ from search.hybrid_retriever import HybridRetriever
 logger = logging.getLogger(__name__)
 
 
+class ReconciliationResult(tuple):
+    """2-tuple (fields, changes) preserving backward compatibility with .status and .error metadata."""
+    def __new__(cls, fields, changes, status="success", error=None):
+        inst = super().__new__(cls, (fields, changes))
+        inst.fields = fields
+        inst.changes = changes
+        inst.status = status
+        inst.error = error
+        return inst
+
+
 class ReconciliationAgent:
     """Agent that performs explicit addendum supersession, contiguous validation, and full summaries."""
 
@@ -33,6 +44,8 @@ class ReconciliationAgent:
         self.retriever = retriever or HybridRetriever()
         self.llm_client = llm_client or get_llm_client()
         self.validator = validator
+        self.status = "idle"
+        self.last_error = None
 
     def get_addendum_chunks(self, bid_id: str) -> List[Dict[str, Any]]:
         """
@@ -75,155 +88,178 @@ class ReconciliationAgent:
         summary: Optional[ValidationSummary] = None
     ) -> Tuple[Dict[str, FieldOutput], List[AddendumChange]]:
         """
-        Reconcile all fields against the addenda passages and build full change log.
-        Enforces contiguous quote verification and dynamic confidence calculation.
+        Reconcile all fields against addenda passages once per addendum (ordered by addendum number).
+        Enforces contiguous quote verification, dynamic confidence calculation, and surfaces errors.
         """
         if addendum_chunks is None:
             addendum_chunks = self.get_addendum_chunks(bid_id)
 
         if not addendum_chunks:
             logger.info(f"No addenda detected for bid '{bid_id}'. Skipping addendum reconciliation.")
-            return fields_map, []
+            self.status = "success"
+            return ReconciliationResult(fields_map, [], status="success")
+
+        # Group chunks by addendum number
+        chunks_by_addendum: Dict[int, List[Dict[str, Any]]] = {}
+        for chk in addendum_chunks:
+            add_num = chk.get("addendum_number") or 1
+            chunks_by_addendum.setdefault(add_num, []).append(chk)
+
+        ordered_addenda_nums = sorted(chunks_by_addendum.keys())
 
         logger.info(
-            f"Reconciling {len(fields_map)} fields against {len(addendum_chunks)} "
-            f"addendum chunks for '{bid_id}'..."
+            f"Reconciling {len(fields_map)} fields against {len(addendum_chunks)} chunks "
+            f"across {len(ordered_addenda_nums)} addenda for '{bid_id}'..."
         )
 
         change_log: List[AddendumChange] = []
         updated_fields = dict(fields_map)
+        self.status = "success"
+        self.last_error = None
 
-        base_fields = {
-            k: str(v.value) if v.value is not None else None
-            for k, v in fields_map.items()
-        }
+        # Run reconciliation once per addendum (chronologically ordered)
+        for add_num in ordered_addenda_nums:
+            current_add_chunks = chunks_by_addendum[add_num]
+            current_add_chunks.sort(key=lambda c: c.get("page_number", 1))
 
-        # Query LLM for amendments across all fields in batch
-        raw_changes = self.llm_client.reconcile_all_addenda(base_fields, addendum_chunks)
+            base_fields = {
+                k: str(v.value) if v.value is not None else None
+                for k, v in updated_fields.items()
+            }
 
-        for item in raw_changes:
-            field_name = item.get("field")
-            if not field_name or field_name not in updated_fields:
-                matching = [k for k in updated_fields if k.lower() == field_name.lower()]
-                if matching:
-                    field_name = matching[0]
-                else:
+            try:
+                raw_changes = self.llm_client.reconcile_all_addenda(base_fields, current_add_chunks)
+            except Exception as e:
+                logger.error(f"[Reconciliation] LLM call failed for Addendum {add_num}: {e}")
+                self.status = "error"
+                self.last_error = str(e)
+                if summary is not None:
+                    summary.errors.append(f"Reconciliation failed: {e}")
+                return ReconciliationResult(updated_fields, change_log, status="error", error=str(e))
+
+            for item in raw_changes:
+                field_name = item.get("field")
+                if not field_name:
+                    continue
+                if field_name not in updated_fields:
+                    matching = [k for k in updated_fields if k.lower() == str(field_name).lower()]
+                    if matching:
+                        field_name = matching[0]
+                    else:
+                        continue
+
+                new_val = item.get("new_value")
+                quote = (item.get("quote") or "").strip()
+                file_name = item.get("file_name") or f"Addendum {add_num}"
+                page_no = item.get("page_number") or 1
+                reason = item.get("reason") or f"Amended by Addendum {add_num}"
+
+                if not new_val or not quote:
                     continue
 
-            new_val = item.get("new_value")
-            quote = (item.get("quote") or "").strip()
-            file_name = item.get("file_name") or "Addendum"
-            page_no = item.get("page_number") or 1
-            reason = item.get("reason") or "Amended by addendum"
+                # Requirement 2: Verify quote is a contiguous substring of chunk
+                norm_quote = re.sub(r"\s+", " ", quote.lower())
+                matching_chunk = None
+                for chk in current_add_chunks:
+                    norm_chunk = re.sub(r"\s+", " ", chk.get("text", "").lower())
+                    if norm_quote in norm_chunk:
+                        matching_chunk = chk
+                        file_name = chk.get("file_name", file_name)
+                        page_no = chk.get("page_number", page_no)
+                        break
 
-            if not new_val or not quote:
-                continue
-
-            # -------------------------------------------------------------
-            # Requirement 2: Verify quote is a contiguous substring of chunk
-            # -------------------------------------------------------------
-            norm_quote = re.sub(r"\s+", " ", quote.lower())
-            matching_chunk = None
-            for chk in addendum_chunks:
-                norm_chunk = re.sub(r"\s+", " ", chk.get("text", "").lower())
-                if norm_quote in norm_chunk:
-                    matching_chunk = chk
-                    file_name = chk.get("file_name", file_name)
-                    page_no = chk.get("page_number", page_no)
-                    break
-
-            if not matching_chunk:
-                logger.warning(
-                    f"[Reconciliation] Amendment quote for '{field_name}' is not a contiguous "
-                    f"substring of any cited addendum chunk. Quote: '{quote}'. Rejecting amendment."
-                )
-                continue
-
-            # -------------------------------------------------------------
-            # Requirement 2 / Task A2: Compute dynamic confidence (not flat 0.95)
-            # -------------------------------------------------------------
-            chunk_score = float(matching_chunk.get("score", 1.0))
-            quote_words = len(norm_quote.split())
-            quote_bonus = min(0.10, quote_words * 0.008)
-            grounding_bonus = 0.05 if (re.search(r"\d{4}", str(new_val)) or any(c.isdigit() for c in str(new_val))) else 0.02
-            dyn_confidence = round(min(0.80 + quote_bonus + grounding_bonus + min(0.05, chunk_score * 0.03), 0.98), 2)
-
-            logger.info(
-                f"[Reconciliation] Field '{field_name}' amended by addendum: "
-                f"'{updated_fields[field_name].value}' -> '{new_val}' (conf: {dyn_confidence})"
-            )
-
-            source = FieldSource(
-                file=file_name,
-                page=int(page_no) if str(page_no).isdigit() else 1,
-                quote=quote,
-                chunk_id=matching_chunk.get("chunk_id")
-            )
-
-            candidate_field = FieldOutput(
-                value=new_val,
-                sources=[source] + [s for s in updated_fields[field_name].sources if s.file != source.file],
-                confidence=dyn_confidence,
-                notes=f"Amended by {file_name}: {reason}".strip(),
-                status="FOUND",
-                specialist=updated_fields[field_name].specialist
-            )
-
-            # -------------------------------------------------------------
-            # Requirement 2 / Task A2: Re-validate amended field before accepting
-            # -------------------------------------------------------------
-            if self.validator is not None:
-                try:
-                    val_field, val_detail = self.validator.validate_field(
-                        field_name=field_name,
-                        field=candidate_field,
-                        retrieved_passages=[matching_chunk],
-                        bid_id=bid_id,
-                        secondary_field=updated_fields.get(field_name),
-                    )
-                except TypeError:
-                    val_field, val_detail = self.validator.validate_field(
-                        field_name=field_name,
-                        field=candidate_field,
-                        retrieved_passages=[matching_chunk],
-                        bid_id=bid_id,
-                    )
-                if not val_detail.is_valid:
+                if not matching_chunk:
                     logger.warning(
-                        f"[Reconciliation] Amended field '{field_name}' failed re-validation "
-                        f"({val_detail.issue_type}: {val_detail.feedback}). Rejecting amendment."
+                        f"[Reconciliation] Amendment quote for '{field_name}' is not a contiguous "
+                        f"substring of any cited addendum chunk. Quote: '{quote}'. Rejecting amendment."
                     )
                     continue
-                candidate_field = val_field
 
-            logger.info(
-                f"[Reconciliation] Field '{field_name}' amendment accepted: "
-                f"'{updated_fields[field_name].value}' -> '{new_val}' (conf: {candidate_field.confidence})"
-            )
+                # -------------------------------------------------------------
+                # Requirement 2 / Task A2: Compute dynamic confidence (not flat 0.95)
+                # -------------------------------------------------------------
+                chunk_score = float(matching_chunk.get("score", 1.0))
+                quote_words = len(norm_quote.split())
+                quote_bonus = min(0.10, quote_words * 0.008)
+                grounding_bonus = 0.05 if (re.search(r"\d{4}", str(new_val)) or any(c.isdigit() for c in str(new_val))) else 0.02
+                dyn_confidence = round(min(0.80 + quote_bonus + grounding_bonus + min(0.05, chunk_score * 0.03), 0.98), 2)
 
-            change = AddendumChange(
-                field=field_name,
-                old_value=str(updated_fields[field_name].value) if updated_fields[field_name].value is not None else None,
-                new_value=new_val,
-                source=source,
-                quote=quote,
-                file=file_name,
-                page=int(page_no) if str(page_no).isdigit() else 1,
-                reason=reason
-            )
-            change_log.append(change)
-            updated_fields[field_name] = candidate_field
+                logger.info(
+                    f"[Reconciliation] Field '{field_name}' amended by addendum: "
+                    f"'{updated_fields[field_name].value}' -> '{new_val}' (conf: {dyn_confidence})"
+                )
 
-            # Re-validate: update validation summary only on successful validation
-            if summary is not None:
-                if field_name not in summary.passed:
-                    summary.passed.append(field_name)
-                if field_name in summary.failed:
-                    summary.failed.remove(field_name)
-                if field_name in summary.not_found:
-                    summary.not_found.remove(field_name)
+                source = FieldSource(
+                    file=file_name,
+                    page=int(page_no) if str(page_no).isdigit() else 1,
+                    quote=quote,
+                    chunk_id=matching_chunk.get("chunk_id")
+                )
 
-        return updated_fields, change_log
+                candidate_field = FieldOutput(
+                    value=new_val,
+                    sources=[source] + [s for s in updated_fields[field_name].sources if s.file != source.file],
+                    confidence=dyn_confidence,
+                    notes=f"Amended by {file_name}: {reason}".strip(),
+                    status="FOUND",
+                    specialist=updated_fields[field_name].specialist
+                )
+
+                # -------------------------------------------------------------
+                # Requirement 2 / Task A2: Re-validate amended field before accepting
+                # -------------------------------------------------------------
+                if self.validator is not None:
+                    try:
+                        val_field, val_detail = self.validator.validate_field(
+                            field_name=field_name,
+                            field=candidate_field,
+                            retrieved_passages=[matching_chunk],
+                            bid_id=bid_id,
+                            secondary_field=updated_fields.get(field_name),
+                        )
+                    except TypeError:
+                        val_field, val_detail = self.validator.validate_field(
+                            field_name=field_name,
+                            field=candidate_field,
+                            retrieved_passages=[matching_chunk],
+                            bid_id=bid_id,
+                        )
+                    if not val_detail.is_valid:
+                        logger.warning(
+                            f"[Reconciliation] Amended field '{field_name}' failed re-validation "
+                            f"({val_detail.issue_type}: {val_detail.feedback}). Rejecting amendment."
+                        )
+                        continue
+                    candidate_field = val_field
+
+                logger.info(
+                    f"[Reconciliation] Field '{field_name}' amendment accepted: "
+                    f"'{updated_fields[field_name].value}' -> '{new_val}' (conf: {candidate_field.confidence})"
+                )
+
+                change = AddendumChange(
+                    field=field_name,
+                    old_value=str(updated_fields[field_name].value) if updated_fields[field_name].value is not None else None,
+                    new_value=new_val,
+                    source=source,
+                    quote=quote,
+                    file=file_name,
+                    page=int(page_no) if str(page_no).isdigit() else 1,
+                    reason=reason
+                )
+                change_log.append(change)
+                updated_fields[field_name] = candidate_field
+
+                # Re-validate: update validation summary only on successful validation
+                if summary is not None:
+                    if field_name not in summary.passed:
+                        summary.passed.append(field_name)
+                    if field_name in summary.failed:
+                        summary.failed.remove(field_name)
+                    if field_name in summary.not_found:
+                        summary.not_found.remove(field_name)
+
+        return ReconciliationResult(updated_fields, change_log, status=self.status)
 
     def get_addendum_summary(
         self,

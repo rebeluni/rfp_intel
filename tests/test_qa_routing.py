@@ -82,18 +82,60 @@ def test_ambiguous_question_handling(mock_qa_agent):
     assert routed is None or routed in ["Bid1", "Bid2", "Bid3"]
 
 
-def test_dynamic_multi_bid_resolution_with_unseen_bid(mock_qa_agent):
-    # Add a 4th unseen bid to mock catalog
-    chunk4 = MagicMock()
-    chunk4.text = "Seattle Public Schools Solicitation SPS-2026-001 Hardware"
-    chunk4.metadata.bid_id = "Bid4"
-    chunk4.metadata.file_name = "SPS_Hardware.pdf"
-    chunk4.metadata.page_number = 1
-    chunk4.metadata.doc_type.value = "bid_page"
-    mock_qa_agent.retriever.bm25_index.chunks.append(chunk4)
+def test_routing_with_four_indexed_bids_including_folder_not_named_bidn(mock_qa_agent):
+    """Routing with four indexed bids including a folder not named 'BidN' (e.g. Acme_RFP_2025)."""
+    chunk_acme = MagicMock()
+    chunk_acme.text = "Acme Global Solutions Solicitation ACME-2025-009 Cloud Services Infrastructure"
+    chunk_acme.metadata.bid_id = "Acme_RFP_2025"
+    chunk_acme.metadata.file_name = "Acme_Proposal.pdf"
+    chunk_acme.metadata.page_number = 1
+    chunk_acme.metadata.doc_type.value = "bid_page"
+    mock_qa_agent.retriever.bm25_index.chunks.append(chunk_acme)
     mock_qa_agent._bid_catalog = None  # Reset catalog cache
 
-    # Ask multi-bid comparison involving Bid1 and Bid4
-    assert mock_qa_agent.is_comparison_query("Compare warranty between Bid1 and Bid4") is True
-    # Verify routing to Bid4 works directly from metadata
-    assert mock_qa_agent.route_bid("What is in SPS-2026-001?") == "Bid4"
+    # Verify 4 bids are indexed
+    indexed_bids = mock_qa_agent._get_indexed_bids()
+    assert "Acme_RFP_2025" in indexed_bids
+    assert len(indexed_bids) >= 4
+
+    # Route by bid ID
+    assert mock_qa_agent.route_bid("What is the scope in Acme_RFP_2025?") == "Acme_RFP_2025"
+    # Route by solicitation number
+    assert mock_qa_agent.route_bid("What are the deliverables for ACME-2025-009?") == "Acme_RFP_2025"
+
+
+def test_comparison_both_bids_with_three_indexed_bids(mock_qa_agent):
+    """'both bids' with 3 bids indexed (expect all 3, with the note)."""
+    mock_qa_agent.llm_client.answer_question.return_value = {
+        "answer": "Mocked warranty comparison across bids.",
+        "citations": []
+    }
+    # Ensure exactly 3 bids in index
+    indexed_bids = mock_qa_agent._get_indexed_bids()
+    assert len(indexed_bids) == 3
+
+    resp = mock_qa_agent.ask("Compare the warranty terms of both bids.")
+    assert resp["active_bids"] == indexed_bids
+    assert "3 bids are indexed; comparing all of them" in resp["answer"]
+    assert "Bids included in comparison: Bid1, Bid2, Bid3." in resp["answer"]
+
+
+def test_comparison_two_bids_named_explicitly_by_agency_or_title(mock_qa_agent):
+    """Two bids named explicitly by agency or title (expect exactly those)."""
+    mock_qa_agent.llm_client.answer_question.return_value = {
+        "answer": "Comparison between Dallas ISD and Austin ISD.",
+        "citations": []
+    }
+    # Compare by agency names
+    resp_agency = mock_qa_agent.ask(
+        "Compare the evaluation criteria between Dallas Independent School District and Austin Independent School District"
+    )
+    assert resp_agency["active_bids"] == ["Bid1", "Bid3"]
+    assert "Bids included in comparison: Bid1, Bid3." in resp_agency["answer"]
+
+    # Compare by solicitation / title tokens
+    resp_title = mock_qa_agent.ask(
+        "Compare the computing device scope between JA-207652 and AISD-2025-9988"
+    )
+    assert resp_title["active_bids"] == ["Bid1", "Bid3"]
+

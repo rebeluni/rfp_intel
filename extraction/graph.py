@@ -295,7 +295,7 @@ class ExtractionPipeline:
                 # Formulate alternative expanded query
                 expanded_q = f"{f_name} {' '.join(hints[1:4]) if len(hints) > 1 else 'requirement specifications'}"
                 new_passages = self.extractor.retrieve_evidence_for_field(
-                    field_name=expanded_q,
+                    field_name=f_name,
                     field_def=f_def,
                     bid_id=bid_id,
                     top_k=8
@@ -352,11 +352,14 @@ class ExtractionPipeline:
         with self.tracer.start_step("reconciliation", {"bid_id": bid_id, "field_count": len(fields_map)}) as ctx:
             logger.info(f"[Reconciliation] Reconciling all fields against ordered addenda chunks for '{bid_id}'...")
 
-            reconciled_fields, change_log = self.reconciler.reconcile_fields(
+            recon_res = self.reconciler.reconcile_fields(
                 bid_id=bid_id,
                 fields_map=fields_map,
                 summary=summary
             )
+            reconciled_fields, change_log = recon_res
+            recon_status = getattr(recon_res, "status", getattr(self.reconciler, "status", "success"))
+            recon_error = getattr(recon_res, "error", getattr(self.reconciler, "last_error", None))
 
             tok_after = self.llm_client.get_token_usage()
             step_p = tok_after["prompt_tokens"] - tok_before["prompt_tokens"]
@@ -364,19 +367,25 @@ class ExtractionPipeline:
             step_t = tok_after["total_tokens"] - tok_before["total_tokens"]
             ctx.add_tokens(step_t, step_p, step_c)
 
-            ctx.complete({
+            ctx_payload = {
+                "status": recon_status,
                 "addendum_changes_count": len(change_log),
                 "amended_fields": [c.field for c in change_log],
                 "step_tokens": step_t,
                 "step_prompt_tokens": step_p,
                 "step_completion_tokens": step_c,
                 "cumulative_tokens": tok_after["total_tokens"]
-            }, tokens=step_t, prompt_tokens=step_p, completion_tokens=step_c)
+            }
+            if recon_error:
+                ctx_payload["error"] = recon_error
+
+            ctx.complete(ctx_payload, tokens=step_t, prompt_tokens=step_p, completion_tokens=step_c)
 
             return {
                 "extracted_fields": reconciled_fields,
                 "addendum_changes": change_log,
-                "validation_summary": summary
+                "validation_summary": summary,
+                "reconciliation_status": recon_status
             }
 
     def _qa_node(self, state: ExtractionState) -> Dict[str, Any]:

@@ -160,3 +160,57 @@ def test_reconciliation_validator_rejection():
     # Amendment must not be accepted because validator rejected it
     assert len(changes) == 0
     assert "Due Date" not in summary.passed
+
+
+def test_reconciliation_llm_failure_returns_error_status():
+    """Reconciliation when the LLM call fails (expect an error status, not an empty change list)."""
+    mock_llm = MagicMock()
+    mock_llm.reconcile_all_addenda.side_effect = RuntimeError("Simulated LLM call failure")
+
+    agent = ReconciliationAgent(retriever=MagicMock(), llm_client=mock_llm)
+    addendum_chunks = [{
+        "chunk_id": "chk_add1",
+        "file_name": "Addendum 1.pdf",
+        "page_number": 1,
+        "addendum_number": 1,
+        "text": "Addendum text"
+    }]
+    fields_map = {
+        "Due Date": FieldOutput(value="27-JUN-2024", sources=[])
+    }
+    summary = ValidationSummary(passed=[], failed=[], not_found=[])
+
+    res = agent.reconcile_fields("Bid1", fields_map, addendum_chunks=addendum_chunks, summary=summary)
+    
+    # Must report error status and not silently return empty changes
+    assert res.status == "error"
+    assert "Simulated LLM call failure" in str(res.error)
+    assert any("Reconciliation failed" in err for err in summary.errors)
+
+
+def test_reconciliation_change_item_without_field_name_no_crash():
+    """A change item without a field name (no crash)."""
+    mock_llm = MagicMock()
+    mock_llm.reconcile_all_addenda.return_value = [
+        {"field": None, "old_value": "A", "new_value": "B", "quote": "something", "file_name": "Addendum 1.pdf", "page_number": 1},
+        {"old_value": "X", "new_value": "Y", "quote": "something else", "file_name": "Addendum 1.pdf", "page_number": 1}
+    ]
+
+    agent = ReconciliationAgent(retriever=MagicMock(), llm_client=mock_llm)
+    addendum_chunks = [{
+        "chunk_id": "chk_add1",
+        "file_name": "Addendum 1.pdf",
+        "page_number": 1,
+        "addendum_number": 1,
+        "text": "Addendum text with something and something else"
+    }]
+    fields_map = {
+        "Due Date": FieldOutput(value="27-JUN-2024", sources=[])
+    }
+    summary = ValidationSummary(passed=[], failed=[], not_found=[])
+
+    # Must process without raising AttributeError: 'NoneType' object has no attribute 'lower'
+    updated, changes = agent.reconcile_fields("Bid1", fields_map, addendum_chunks=addendum_chunks, summary=summary)
+    assert isinstance(changes, list)
+    assert len(changes) == 0
+

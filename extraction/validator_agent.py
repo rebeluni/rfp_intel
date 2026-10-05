@@ -178,6 +178,23 @@ class ValidatorAgent:
                     retrieval_score = float(p.get("score") or 0.50)
                     break
 
+            if not is_contiguous_match:
+                # Fallback: check all retrieved passages in case page or chunk_id was misattributed
+                for idx, p in enumerate(retrieved_passages):
+                    chk_text = p.get("text", "")
+                    norm_chunk_text = re.sub(r"\s+", " ", chk_text.lower())
+                    clean_chunk_text = _clean_markdown(chk_text)
+
+                    if (norm_quote and norm_quote in norm_chunk_text) or (clean_quote and clean_quote in clean_chunk_text):
+                        is_contiguous_match = True
+                        matched_chunk = p
+                        matched_chunk_idx = idx
+                        retrieval_score = float(p.get("score") or 0.50)
+                        primary_source.file = p.get("file_name", primary_source.file)
+                        primary_source.page = p.get("page_number", primary_source.page)
+                        primary_source.chunk_id = p.get("chunk_id", primary_source.chunk_id)
+                        break
+
         if not is_contiguous_match:
             val_issues.append(
                 f"Quote is not a contiguous substring of cited chunk ({cited_file} p.{cited_page})"

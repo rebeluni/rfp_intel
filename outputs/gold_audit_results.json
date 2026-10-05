@@ -53,7 +53,7 @@
             "Dallas ISD prefers responses to be submitted online via our electronic system",
             "iSupplier portal"
           ],
-          "extracted": "Dallas ISD prefers responses to be submitted online via our electronic system. Submissions may be submitted manually. Manual submissions must be delivered to the Procurement Services Department, in a sealed envelope by the date and time stated."
+          "extracted": "Dallas ISD prefers responses to be submitted online via our electronic system. Submissions may be submitted manually."
         },
         {
           "field": "Term of Bid",
@@ -74,7 +74,7 @@
             "Pre-Proposal Meeting 10-JUN-2024 14:00:00",
             "June 10, 2024 via TEAMS"
           ],
-          "extracted": "Pre-Proposal Meeting 10-JUN-2024 14:00:00; A pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10, 2024. It is highly encouraged that all potential proposers participate and attend the preproposal. Join TEAMS Meeting: https://www.microsoft.com/en-us/microsoft-teams/join-a-meeting Meeting ID: 270 031 467 036 Passcode: N9ndKY"
+          "extracted": "Pre-proposal meeting will be held at 2:00 PM CST via TEAMS video conference on June 10, 2024. Join TEAMS Meeting: https://www.microsoft.com/en-us/microsoft-teams/join-a-meeting Meeting ID: 270 031 467 036 Passcode: N9ndKY. It is highly encouraged that all potential proposers participate and attend the preproposal."
         },
         {
           "field": "Installation",
@@ -83,7 +83,7 @@
             "software installation",
             "services include (a) software installation, (b) asset tagging and (c) white glove delivery"
           ],
-          "extracted": "These services include (a) software installation, (b) asset tagging and etching, (c) device deployment and setup, and (d) asset control reporting."
+          "extracted": "software installation"
         },
         {
           "field": "Bid Bond Requirement",
@@ -152,7 +152,7 @@
             "Chromebook",
             "Tier 1 Small Student Chromebook Laptop (Touch) (50,000 Each), Tier 2 Large Student Chromebook Laptop (Non-Touch)"
           ],
-          "extracted": "Tier 1 Small Student Chromebook Laptop (Touch) (50,000 Each), Tier 2 Large Student Chromebook Laptop (Non-Touch) (50,000 Each), Tier 3 Student Windows Laptop (5,000 Each), Student Tablet (50,000 Each), Tier 1 Staff Laptop (10,000 Each), Tier 2 Staff Laptop (10,000 Each), Tier 1 Staff Basic Desktop (5,000 Each), Tier 2 Staff Professional Desktop (5,000 Each), Display Monitor - Touch (5,000 Each), Display Monitor - Non-Touch (5,000 Each)"
+          "extracted": "Tier 1 Small Student Chromebook Laptop (Touch) (Quantity: 50,000 Each), Tier 2 Large Student Chromebook Laptop (Non-Touch) (Quantity: 50,000 Each), Tier 3 Student Windows Laptop (Quantity: 5,000 Each), Student Tablet (Quantity: 50,000 Each), Tier 1 Staff Laptop (Quantity: 10,000 Each), Tier 2 Staff Laptop (Quantity: 10,000 Each), Tier 1 Staff Basic Desktop (Quantity: 5,000 Each), Tier 2 Staff Professional Desktop (Quantity: 5,000 Each), Display Monitor - Touch (Quantity: 5,000 Each), Display Monitor - Non-Touch (Quantity: 5,000 Each)"
         },
         {
           "field": "Product Specification",
@@ -161,7 +161,7 @@
             "Student Devices Tier 1 Small Student Chromebook Laptop Minimum Requirements",
             "Tier 1 Small Student Chromebook Laptop"
           ],
-          "extracted": "Student Devices Tier 1 Small Student Chromebook Laptop Minimum Requirements: Intel Celeron Processor N100 or equivalent, Display Minimum 11.6\" diagonal, 8GB DDR5 Memory, 64 GB eMMC storage, Chrome O/S License Required, 1-year minimum warranty; Tier 2 Large Student Chromebook Laptop: Intel Celeron Processor N100 or equivalent, Display Minimum 14\" diagonal Non-Touch, 8GB DDR5 Memory, 128 GB eMMC storage, Chrome O/S License Required, 1-year minimum warranty; Tier 3 Student Windows Laptop: Intel i5 13th Gen or equivalent; Student Tablet: Processor A13, 10.2\" Retina Display, 64 GB storage, iOS 17, 1-year minimum warranty; Staff Devices Tier 1 Staff Windows Basic Desktop: Intel i5 Processor, 14th Gen or equivalent, Minimum 23.8\" diagonal screen Touch Screen, 16GB RAM, 512 GB NVMe SSD, Windows 11 Pro, 3-year minimum warranty; Tier 2 Staff Professional Desktop: Intel i7 Processor, 14th Gen or equivalent, Minimum 23.8\" diagonal screen Touch Screen, 32GB DDR5 RAM, 1 TB NVMe SSD, Windows 11 Pro or Mac O/S; Tier 1 Staff Basic Laptop: Intel i5 CPU, 14th Gen or equivalent, Minimum 13\" diagonal screen, 16GB DDR5 RAM, 512 GB NVMe SSD, Windows 11 or Mac OS, 3-year minimum warranty; Tier 2 Staff Laptop: Intel i7 CPU, 14th Gen or equivalent, Minimum 13\" diagonal screen, 32GB DDR5 RAM, 1 TB NVMe SSD, Windows 11 or Mac OS, 3-year minimum warranty; Display Monitors (Touch and Non-Touch): Minimum 24\" diagonal screen, Resolution 1920 X 1080, 3-year minimum warranty."
+          "extracted": "Student Devices Tier 1 Small Student Chromebook Laptop Minimum Requirements: Enterprise Management Ready, Intel Celeron Processor N100 or equivalent, Display: Minimum 11.6\" diagonal, Integrated Camera: 720p minimum, Screen Resolution 1366 x 768 Multi-touch, Memory: Minimum 8GB DDR5 Memory, Wireless: 802.11AX WiFi-6E and Bluetooth 5.1, Power Supply: Type C, 65W, Battery Life: Minimum 10 hours, Ports: Minimum 2 USB 3.0; type C; 1 headphone/microphone combo, Storage: 64 GB eMMC, Chrome O/S License Required, Warranty: 1-year minimum. Tier 2 Large Student Chromebook Laptop Minimum Requirements: Enterprise Management Ready, Intel Celeron Processor N100 or equivalent, Display: Minimum 14\" diagonal Non-Touch, Integrated Camera: 720p minimum, Screen Resolution 1920-1080, Memory: Minimum 8GB DDR5 Memory, Wireless: 802.11AX WiFi-6E and Bluetooth 5.1, Power Supply: Type C, 65W, Battery Life: Minimum 10 Hours, Ports, Minimum 2 USB 3.0; 1 Type C; 65HDMI; 1 headphone/microphone combo, Storage: 128 GB eMMC, Chrome O/S License Required, Warranty: 1-year minimum. Tier 3 Student Windows Laptop Minimum Requirements: Enterprise Management Ready w/ Autopilot Enrollment, Intel i5 13th Gen or equivalent, Display: Minimum 13\" diagonal, Integrated Camera: 720p minimum."
         },
         {
           "field": "Bid Summary",
@@ -170,7 +170,7 @@
             "Dallas Independent School District is soliciting offers for student and staff computing devices",
             "soliciting offers for student and staff computing devices"
           ],
-          "extracted": "The Dallas Independent School District is soliciting offers for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors. The purpose of this Request for Proposal is to procure vendors who provide goods or services purchased using federal, local, state, and grant-funded programs. Vendors may submit proposals for one, several, or all categories of devices required by the District to meet minimum hardware specifications. Purchases may also include a variety of device accessories ordered in a bundle along with the devices, such as sleeves, cases, mice, keyboards, and cables. Each submission must include a detailed plan outlining tracking and deployment services, including processes for white glove services."
+          "extracted": "The Dallas Independent School District is soliciting offers for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors. Vendors may submit proposals for one, several, or all categories of devices required by the District. The specifications listed in the RFP represent the minimum hardware requirements for each tier of device. Purchases may also include a variety of device accessories ordered in a bundle along with the devices, such as sleeves, cases, mice, keyboards, and cables. As stated in the solicitation, \"This Request for Proposal (RFP) will be for student and staff computing devices, including laptops, desktops, tablet devices, and display monitors.\""
         },
         {
           "field": "contact_info",
@@ -180,7 +180,7 @@
             "JALZATE@dallasisd.org",
             "ALZATE, JASMINE | JALZATE@dallasisd.org"
           ],
-          "extracted": "ALZATE, JASMINE | JALZATE@dallasisd.org"
+          "extracted": "Buyer ALZATE, JASMINE, JALZATE@dallasisd.org"
         },
         {
           "field": "company_name",
@@ -239,7 +239,7 @@
             "eMaryland Marketplace Advantage",
             "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system"
           ],
-          "extracted": "State's eMaryland Marketplace Advantage (eMMA) e-Procurement system"
+          "extracted": "Purchase Order Request for Proposal (PORFP) responses will only be accepted through the State's eMaryland Marketplace Advantage (eMMA) e-Procurement system."
         },
         {
           "field": "Term of Bid",
@@ -286,7 +286,7 @@
             "within 10 days",
             "Email invoices to: STOaccountspayable@treasurer.state.md.us"
           ],
-          "extracted": "Email invoices to: STOaccountspayable@treasurer.state.md.us. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum the following: Contractor name, mailing address, social security number or Federal Tax ID number, and phone number; Reference the States assigned PORFP number; Date, invoice number and amount due. Proof of delivery including packing slip or delivery confirmation, and equipment serial numbers."
+          "extracted": "Invoicing Instructions:\n1. Email invoices to: STOaccountspayable@treasurer.state.md.us\n2. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum the following:\n\u2022 Contractor name, mailing address, social security number or Federal Tax ID number, and phone number.\n\u2022 Reference the States assigned PORFP number.\n\u2022 Date, invoice number and amount due.\n3. Proof of delivery including packing slip or delivery confirmation, and equipment serial numbers."
         },
         {
           "field": "Any Additional Documentation Required",
@@ -333,7 +333,7 @@
             "WD22TB4",
             "210-BLYZ, WD22TB4"
           ],
-          "extracted": "210-BLYZ, WD22TB4"
+          "extracted": "CC7802, WD22TB4"
         },
         {
           "field": "Product",
@@ -343,7 +343,7 @@
             "SI# CC7802 Dell Latitude 5550",
             "1. SI# CC7802 Dell Latitude 5550 (Qty: 30)"
           ],
-          "extracted": "1. SI# CC7802 Dell Latitude 5550 (Quantity: 30) \n2. Dell Thunderbolt 4 Dock \u2013 WD22TB4 (Quantity: 30)"
+          "extracted": "1. SI# CC7802 Dell Latitude 5550 (Qty: 30), Laptops must be Microsoft Copilot ready; 2. Dell Thunderbolt 4 Dock \u2013 WD22TB4 (Qty: 30)"
         },
         {
           "field": "Product Specification",
@@ -353,7 +353,7 @@
             "Intel Core Ultra 5 125U processor",
             "Dell Latitude 5550 XCTO Base, Intel Core Ultra 5 125U processor"
           ],
-          "extracted": "Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), 16 GB DDR5 memory, 256 GB SSD, 15.6\" FHD display, Windows 11 Pro, and 3-year Dell Limited Hardware Warranty"
+          "extracted": "Dell Latitude 5550 featuring an Intel Core Ultra 5 125U processor (12 MB cache, 12 cores, 14 threads, up to 4.3 GHz Turbo), Windows 11 Pro, 16 GB DDR5 RAM (2 x 8 GB, 5600 MT/s), 256 GB M.2 2230 TLC Gen 4 PCIe NVMe SSD, 15.6\" FHD (1920x1080) 60Hz IPS Non-Touch display, Integrated Intel graphics, English US backlit AI hotkey keyboard, Intel Wi-Fi 6E and Bluetooth 5.3 wireless, 3-cell 54 Wh ExpressCharge capable battery, and 65W USB Type-C AC adapter, Microsoft Copilot ready."
         },
         {
           "field": "Bid Summary",
@@ -362,7 +362,7 @@
             "State of Maryland Treasurer's Office is seeking a refresh of laptops",
             "refresh of laptops to accommodate MD529 employees"
           ],
-          "extracted": "The State of Maryland Treasurer's Office is seeking a refresh of laptops to accommodate MD529 employees who have been included in our staff as of June 1, 2023. The scope requires the delivery of 30 units of Dell Latitude 5550 laptops (Microsoft Copilot ready) and 30 units of Dell Thunderbolt 4 Docks (WD22TB4) under the Desktop, Laptop and Tablet 2015 Master Contract (060B5400007). Additionally, the contractor must provide a 3-year extended Dell Limited Hardware Warranty certificate or affidavit upon award. All products are due by June 10, 2024."
+          "extracted": "The State of Maryland Treasurer's Office is soliciting proposals for a refresh of laptops to accommodate MD529 employees. The procurement scope requires the acquisition of 30 Dell Latitude 5550 laptops that are Microsoft Copilot ready, along with 30 Dell Thunderbolt 4 Docks (WD22TB4). Deliverables include a 3-year Dell Limited Hardware Warranty extended for all machines purchased, with a warranty certificate or affidavit to be presented upon award. All items have a required due and delivery date of June 10, 2024. As stated in the business need, the \"Office is in need of a refresh of laptops and must acquire enough laptops to accommodate MD529 employees who have been included in our staff as of June 1, 2023.\""
         },
         {
           "field": "contact_info",
@@ -384,7 +384,7 @@
             "State Treasurer's Office",
             "MD State Treasurer\u2019s Office"
           ],
-          "extracted": "MD State Treasurer\u2019s Office"
+          "extracted": "State Treasurer's Office"
         }
       ]
     },
@@ -406,7 +406,7 @@
             "AISD-2025-9988",
             "#AISD-P8820 (Project Number: AISD-2025-9988)"
           ],
-          "extracted": "#AISD-P8820 (Project Number: AISD-2025-9988)"
+          "extracted": "#AISD-P8820"
         },
         {
           "field": "Title",
@@ -469,7 +469,7 @@
             "Delivery within 30 days of Award",
             "30 days"
           ],
-          "extracted": "Delivery within 30 days of Award"
+          "extracted": "Delivery within 30 days of Award."
         },
         {
           "field": "Payment Terms",
@@ -479,7 +479,7 @@
             "within 10 days of delivering the equipment",
             "Email invoices to: ap@austinisd.org"
           ],
-          "extracted": "Email invoices to: ap@austinisd.org. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum: Contractor name, mailing address, Tax ID number, PORFP number #AISD-2025-9988, date, invoice number, amount due, and serial numbers."
+          "extracted": "Email invoices to: ap@austinisd.org. Invoice(s) shall be submitted within 10 days of delivering the equipment and shall include at a minimum: Contractor name, mailing address, Tax ID number, PORFP number #AISD-2025-9988, date, invoice number, amount due, and serial numbers. Proof of delivery including packing slip or delivery confirmation, and equipment serial numbers."
         },
         {
           "field": "Any Additional Documentation Required",
@@ -487,7 +487,7 @@
           "expected": [
             "Mercury Affidavit"
           ],
-          "extracted": "Mercury Affidavit"
+          "extracted": "Letter of Authorization (LOA) from the Manufacturer, Mercury Affidavit, and Contract Affidavit and Non-Collusion Certification"
         },
         {
           "field": "MFG for Registration",
@@ -514,7 +514,7 @@
             "Lenovo ThinkPad L15 Gen 5",
             "ThinkPad L15 Gen 5"
           ],
-          "extracted": "Lenovo ThinkPad L15 Gen 5"
+          "extracted": "Lenovo ThinkPad L15 Gen 5 and Lenovo USB-C Universal Dock"
         },
         {
           "field": "Part_no",
@@ -533,7 +533,7 @@
             "Lenovo ThinkPad L15 Gen 5",
             "Lenovo ThinkPad L15 Gen 5 (Model #: 21L30001US, Qty: 1,200)"
           ],
-          "extracted": "Lenovo ThinkPad L15 Gen 5 (Model #: 21L30001US, Qty: 1,200) and Lenovo USB-C Universal Dock (Model #: 40AY0090US, Qty: 1,200)"
+          "extracted": "Lenovo ThinkPad L15 Gen 5 (Quantity: 1,200), Lenovo USB-C Universal Dock (Quantity: 1,200), and Lenovo 3-Year Premier Support with Onsite NBD Warranty"
         },
         {
           "field": "Product Specification",
@@ -543,7 +543,7 @@
             "Intel Core Ultra 7 155U processor",
             "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop (Part Number: 21L30001US)"
           ],
-          "extracted": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop (Part Number: 21L30001US) featuring Intel Core Ultra 7 155U processor, Windows 11 Pro 64-bit, 16 GB DDR5 5600MHz RAM, 512 GB SSD M.2 2280 PCIe Gen4, 15.6 inch FHD IPS display, Integrated Intel Graphics, 1080P FHD RGB Camera, Intel Wi-Fi 6E AX211 and Bluetooth 5.3, 3 Cell Li-Polymer 57Wh battery with 65W AC Adapter, Traditional Keyboard with Numeric Keypad, Discrete TPM 2.0, and 3-Year Premier Support with Onsite NBD Warranty. Item 2: Lenovo USB-C Universal Dock (Model: 40AY0090US) with Dual 4K display support and 90W Power Delivery."
+          "extracted": "Item 1: Lenovo ThinkPad L15 Gen 5 Laptop (Model: 21L30001US) - Intel Core Ultra 7 155U processor, Windows 11 Pro 64-bit English, 16 GB DDR5 5600MHz RAM, 512 GB SSD M.2 2280 PCIe Gen4, 15.6 inch FHD (1920 x 1080) IPS Display, Integrated Intel Graphics, 1080P FHD RGB Camera, Intel Wi-Fi 6E AX211 & Bluetooth 5.3, 3 Cell Li-Polymer 57Wh Battery with 65W AC Adapter, Traditional Keyboard with Numeric Keypad, Discrete TPM 2.0, ENERGY STAR 8.0 certified, EPEAT Gold registered, RoHS compliant, 3-Year Premier Support with Onsite Next Business Day (NBD) Warranty. Item 2: Lenovo USB-C Universal Dock (Model: 40AY0090US) - Dual 4K display support, 90W Power Delivery to notebook."
         },
         {
           "field": "Bid Summary",
@@ -552,7 +552,7 @@
             "Austin Independent School District requires a refresh of student and administrative laptops",
             "refresh of student and administrative laptops"
           ],
-          "extracted": "Austin Independent School District requires a refresh of student and administrative laptops for high school campuses across the district under solicitation AISD-2025-9988. The procurement scope includes 1,200 units of Lenovo ThinkPad L15 Gen 5 laptops equipped with Intel Core Ultra 7 processors, 16GB RAM, and 512GB SSDs, alongside 1,200 units of Lenovo USB-C Universal Docks. Additional deliverables include a Lenovo 3-Year Premier Support with Onsite Next Business Day warranty, warranty certificates or affidavits, and a Mercury Affidavit. Proposals are due by December 18, 2025, and equipment delivery is expected within 30 days of award."
+          "extracted": "Austin Independent School District requires a refresh of student and administrative laptops for high school campuses across the district. The procurement scope requests 1,200 Lenovo ThinkPad L15 Gen 5 laptops and 1,200 Lenovo USB-C Universal Docks, along with a Lenovo 3-Year Premier Support with Onsite NBD Warranty. The primary objective is to acquire high-performance student and staff equipment meeting specific technical requirements such as Intel Core Ultra processors and Windows 11 Pro. Deliverables include the hardware, warranty certificates or affidavits, estimated ship dates, and proper invoicing documentation. As stated in the scope: 'Austin ISD requires a refresh of student and administrative laptops for high school campuses across the district.'"
         },
         {
           "field": "contact_info",

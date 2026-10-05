@@ -215,7 +215,7 @@ with tab_search:
         with col1:
             search_query = st.text_input(
                 "Search Query",
-                placeholder="e.g. liquidated damages per day or Dell laptop specifications",
+                placeholder="e.g. liquidated damages per day or computing hardware specifications",
                 key="search_query"
             )
         with col2:
@@ -324,7 +324,7 @@ with tab_ask:
         with q_col1:
             question_input = st.text_input(
                 "Enter Question",
-                placeholder="e.g. When is the proposal due date for Dallas ISD? or Compare warranties across all bids.",
+                placeholder="e.g. When is the proposal submission deadline? or Compare warranties across all bids.",
                 key="ask_question_input"
             )
         with q_col2:

@@ -1,7 +1,7 @@
 [
   {
     "step_id": 1,
-    "timestamp": "2026-10-04T12:48:44.724052+00:00",
+    "timestamp": "2026-10-05T10:28:40.752184+00:00",
     "agent": "orchestrator_planner",
     "input": {
       "bid_id": "Bid1",
@@ -19,11 +19,11 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.3
+    "latency_ms": 0.23
   },
   {
     "step_id": 2,
-    "timestamp": "2026-10-04T12:50:24.162236+00:00",
+    "timestamp": "2026-10-05T10:30:32.351312+00:00",
     "agent": "retrieval",
     "input": {
       "bid_id": "Bid1",
@@ -44,21 +44,21 @@
           ],
           "total_fields": 20
         },
-        "output_summary": "Retrieved 101 chunks across 20 fields."
+        "output_summary": "Retrieved 119 chunks across 20 fields."
       }
     ],
     "output": {
       "retrieved_fields_count": 20,
-      "total_chunks": 101
+      "total_chunks": 119
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 99433.03
+    "latency_ms": 111595.5
   },
   {
     "step_id": 3,
-    "timestamp": "2026-10-04T12:51:42.355147+00:00",
+    "timestamp": "2026-10-05T10:31:50.638103+00:00",
     "agent": "extractor",
     "input": {
       "bid_id": "Bid1",
@@ -68,19 +68,19 @@
     "output": {
       "extracted_fields_count": 20,
       "found_fields_count": 15,
-      "step_tokens": 73502,
-      "step_prompt_tokens": 69499,
-      "step_completion_tokens": 4003,
-      "cumulative_tokens": 73502
+      "step_tokens": 84177,
+      "step_prompt_tokens": 79650,
+      "step_completion_tokens": 4527,
+      "cumulative_tokens": 84177
     },
-    "tokens": 73502,
-    "prompt_tokens": 69499,
-    "completion_tokens": 4003,
-    "latency_ms": 78153.87
+    "tokens": 84177,
+    "prompt_tokens": 79650,
+    "completion_tokens": 4527,
+    "latency_ms": 78284.93
   },
   {
     "step_id": 4,
-    "timestamp": "2026-10-04T12:52:19.412897+00:00",
+    "timestamp": "2026-10-05T10:32:25.898448+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid1",
@@ -88,65 +88,83 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 14,
-      "failed": 1,
+      "passed": 13,
+      "failed": 2,
       "not_found": 5,
       "needs_retry": true
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 37055.05
+    "latency_ms": 35257.99
   },
   {
     "step_id": 5,
-    "timestamp": "2026-10-04T12:52:27.467808+00:00",
+    "timestamp": "2026-10-05T10:32:41.175840+00:00",
     "agent": "retry_refinement",
     "input": {
       "bid_id": "Bid1",
       "retry_count": 1,
       "failed_fields": [
-        "Contract or Cooperative to use"
+        "Due Date",
+        "Any Additional Documentation Required"
       ]
     },
     "tool_calls": [
       {
         "tool": "retry_extraction",
         "args": {
-          "field": "Contract or Cooperative to use",
-          "query": "Contract or Cooperative to use cooperative purchasing piggyback contract purchasing vehicle",
+          "field": "Due Date",
+          "query": "Due Date submission deadline closing date bid opening date",
           "attempt": 1
         },
-        "output_summary": "Result: CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT) (status: FOUND, confidence: 0.9)"
+        "output_summary": "Result: 27-JUN-2024 14:00:00 (status: FOUND, confidence: 0.9)"
+      },
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Any Additional Documentation Required",
+          "query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "attempt": 1
+        },
+        "output_summary": "Result: MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission (status: FOUND, confidence: 0.9)"
       }
     ],
     "output": {
       "retried_fields": [
-        "Contract or Cooperative to use"
+        "Due Date",
+        "Any Additional Documentation Required"
       ],
       "retry_details": [
         {
-          "field": "Contract or Cooperative to use",
-          "new_query": "Contract or Cooperative to use cooperative purchasing piggyback contract purchasing vehicle",
-          "new_value": "CENTRAL TEXAS PURCHASING ALLIANCE (CTPA) / Educational Purchasing Cooperative of North Texas (EPCNT)",
+          "field": "Due Date",
+          "new_query": "Due Date submission deadline closing date bid opening date",
+          "new_value": "27-JUN-2024 14:00:00",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "new_query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "new_value": "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission",
           "new_confidence": 0.9,
           "status": "FOUND"
         }
       ],
       "new_retry_count": 1,
-      "step_tokens": 5066,
-      "step_prompt_tokens": 4861,
-      "step_completion_tokens": 205,
-      "cumulative_tokens": 95850
+      "step_tokens": 18077,
+      "step_prompt_tokens": 17747,
+      "step_completion_tokens": 330,
+      "cumulative_tokens": 120304
     },
-    "tokens": 5066,
-    "prompt_tokens": 4861,
-    "completion_tokens": 205,
-    "latency_ms": 8053.2
+    "tokens": 18077,
+    "prompt_tokens": 17747,
+    "completion_tokens": 330,
+    "latency_ms": 15273.35
   },
   {
     "step_id": 6,
-    "timestamp": "2026-10-04T12:53:03.383711+00:00",
+    "timestamp": "2026-10-05T10:33:16.935292+00:00",
     "agent": "validator",
     "input": {
       "bid_id": "Bid1",
@@ -154,19 +172,103 @@
     },
     "tool_calls": [],
     "output": {
-      "passed": 15,
-      "failed": 0,
+      "passed": 13,
+      "failed": 2,
+      "not_found": 5,
+      "needs_retry": true
+    },
+    "tokens": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "latency_ms": 35758.74
+  },
+  {
+    "step_id": 7,
+    "timestamp": "2026-10-05T10:33:32.243967+00:00",
+    "agent": "retry_refinement",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_count": 2,
+      "failed_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ]
+    },
+    "tool_calls": [
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Due Date",
+          "query": "Due Date submission deadline closing date bid opening date",
+          "attempt": 2
+        },
+        "output_summary": "Result: 27-JUN-2024 14:00:00 (status: FOUND, confidence: 0.9)"
+      },
+      {
+        "tool": "retry_extraction",
+        "args": {
+          "field": "Any Additional Documentation Required",
+          "query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "attempt": 2
+        },
+        "output_summary": "Result: MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission (status: FOUND, confidence: 0.9)"
+      }
+    ],
+    "output": {
+      "retried_fields": [
+        "Due Date",
+        "Any Additional Documentation Required"
+      ],
+      "retry_details": [
+        {
+          "field": "Due Date",
+          "new_query": "Due Date submission deadline closing date bid opening date",
+          "new_value": "27-JUN-2024 14:00:00",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        },
+        {
+          "field": "Any Additional Documentation Required",
+          "new_query": "Any Additional Documentation Required mandatory forms disclosure forms conflict of interest CIQ",
+          "new_value": "MWBE Forms must be completed and attached regardless if you are MWBE status; W9 Form completed, signed and attached to the submission",
+          "new_confidence": 0.9,
+          "status": "FOUND"
+        }
+      ],
+      "new_retry_count": 2,
+      "step_tokens": 18076,
+      "step_prompt_tokens": 17747,
+      "step_completion_tokens": 329,
+      "cumulative_tokens": 156430
+    },
+    "tokens": 18076,
+    "prompt_tokens": 17747,
+    "completion_tokens": 329,
+    "latency_ms": 15306.54
+  },
+  {
+    "step_id": 8,
+    "timestamp": "2026-10-05T10:34:09.038287+00:00",
+    "agent": "validator",
+    "input": {
+      "bid_id": "Bid1",
+      "retry_iteration": 2
+    },
+    "tool_calls": [],
+    "output": {
+      "passed": 13,
+      "failed": 2,
       "not_found": 5,
       "needs_retry": false
     },
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 35915.23
+    "latency_ms": 36793.89
   },
   {
-    "step_id": 7,
-    "timestamp": "2026-10-04T12:53:07.735112+00:00",
+    "step_id": 9,
+    "timestamp": "2026-10-05T10:34:18.733710+00:00",
     "agent": "reconciliation",
     "input": {
       "bid_id": "Bid1",
@@ -174,23 +276,24 @@
     },
     "tool_calls": [],
     "output": {
+      "status": "success",
       "addendum_changes_count": 1,
       "amended_fields": [
         "Due Date"
       ],
-      "step_tokens": 6481,
-      "step_prompt_tokens": 6247,
-      "step_completion_tokens": 234,
-      "cumulative_tokens": 119613
+      "step_tokens": 8105,
+      "step_prompt_tokens": 7692,
+      "step_completion_tokens": 413,
+      "cumulative_tokens": 182585
     },
-    "tokens": 6481,
-    "prompt_tokens": 6247,
-    "completion_tokens": 234,
-    "latency_ms": 4348.53
+    "tokens": 8105,
+    "prompt_tokens": 7692,
+    "completion_tokens": 413,
+    "latency_ms": 9693.67
   },
   {
-    "step_id": 8,
-    "timestamp": "2026-10-04T12:53:07.735629+00:00",
+    "step_id": 10,
+    "timestamp": "2026-10-05T10:34:18.735712+00:00",
     "agent": "qa_node",
     "input": {
       "bid_id": "Bid1"
@@ -210,6 +313,6 @@
     "tokens": 0,
     "prompt_tokens": 0,
     "completion_tokens": 0,
-    "latency_ms": 0.25
+    "latency_ms": 0.3
   }
 ]
